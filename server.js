@@ -7,1506 +7,721 @@ const admin = require("firebase-admin");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-/* =========================
-   BASIC MIDDLEWARE
-========================= */
-
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
-
 app.use(express.static(path.join(__dirname, "public")));
-
-
-/* =========================
-   FIREBASE
-========================= */
 
 let db = null;
 
 function initFirebase() {
+  if (db) return db;
 
-  if (db) {
-    return db;
-  }
-
-  const serviceAccount =
-    process.env.FIREBASE_SERVICE_ACCOUNT;
-
-  const databaseURL =
-    process.env.FIREBASE_DATABASE_URL;
+  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+  const databaseURL = process.env.FIREBASE_DATABASE_URL;
 
   if (!serviceAccount || !databaseURL) {
-
-    console.log(
-      "Firebase environment variables are not configured yet."
-    );
-
     return null;
   }
 
   try {
-
-    const credentials =
-      JSON.parse(serviceAccount);
+    const credentials = JSON.parse(serviceAccount);
 
     if (!admin.apps.length) {
-
       admin.initializeApp({
-
-        credential:
-          admin.credential.cert(credentials),
-
-        databaseURL:
-          databaseURL
-
+        credential: admin.credential.cert(credentials),
+        databaseURL
       });
-
     }
 
     db = admin.database();
-
-    console.log("Firebase connected.");
-
     return db;
-
   } catch (error) {
-
-    console.error(
-      "Firebase connection error:",
-      error.message
-    );
-
+    console.error("Firebase error:", error.message);
     return null;
   }
 }
 
-
-/* =========================
-   FIREBASE HELPERS
-========================= */
-
-async function firebaseGet(pathName) {
-
+async function firebaseGet(ref) {
   const database = initFirebase();
 
   if (!database) {
-    throw new Error(
-      "Firebase is not configured."
-    );
+    throw new Error("Firebase is not configured.");
   }
 
-  const snapshot =
-    await database
-      .ref(pathName)
-      .once("value");
-
+  const snapshot = await database.ref(ref).once("value");
   return snapshot.val();
 }
 
-
-async function firebaseSet(pathName, value) {
-
+async function firebaseSet(ref, value) {
   const database = initFirebase();
 
   if (!database) {
-    throw new Error(
-      "Firebase is not configured."
-    );
+    throw new Error("Firebase is not configured.");
   }
 
-  await database
-    .ref(pathName)
-    .set(value);
+  await database.ref(ref).set(value);
 }
 
-
-async function firebaseUpdate(pathName, value) {
-
+async function increment(ref) {
   const database = initFirebase();
 
-  if (!database) {
-    throw new Error(
-      "Firebase is not configured."
-    );
-  }
+  if (!database) return;
 
-  await database
-    .ref(pathName)
-    .update(value);
+  await database.ref(ref).transaction(current => {
+    return (Number(current) || 0) + 1;
+  });
 }
-
-
-async function increment(pathName) {
-
-  const database = initFirebase();
-
-  if (!database) {
-    return;
-  }
-
-  await database
-    .ref(pathName)
-    .transaction(function(current) {
-
-      return (Number(current) || 0) + 1;
-
-    });
-}
-
 
 /* =========================
-   ADMIN SESSIONS
+   ADMIN SESSION
 ========================= */
 
-const adminSessions =
-  new Map();
-
+const adminSessions = new Map();
 
 function requireAdmin(req, res, next) {
-
-  const token =
-    req.cookies.makyama_admin;
+  const token = req.cookies.makyama_admin;
 
   if (!token) {
-
     return res.status(401).json({
-
       error: "Admin login required."
-
     });
-
   }
 
-
-  const session =
-    adminSessions.get(token);
-
+  const session = adminSessions.get(token);
 
   if (!session) {
-
     return res.status(401).json({
-
       error: "Invalid admin session."
-
     });
-
   }
 
-
-  if (
-    session.expiresAt <
-    Date.now()
-  ) {
-
+  if (session.expiresAt < Date.now()) {
     adminSessions.delete(token);
 
     return res.status(401).json({
-
       error: "Admin session expired."
-
     });
-
   }
-
 
   next();
 }
 
-
 /* =========================
-   HEALTH CHECK
+   HEALTH
 ========================= */
 
-app.get("/health", function(req, res) {
-
+app.get("/health", (req, res) => {
   res.json({
-
     ok: true,
-
-    server:
-      "MAKYAMA MESSAGE SERVER",
-
-    firebase:
-      Boolean(initFirebase()),
-
-    time:
-      new Date().toISOString()
-
+    server: "MAKYAMA MESSAGE SERVER",
+    firebase: Boolean(initFirebase()),
+    time: new Date().toISOString()
   });
-
 });
-
 
 /* =========================
    ADMIN LOGIN
 ========================= */
 
-app.post(
-  "/api/admin/login",
-  function(req, res) {
+app.post("/api/admin/login", (req, res) => {
+  const username = String(req.body.username || "");
+  const password = String(req.body.password || "");
 
-    const username =
-      String(
-        req.body.username || ""
-      );
+  const correctUsername = process.env.ADMIN_USERNAME;
+  const correctPassword = process.env.ADMIN_PASSWORD;
 
-    const password =
-      String(
-        req.body.password || ""
-      );
-
-
-    const correctUsername =
-      process.env.ADMIN_USERNAME;
-
-    const correctPassword =
-      process.env.ADMIN_PASSWORD;
-
-
-    if (
-      !correctUsername ||
-      !correctPassword
-    ) {
-
-      return res.status(500).json({
-
-        error:
-          "Admin credentials are not configured on the server."
-
-      });
-
-    }
-
-
-    if (
-      username !== correctUsername ||
-      password !== correctPassword
-    ) {
-
-      return res.status(401).json({
-
-        error:
-          "Invalid username or password."
-
-      });
-
-    }
-
-
-    const token =
-      crypto.randomBytes(32).toString("hex");
-
-
-    adminSessions.set(
-      token,
-      {
-
-        username:
-          correctUsername,
-
-        expiresAt:
-          Date.now() +
-          12 * 60 * 60 * 1000
-
-      }
-    );
-
-
-    res.cookie(
-      "makyama_admin",
-      token,
-      {
-
-        httpOnly: true,
-
-        sameSite: "lax",
-
-        secure:
-          process.env.NODE_ENV ===
-          "production",
-
-        maxAge:
-          12 * 60 * 60 * 1000
-
-      }
-    );
-
-
-    res.json({
-
-      ok: true,
-
-      message:
-        "Admin login successful."
-
+  if (!correctUsername || !correctPassword) {
+    return res.status(500).json({
+      error: "Admin credentials are not configured on Render."
     });
-
   }
-);
 
-
-/* =========================
-   ADMIN CHECK
-========================= */
-
-app.get(
-  "/api/admin/me",
-  requireAdmin,
-  function(req, res) {
-
-    res.json({
-
-      ok: true,
-
-      username:
-        process.env.ADMIN_USERNAME
-
+  if (
+    username !== correctUsername ||
+    password !== correctPassword
+  ) {
+    return res.status(401).json({
+      error: "Invalid username or password."
     });
-
   }
-);
 
+  const token = crypto.randomBytes(32).toString("hex");
 
-/* =========================
-   ADMIN LOGOUT
-========================= */
+  adminSessions.set(token, {
+    username,
+    expiresAt: Date.now() + 12 * 60 * 60 * 1000
+  });
 
-app.post(
-  "/api/admin/logout",
-  requireAdmin,
-  function(req, res) {
+  res.cookie("makyama_admin", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 12 * 60 * 60 * 1000
+  });
 
-    const token =
-      req.cookies.makyama_admin;
+  res.json({
+    ok: true,
+    message: "Admin login successful."
+  });
+});
 
-    adminSessions.delete(token);
+app.get("/api/admin/me", requireAdmin, (req, res) => {
+  res.json({
+    ok: true,
+    username: process.env.ADMIN_USERNAME
+  });
+});
 
-    res.clearCookie(
-      "makyama_admin"
-    );
+app.post("/api/admin/logout", requireAdmin, (req, res) => {
+  const token = req.cookies.makyama_admin;
 
+  adminSessions.delete(token);
+  res.clearCookie("makyama_admin");
 
-    res.json({
-
-      ok: true
-
-    });
-
-  }
-);
-
+  res.json({
+    ok: true
+  });
+});
 
 /* =========================
    PUBLIC TEMPLATES
 ========================= */
 
-app.get(
-  "/api/templates",
-  async function(req, res) {
+app.get("/api/templates", async (req, res) => {
+  try {
+    const data = await firebaseGet("templates");
 
-    try {
+    const templates = Object.values(data || {})
+      .filter(template => {
+        return template && template.published === true;
+      })
+      .map(template => ({
+        id: template.id,
+        title: template.title,
+        category: template.category,
+        thumbnail: template.thumbnail || "",
+        nameRequired: Boolean(template.nameRequired),
+        views: Number(template.views || 0),
+        downloads: Number(template.downloads || 0)
+      }));
 
-      const data =
-        await firebaseGet(
-          "templates"
-        );
-
-
-      const templates =
-        Object.values(
-          data || {}
-        )
-        .filter(function(template) {
-
-          return (
-            template &&
-            template.published === true
-          );
-
-        })
-        .map(function(template) {
-
-          return {
-
-            id:
-              template.id,
-
-            title:
-              template.title,
-
-            category:
-              template.category,
-
-            thumbnail:
-              template.thumbnail || "",
-
-            nameRequired:
-              Boolean(
-                template.nameRequired
-              ),
-
-            views:
-              Number(
-                template.views || 0
-              ),
-
-            downloads:
-              Number(
-                template.downloads || 0
-              )
-
-          };
-
-        });
-
-
-      res.json(templates);
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
+    res.json(templates);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
-
+});
 
 /* =========================
-   GET ONE PUBLIC TEMPLATE
+   SINGLE TEMPLATE
 ========================= */
 
-app.get(
-  "/api/templates/:id",
-  async function(req, res) {
+app.get("/api/templates/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
 
-    try {
+    const template = await firebaseGet(`templates/${id}`);
 
-      const id =
-        req.params.id;
-
-
-      const template =
-        await firebaseGet(
-          `templates/${id}`
-        );
-
-
-      if (
-        !template ||
-        template.published !== true
-      ) {
-
-        return res.status(404).json({
-
-          error:
-            "Template not found."
-
-        });
-
-      }
-
-
-      await increment(
-        `templates/${id}/views`
-      );
-
-
-      await increment(
-        "stats/totalViews"
-      );
-
-
-      res.json(template);
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
+    if (!template || template.published !== true) {
+      return res.status(404).json({
+        error: "Template not found."
       });
-
     }
 
-  }
-);
+    await increment(`templates/${id}/views`);
+    await increment("stats/totalViews");
 
+    res.json(template);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
 /* =========================
-   ADMIN: GET TEMPLATES
+   ADMIN TEMPLATES
 ========================= */
 
-app.get(
-  "/api/admin/templates",
-  requireAdmin,
-  async function(req, res) {
+app.get("/api/admin/templates", requireAdmin, async (req, res) => {
+  try {
+    const data = await firebaseGet("templates");
 
-    try {
+    res.json(Object.values(data || {}));
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
-      const data =
-        await firebaseGet(
-          "templates"
-        );
+app.post("/api/admin/templates", requireAdmin, async (req, res) => {
+  try {
+    const id = crypto.randomUUID();
 
+    const title = String(req.body.title || "").trim();
+    const category = String(req.body.category || "Other").trim();
+    const html = String(req.body.html || "");
+    const thumbnail = String(req.body.thumbnail || "");
+    const nameRequired = Boolean(req.body.nameRequired);
+    const published = Boolean(req.body.published);
 
-      const templates =
-        Object.values(
-          data || {}
-        );
-
-
-      res.json(templates);
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
+    if (!title || !html) {
+      return res.status(400).json({
+        error: "Title and HTML are required."
       });
-
     }
 
+    const template = {
+      id,
+      title,
+      category,
+      html,
+      thumbnail,
+      nameRequired,
+      published,
+      views: 0,
+      downloads: 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await firebaseSet(`templates/${id}`, template);
+
+    res.json({
+      ok: true,
+      template
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
+});
 
+app.put("/api/admin/templates/:id", requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
 
-/* =========================
-   ADMIN: ADD TEMPLATE
-========================= */
+    const old = await firebaseGet(`templates/${id}`);
 
-app.post(
-  "/api/admin/templates",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      const id =
-        crypto.randomUUID();
-
-
-      const template = {
-
-        id: id,
-
-        title:
-          String(
-            req.body.title || ""
-          ).trim(),
-
-        category:
-          String(
-            req.body.category || "Other"
-          ).trim(),
-
-        html:
-          String(
-            req.body.html || ""
-          ),
-
-        thumbnail:
-          String(
-            req.body.thumbnail || ""
-          ),
-
-        nameRequired:
-          Boolean(
-            req.body.nameRequired
-          ),
-
-        published:
-          Boolean(
-            req.body.published
-          ),
-
-        views: 0,
-
-        downloads: 0,
-
-        createdAt:
-          Date.now(),
-
-        updatedAt:
-          Date.now()
-
-      };
-
-
-      if (
-        !template.title ||
-        !template.html
-      ) {
-
-        return res.status(400).json({
-
-          error:
-            "Title and HTML are required."
-
-        });
-
-      }
-
-
-      await firebaseSet(
-        `templates/${id}`,
-        template
-      );
-
-
-      res.json({
-
-        ok: true,
-
-        template:
-          template
-
+    if (!old) {
+      return res.status(404).json({
+        error: "Template not found."
       });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
     }
 
+    const updated = {
+      ...old,
+      title: String(
+        req.body.title ?? old.title ?? ""
+      ).trim(),
+
+      category: String(
+        req.body.category ?? old.category ?? "Other"
+      ).trim(),
+
+      html: String(
+        req.body.html ?? old.html ?? ""
+      ),
+
+      thumbnail: String(
+        req.body.thumbnail ?? old.thumbnail ?? ""
+      ),
+
+      nameRequired:
+        req.body.nameRequired === undefined
+          ? Boolean(old.nameRequired)
+          : Boolean(req.body.nameRequired),
+
+      published:
+        req.body.published === undefined
+          ? Boolean(old.published)
+          : Boolean(req.body.published),
+
+      updatedAt: Date.now()
+    };
+
+    await firebaseSet(`templates/${id}`, updated);
+
+    res.json({
+      ok: true,
+      template: updated
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
+});
 
+app.delete("/api/admin/templates/:id", requireAdmin, async (req, res) => {
+  try {
+    await firebaseSet(
+      `templates/${req.params.id}`,
+      null
+    );
 
-/* =========================
-   ADMIN: EDIT TEMPLATE
-========================= */
-
-app.put(
-  "/api/admin/templates/:id",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      const id =
-        req.params.id;
-
-
-      const old =
-        await firebaseGet(
-          `templates/${id}`
-        );
-
-
-      if (!old) {
-
-        return res.status(404).json({
-
-          error:
-            "Template not found."
-
-        });
-
-      }
-
-
-      const updated = {
-
-        ...old,
-
-        title:
-          String(
-            req.body.title ??
-            old.title
-          ).trim(),
-
-        category:
-          String(
-            req.body.category ??
-            old.category
-          ).trim(),
-
-        html:
-          String(
-            req.body.html ??
-            old.html
-          ),
-
-        thumbnail: String(req.body.thumbnail ?? old.thumbnail ?? ""),
-
-        nameRequired:
-          Boolean(
-            req.body.nameRequired
-          ),
-
-        published:
-          Boolean(
-            req.body.published
-          ),
-
-        updatedAt:
-          Date.now()
-
-      };
-
-
-      await firebaseSet(
-        `templates/${id}`,
-        updated
-      );
-
-
-      res.json({
-
-        ok: true,
-
-        template:
-          updated
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
+    res.json({
+      ok: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
-
-
-/* =========================
-   ADMIN: DELETE TEMPLATE
-========================= */
-
-app.delete(
-  "/api/admin/templates/:id",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      await firebaseSet(
-        `templates/${req.params.id}`,
-        null
-      );
-
-
-      res.json({
-
-        ok: true
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
+});
 
 /* =========================
    ADS
 ========================= */
 
-app.get(
-  "/api/ads",
-  async function(req, res) {
+app.get("/api/ads", async (req, res) => {
+  try {
+    const data = await firebaseGet("ads");
 
-    try {
+    const ads = Object.values(data || {})
+      .filter(ad => ad && ad.enabled === true);
 
-      const data =
-        await firebaseGet(
-          "ads"
-        );
+    res.json(ads);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
+app.get("/api/admin/ads", requireAdmin, async (req, res) => {
+  try {
+    const data = await firebaseGet("ads");
 
-      const ads =
-        Object.values(
-          data || {}
-        )
-        .filter(function(ad) {
+    res.json(Object.values(data || {}));
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
-          return (
-            ad &&
-            ad.enabled === true
-          );
+app.post("/api/admin/ads", requireAdmin, async (req, res) => {
+  try {
+    const id = crypto.randomUUID();
 
-        });
+    const validPositions = [
+      "top",
+      "middle",
+      "download"
+    ];
 
+    const position = validPositions.includes(req.body.position)
+      ? req.body.position
+      : "middle";
 
-      res.json(ads);
+    const ad = {
+      id,
+      title: String(
+        req.body.title || "Advertisement"
+      ),
 
-    } catch (error) {
+      position,
 
-      res.status(500).json({
+      code: String(
+        req.body.code || ""
+      ),
 
-        error:
-          error.message
+      enabled: Boolean(req.body.enabled),
 
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await firebaseSet(`ads/${id}`, ad);
+
+    res.json({
+      ok: true,
+      ad
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+app.put("/api/admin/ads/:id", requireAdmin, async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const old = await firebaseGet(`ads/${id}`);
+
+    if (!old) {
+      return res.status(404).json({
+        error: "Advertisement not found."
       });
-
     }
 
-  }
-);
+    const validPositions = [
+      "top",
+      "middle",
+      "download"
+    ];
 
+    const position = validPositions.includes(req.body.position)
+      ? req.body.position
+      : old.position;
+
+    const updated = {
+      ...old,
+
+      title: String(
+        req.body.title ?? old.title ?? "Advertisement"
+      ),
+
+      position,
+
+      code: String(
+        req.body.code ?? old.code ?? ""
+      ),
+
+      enabled:
+        req.body.enabled === undefined
+          ? Boolean(old.enabled)
+          : Boolean(req.body.enabled),
+
+      updatedAt: Date.now()
+    };
+
+    await firebaseSet(`ads/${id}`, updated);
+
+    res.json({
+      ok: true,
+      ad: updated
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+app.delete("/api/admin/ads/:id", requireAdmin, async (req, res) => {
+  try {
+    await firebaseSet(
+      `ads/${req.params.id}`,
+      null
+    );
+
+    res.json({
+      ok: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
 /* =========================
-   ADMIN: GET ADS
+   ANALYTICS
 ========================= */
 
-app.get(
-  "/api/admin/ads",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      const data =
-        await firebaseGet(
-          "ads"
-        );
-
-
-      res.json(
-        Object.values(
-          data || {}
-        )
-      );
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ADMIN: ADD AD
-========================= */
-
-app.post(
-  "/api/admin/ads",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      const id =
-        crypto.randomUUID();
-
-
-      const position =
-        [
-          "top",
-          "middle",
-          "download"
-        ].includes(
-          req.body.position
-        )
-          ? req.body.position
-          : "middle";
-
-
-      const ad = {
-
-        id: id,
-
-        title:
-          String(
-            req.body.title ||
-            "Advertisement"
-          ),
-
-        position:
-          position,
-
-        code:
-          String(
-            req.body.code || ""
-          ),
-
-        enabled:
-          Boolean(
-            req.body.enabled
-          ),
-
-        createdAt:
-          Date.now(),
-
-        updatedAt:
-          Date.now()
-
-      };
-
-
-      await firebaseSet(
-        `ads/${id}`,
-        ad
-      );
-
-
-      res.json({
-
-        ok: true,
-
-        ad: ad
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ADMIN: EDIT AD
-========================= */
-
-app.put(
-  "/api/admin/ads/:id",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      const id =
-        req.params.id;
-
-
-      const old =
-        await firebaseGet(
-          `ads/${id}`
-        );
-
-
-      if (!old) {
-
-        return res.status(404).json({
-
-          error:
-            "Advertisement not found."
-
-        });
-
-      }
-
-
-      const position =
-        [
-          "top",
-          "middle",
-          "download"
-        ].includes(
-          req.body.position
-        )
-          ? req.body.position
-          : old.position;
-
-
-      const updated = {
-
-        ...old,
-
-        title:
-          String(
-            req.body.title ??
-            old.title
-          ),
-
-        position:
-          position,
-
-        code:
-          String(
-            req.body.code ??
-            old.code
-          ),
-
-        enabled:
-          Boolean(
-            req.body.enabled
-          ),
-
-        updatedAt:
-          Date.now()
-
-      };
-
-
-      await firebaseSet(
-        `ads/${id}`,
-        updated
-      );
-
-
-      res.json({
-
-        ok: true,
-
-        ad:
-          updated
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ADMIN: DELETE AD
-========================= */
-
-app.delete(
-  "/api/admin/ads/:id",
-  requireAdmin,
-  async function(req, res) {
-
-    try {
-
-      await firebaseSet(
-        `ads/${req.params.id}`,
-        null
-      );
-
-
-      res.json({
-
-        ok: true
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-
-/* =========================
-   VIEW ANALYTICS
-========================= */
-
-app.post(
-  "/api/analytics/view",
-  async function(req, res) {
-
-    try {
-
+app.post("/api/analytics/view", async (req, res) => {
+  try {
+    await increment("stats/totalViews");
+
+    if (req.body.templateId) {
       await increment(
-        "stats/totalViews"
+        `templates/${req.body.templateId}/views`
       );
-
-
-      if (
-        req.body.templateId
-      ) {
-
-        await increment(
-          `templates/${req.body.templateId}/views`
-        );
-
-      }
-
-
-      res.json({
-
-        ok: true
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
     }
 
+    res.json({
+      ok: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
+});
 
+app.post("/api/analytics/download", async (req, res) => {
+  try {
+    await increment("stats/totalDownloads");
 
-/* =========================
-   DOWNLOAD ANALYTICS
-========================= */
-
-app.post(
-  "/api/analytics/download",
-  async function(req, res) {
-
-    try {
-
+    if (req.body.templateId) {
       await increment(
-        "stats/totalDownloads"
+        `templates/${req.body.templateId}/downloads`
       );
-
-
-      if (
-        req.body.templateId
-      ) {
-
-        await increment(
-          `templates/${req.body.templateId}/downloads`
-        );
-
-      }
-
-
-      res.json({
-
-        ok: true
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
     }
 
+    res.json({
+      ok: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
-
+});
 
 /* =========================
-   LIVE USERS
+   ONLINE USERS
 ========================= */
 
-app.post(
-  "/api/online/heartbeat",
-  async function(req, res) {
+app.post("/api/online/heartbeat", async (req, res) => {
+  try {
+    const clientId = String(
+      req.body.clientId || ""
+    )
+      .replace(/[^a-zA-Z0-9_-]/g, "")
+      .slice(0, 80);
 
-    try {
-
-      const clientId =
-        String(
-          req.body.clientId || ""
-        )
-        .replace(
-          /[^a-zA-Z0-9_-]/g,
-          ""
-        )
-        .slice(0, 80);
-
-
-      if (!clientId) {
-
-        return res.status(400).json({
-
-          error:
-            "Client ID is required."
-
-        });
-
-      }
-
-
-      await firebaseSet(
-
-        `onlineUsers/${clientId}`,
-
-        {
-
-          lastSeen:
-            Date.now()
-
-        }
-
-      );
-
-
-      res.json({
-
-        ok: true
-
+    if (!clientId) {
+      return res.status(400).json({
+        error: "Client ID is required."
       });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
     }
 
-  }
-);
+    await firebaseSet(
+      `onlineUsers/${clientId}`,
+      {
+        lastSeen: Date.now()
+      }
+    );
 
+    res.json({
+      ok: true
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
 
 /* =========================
    ADMIN STATISTICS
 ========================= */
 
-app.get(
-  "/api/admin/stats",
-  requireAdmin,
-  async function(req, res) {
+app.get("/api/admin/stats", requireAdmin, async (req, res) => {
+  try {
+    const stats = await firebaseGet("stats");
+    const templates = await firebaseGet("templates");
+    const onlineUsers = await firebaseGet("onlineUsers");
 
-    try {
+    const now = Date.now();
+    const onlineLimit = now - 90 * 1000;
 
-      const stats =
-        await firebaseGet(
-          "stats"
+    const onlineCount = Object.values(
+      onlineUsers || {}
+    ).filter(user => {
+      return (
+        user &&
+        Number(user.lastSeen) >= onlineLimit
+      );
+    }).length;
+
+    const templateList = Object.values(
+      templates || {}
+    ).filter(Boolean);
+
+    const trending = [...templateList]
+      .sort((a, b) => {
+        return (
+          Number(b.views || 0) -
+          Number(a.views || 0)
         );
+      })
+      .slice(0, 10)
+      .map(template => ({
+        id: template.id,
+        title: template.title,
+        views: Number(template.views || 0)
+      }));
 
-
-      const templates =
-        await firebaseGet(
-          "templates"
+    const mostDownloaded = [...templateList]
+      .sort((a, b) => {
+        return (
+          Number(b.downloads || 0) -
+          Number(a.downloads || 0)
         );
-
-
-      const onlineUsers =
-        await firebaseGet(
-          "onlineUsers"
-        );
-
-
-      const now =
-        Date.now();
-
-
-      const onlineLimit =
-        now -
-        90 * 1000;
-
-
-      const onlineCount =
-        Object.values(
-          onlineUsers || {}
+      })
+      .slice(0, 10)
+      .map(template => ({
+        id: template.id,
+        title: template.title,
+        downloads: Number(
+          template.downloads || 0
         )
-        .filter(function(user) {
+      }));
 
-          return (
-            user &&
-            Number(
-              user.lastSeen
-            ) >= onlineLimit
-          );
+    res.json({
+      totalViews: Number(
+        stats?.totalViews || 0
+      ),
 
-        })
-        .length;
+      totalDownloads: Number(
+        stats?.totalDownloads || 0
+      ),
 
+      onlineUsers: onlineCount,
 
-      const templateList =
-        Object.values(
-          templates || {}
-        )
-        .filter(Boolean);
+      templatesCount:
+        templateList.length,
 
+      trending,
 
-      const trending =
-        [...templateList]
-
-          .sort(function(a,b) {
-
-            return (
-              Number(b.views || 0) -
-              Number(a.views || 0)
-            );
-
-          })
-
-          .slice(0,10)
-
-          .map(function(template) {
-
-            return {
-
-              id:
-                template.id,
-
-              title:
-                template.title,
-
-              views:
-                Number(
-                  template.views || 0
-                )
-
-            };
-
-          });
-
-
-      const mostDownloaded =
-        [...templateList]
-
-          .sort(function(a,b) {
-
-            return (
-              Number(b.downloads || 0) -
-              Number(a.downloads || 0)
-            );
-
-          })
-
-          .slice(0,10)
-
-          .map(function(template) {
-
-            return {
-
-              id:
-                template.id,
-
-              title:
-                template.title,
-
-              downloads:
-                Number(
-                  template.downloads || 0
-                )
-
-            };
-
-          });
-
-
-      res.json({
-
-        totalViews:
-          Number(
-            stats?.totalViews || 0
-          ),
-
-        totalDownloads:
-          Number(
-            stats?.totalDownloads || 0
-          ),
-
-        onlineUsers:
-          onlineCount,
-
-        templatesCount:
-          templateList.length,
-
-        trending:
-          trending,
-
-        mostDownloaded:
-          mostDownloaded
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
+      mostDownloaded
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
-
+});
 
 /* =========================
-   DEFAULT ROUTE
+   PAGES
 ========================= */
 
-app.get(
-  "/",
-  function(req, res) {
+app.get("/", (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "public",
+      "index.html"
+    )
+  );
+});
 
-    res.sendFile(
-      path.join(
-        __dirname,
-        "public",
-        "index.html"
-      )
-    );
+app.get("/template", (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "public",
+      "template.html"
+    )
+  );
+});
 
-  }
-);
-
+app.get("/admin", (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "public",
+      "admin.html"
+    )
+  );
+});
 
 /* =========================
-   START SERVER
+   SERVER
 ========================= */
 
-app.listen(
-  PORT,
-  function() {
-
-    console.log(
-      `MAKYAMA Message Server running on port ${PORT}`
-    );
-
-  }
-);
+app.listen(PORT, () => {
+  console.log(
+    `MAKYAMA Message Server running on port ${PORT}`
+  );
+});
