@@ -741,12 +741,7 @@ app.put(
             old.html
           ),
 
-        thumbnail:
-          String(
-            req.body.thumbnail ??
-            old.thumbnail ||
-            ""
-          ),
+        thumbnail: String(req.body.thumbnail ?? old.thumbnail ?? ""),
 
         nameRequired:
           Boolean(
