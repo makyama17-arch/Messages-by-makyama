@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MAKYAMA Message</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #050d18;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      padding: 15px 20px;
+      background: #0b1c30;
+      border-bottom: 1px solid #1b3851;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .title {
+      text-align: center;
+      margin: 15px 0 20px;
+    }
+
+    .message-box {
+      min-height: 450px;
+      background: #071321;
+      border: 1px solid #24435c;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .name-box {
+      display: none;
+      margin-bottom: 15px;
+    }
+
+    .name-box input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #2a4b64;
+      background: #0b1d31;
+      color: white;
+      font-size: 16px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    button {
+      flex: 1;
+      min-width: 130px;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #159bd5;
+      color: white;
+      font-weight: bold;
+    }
+
+    button.secondary {
+      background: #19334b;
+    }
+
+    .ad {
+      margin-top: 18px;
+      min-height: 70px;
+      border: 1px dashed #31516c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #68829a;
+      border-radius: 10px;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 450px;
+      color: #8fa6ba;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <a href="/">← Back to Messages</a>
+</header>
+
+<div class="page">
+
+  <h1 id="title" class="title">
+    Loading...
+  </h1>
+
+  <div id="nameBox" class="name-box">
+    <input
+      id="nameInput"
+      type="text"
+      maxlength="80"
+      placeholder="Enter name..."
+    >
+  </div>
+
+  <div id="messageBox" class="message-box">
+
+    <div class="loading">
+      Loading message...
+    </div>
+
+  </div>
+
+  <div class="controls">
+
+    <button
+      id="playBtn"
+    >
+      Play
+    </button>
+
+    <button
+      id="shareBtn"
+      class="secondary"
+    >
+      Share
+    </button>
+
+    <button
+      id="downloadBtn"
+    >
+      Download
+    </button>
+
+  </div>
+
+  <div id="downloadAd" class="ad">
+    Advertisement
+  </div>
+
+</div>
+
+<script>
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const id =
+    params.get("id");
+
+  const title =
+    document.getElementById("title");
+
+  const messageBox =
+    document.getElementById("messageBox");
+
+  const nameBox =
+    document.getElementById("nameBox");
+
+  const nameInput =
+    document.getElementById("nameInput");
+
+  let template = null;
+
+  async function loadTemplate() {
+
+    if (!id) {
+      messageBox.innerHTML = `
+        <div class="loading">
+          Message ID is missing.
+        </div>
+      `;
+
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/templates/" +
+          encodeURIComponent(id)
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          "Template not found."
+        );
+      }
+
+      template =
+        await response.json();
+
+      title.textContent =
+        template.title;
+
+      if (template.nameRequired) {
+        nameBox.style.display =
+          "block";
+      }
+
+      renderMessage();
+
+    } catch (error) {
+
+      messageBox.innerHTML = `
+        <div class="loading">
+          Message could not be loaded.
+        </div>
+      `;
+
+      console.error(error);
+    }
+  }
+
+  function renderMessage() {
+
+    if (!template) return;
+
+    let html =
+      template.html || "";
+
+    const name =
+      nameInput.value.trim() ||
+      "Rafiki";
+
+    html =
+      html.replaceAll(
+        "{name}",
+        escapeHtml(name)
+      );
+
+    messageBox.innerHTML =
+      html;
+
+    runAnimations();
+  }
+
+  function runAnimations() {
+
+    const elements =
+      messageBox.querySelectorAll(
+        "[data-animation]"
+      );
+
+    elements.forEach(
+      element => {
+
+        const animation =
+          element.dataset.animation;
+
+        element.style.animation =
+          "none";
+
+        void element.offsetWidth;
+
+        element.style.animation =
+          animation;
+      }
+    );
+  }
+
+  function escapeHtml(value) {
+
+    const div =
+      document.createElement("div");
+
+    div.textContent =
+      value;
+
+    return div.innerHTML;
+  }
+
+  nameInput.addEventListener(
+    "input",
+    renderMessage
+  );
+
+  document
+    .getElementById("playBtn")
+    .addEventListener(
+      "click",
+      renderMessage
+    );
+
+  document
+    .getElementById("shareBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const shareUrl =
+          window.location.href;
+
+        try {
+
+          if (
+            navigator.share
+          ) {
+
+            await navigator.share({
+              title:
+                template?.title ||
+                "MAKYAMA Message",
+              url: shareUrl
+            });
+
+          } else {
+
+            await navigator.clipboard
+              .writeText(shareUrl);
+
+            alert(
+              "Message link copied."
+            );
+          }
+
+        } catch (error) {
+          console.log(error);
+        }
+
+      }
+    );
+
+  document
+    .getElementById("downloadBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        if (!template) return;
+
+        try {
+
+          await fetch(
+            "/api/analytics/download",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                templateId: template.id
+              })
+            }
+          );
+
+        } catch (error) {
+          console.log(error);
+        }
+
+        /*
+          Video conversion will be connected
+          here in the next stage using browser
+          recording / WebM and later MP4 support.
+        */
+
+        alert(
+          "Download system is ready to be connected."
+        );
+      }
+    );
+
+  loadTemplate();
+
+</script>
+
+</body>
+</html>
