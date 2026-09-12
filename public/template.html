@@ -16,102 +16,459 @@
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #050816;
+      --panel: rgba(15, 23, 47, .78);
+      --line: rgba(255,255,255,.10);
+      --text: #ffffff;
+      --muted: #8d9bb9;
+      --blue: #5b8cff;
+      --purple: #8b5cff;
+      --cyan: #39d9ff;
+      --green: #25d366;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      background: #050d18;
-      color: white;
-      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(91,140,255,.15),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(139,92,255,.13),
+          transparent 30%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+      overflow-x: hidden;
     }
+
+    /* ================= HEADER ================= */
 
     header {
-      padding: 15px 20px;
-      background: #0b1c30;
-      border-bottom: 1px solid #1b3851;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 14px 18px;
+      background: rgba(5,8,22,.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
     }
 
-    header a {
-      color: white;
-      text-decoration: none;
+    .header-inner {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
     }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d8e2f7;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      transition: .25s;
+    }
+
+    .back:hover {
+      background: rgba(255,255,255,.07);
+      color: white;
+      transform: translateX(-3px);
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .7px;
+      color: #9eb5e8;
+    }
+
+    /* ================= PAGE ================= */
 
     .page {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
-      padding: 20px;
+      padding: 25px 18px 60px;
+    }
+
+    .title-area {
+      text-align: center;
+      padding: 15px 0 25px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #9bb5ed;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 11px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #55e9a3;
+      box-shadow: 0 0 12px #55e9a3;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(.65);
+        opacity: .5;
+      }
     }
 
     .title {
-      text-align: center;
-      margin: 15px 0 20px;
+      font-size: clamp(28px, 6vw, 48px);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      background:
+        linear-gradient(
+          90deg,
+          #fff,
+          #74dcff,
+          #9e80ff,
+          #fff
+        );
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: titleGradient 5s linear infinite;
     }
 
-    .message-box {
-      min-height: 450px;
-      background: #071321;
-      border: 1px solid #24435c;
-      border-radius: 18px;
-      overflow: hidden;
-      position: relative;
+    @keyframes titleGradient {
+      to {
+        background-position: 250% center;
+      }
     }
+
+    /* ================= NAME ================= */
 
     .name-box {
       display: none;
-      margin-bottom: 15px;
+      margin: 0 auto 17px;
+      max-width: 620px;
+    }
+
+    .name-label {
+      display: block;
+      color: #91a0bd;
+      font-size: 11px;
+      margin: 0 0 7px 4px;
+    }
+
+    .name-input-wrap {
+      position: relative;
+    }
+
+    .name-input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      opacity: .7;
     }
 
     .name-box input {
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid #2a4b64;
-      background: #0b1d31;
+      height: 52px;
+      padding: 0 15px 0 45px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.10);
+      outline: none;
+      background: rgba(13,20,42,.85);
       color: white;
-      font-size: 16px;
+      font-size: 15px;
+      transition: .25s;
     }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
+    .name-box input::placeholder {
+      color: #586682;
     }
 
-    button {
-      flex: 1;
-      min-width: 130px;
-      padding: 13px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #159bd5;
-      color: white;
-      font-weight: bold;
+    .name-box input:focus {
+      border-color: rgba(91,140,255,.6);
+      box-shadow:
+        0 0 0 4px rgba(91,140,255,.08);
     }
 
-    button.secondary {
-      background: #19334b;
+    /* ================= MESSAGE ================= */
+
+    .message-shell {
+      position: relative;
+      max-width: 900px;
+      margin: auto;
+      padding: 1px;
+      border-radius: 25px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(91,140,255,.35),
+          rgba(139,92,255,.22),
+          rgba(57,217,255,.15)
+        );
+      box-shadow:
+        0 30px 90px rgba(0,0,0,.32);
     }
 
-    .ad {
-      margin-top: 18px;
-      min-height: 70px;
-      border: 1px dashed #31516c;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #68829a;
-      border-radius: 10px;
+    .message-box {
+      min-height: 520px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(91,140,255,.09),
+          transparent 35%
+        ),
+        #07101f;
+    }
+
+    .message-box::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      left: -130px;
+      top: -120px;
+      background: rgba(91,140,255,.08);
+      filter: blur(30px);
+      pointer-events: none;
+    }
+
+    .message-box::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      right: -130px;
+      bottom: -120px;
+      background: rgba(139,92,255,.08);
+      filter: blur(30px);
+      pointer-events: none;
     }
 
     .loading {
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      color: #8190ad;
+      font-size: 12px;
+    }
+
+    .loader {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,.08);
+      border-top-color: var(--blue);
+      border-right-color: var(--purple);
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ================= CONTROLS ================= */
+
+    .controls {
+      max-width: 900px;
+      margin: 17px auto 0;
+      display: grid;
+      grid-template-columns:
+        repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      min-height: 50px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 13px;
+      cursor: pointer;
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      background:
+        rgba(19,29,57,.9);
+      transition:
+        transform .25s,
+        box-shadow .25s,
+        border-color .25s;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.18);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.22);
+    }
+
+    #playBtn {
+      background:
+        linear-gradient(
+          135deg,
+          #4f82ff,
+          #795cff
+        );
+      border-color: transparent;
+      box-shadow:
+        0 8px 25px rgba(79,130,255,.18);
+    }
+
+    #shareBtn {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(32,50,86,.95),
+          rgba(25,36,66,.95)
+        );
+    }
+
+    #downloadBtn {
+      background:
+        linear-gradient(
+          135deg,
+          #087fca,
+          #0b9fd8
+        );
+      border-color: transparent;
+      box-shadow:
+        0 8px 25px rgba(11,159,216,.14);
+    }
+
+    /* ================= AD ================= */
+
+    .ad {
+      max-width: 900px;
+      min-height: 70px;
+      margin: 20px auto 0;
+      border: 1px dashed rgba(126,154,255,.15);
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 450px;
-      color: #8fa6ba;
+      color: #52617c;
+      background: rgba(255,255,255,.012);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ================= INFO ================= */
+
+    .info {
+      max-width: 900px;
+      margin: 18px auto 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .info-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.06);
+      color: #667594;
+      font-size: 9px;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 11px 12px;
+      }
+
+      .page {
+        padding:
+          20px 12px 45px;
+      }
+
+      .brand {
+        font-size: 10px;
+      }
+
+      .back {
+        font-size: 11px;
+        padding: 7px 8px;
+      }
+
+      .title-area {
+        padding-top: 8px;
+      }
+
+      .title {
+        font-size: 31px;
+      }
+
+      .message-shell {
+        border-radius: 19px;
+      }
+
+      .message-box {
+        min-height: 460px;
+        border-radius: 18px;
+      }
+
+      .loading {
+        min-height: 460px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        min-height: 48px;
+      }
+
     }
 
   </style>
@@ -121,62 +478,152 @@
 <body>
 
 <header>
-  <a href="/">← Back to Messages</a>
-</header>
 
-<div class="page">
+  <div class="header-inner">
 
-  <h1 id="title" class="title">
-    Loading...
-  </h1>
-
-  <div id="nameBox" class="name-box">
-    <input
-      id="nameInput"
-      type="text"
-      maxlength="80"
-      placeholder="Enter name..."
+    <a
+      class="back"
+      href="/"
     >
-  </div>
+      ← Back to Messages
+    </a>
 
-  <div id="messageBox" class="message-box">
-
-    <div class="loading">
-      Loading message...
+    <div class="brand">
+      MAKYAMA MESSAGES
     </div>
 
   </div>
 
+</header>
+
+<main class="page">
+
+  <!-- TITLE -->
+
+  <section class="title-area">
+
+    <div class="eyebrow">
+
+      <span class="eyebrow-dot"></span>
+
+      Animated Message
+
+    </div>
+
+    <h1
+      id="title"
+      class="title"
+    >
+      Loading...
+    </h1>
+
+  </section>
+
+  <!-- NAME -->
+
+  <div
+    id="nameBox"
+    class="name-box"
+  >
+
+    <label
+      class="name-label"
+      for="nameInput"
+    >
+      Personalize this message
+    </label>
+
+    <div class="name-input-wrap">
+
+      <span class="name-input-icon">
+        👤
+      </span>
+
+      <input
+        id="nameInput"
+        type="text"
+        maxlength="80"
+        placeholder="Enter name..."
+        autocomplete="off"
+      >
+
+    </div>
+
+  </div>
+
+  <!-- MESSAGE -->
+
+  <div class="message-shell">
+
+    <div
+      id="messageBox"
+      class="message-box"
+    >
+
+      <div class="loading">
+
+        <div class="loader"></div>
+
+        <span>
+          Loading animated message...
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CONTROLS -->
+
   <div class="controls">
 
-    <button
-      id="playBtn"
-    >
-      Play
+    <button id="playBtn">
+      ▶ Play Animation
     </button>
 
-    <button
-      id="shareBtn"
-      class="secondary"
-    >
-      Share
+    <button id="shareBtn">
+      ↗ Share
     </button>
 
-    <button
-      id="downloadBtn"
-    >
-      Download
+    <button id="downloadBtn">
+      ↓ Download
     </button>
 
   </div>
 
-  <div id="downloadAd" class="ad">
+  <!-- INFO -->
+
+  <div class="info">
+
+    <span class="info-pill">
+      ✨ Animated
+    </span>
+
+    <span class="info-pill">
+      💬 Swahili Message
+    </span>
+
+    <span class="info-pill">
+      📱 Shareable
+    </span>
+
+  </div>
+
+  <!-- AD -->
+
+  <div
+    id="downloadAd"
+    class="ad"
+  >
     Advertisement
   </div>
 
-</div>
+</main>
 
 <script>
+
+  /* ================= URL ================= */
 
   const params =
     new URLSearchParams(
@@ -185,6 +632,8 @@
 
   const id =
     params.get("id");
+
+  /* ================= ELEMENTS ================= */
 
   const title =
     document.getElementById("title");
@@ -198,18 +647,31 @@
   const nameInput =
     document.getElementById("nameInput");
 
+  const playBtn =
+    document.getElementById("playBtn");
+
+  const shareBtn =
+    document.getElementById("shareBtn");
+
+  const downloadBtn =
+    document.getElementById("downloadBtn");
+
+  /* ================= DATA ================= */
+
   let template = null;
+
+  /* ================= LOAD TEMPLATE ================= */
 
   async function loadTemplate() {
 
     if (!id) {
-      messageBox.innerHTML = `
-        <div class="loading">
-          Message ID is missing.
-        </div>
-      `;
+
+      showError(
+        "Message ID is missing."
+      );
 
       return;
+
     }
 
     try {
@@ -230,26 +692,69 @@
         await response.json();
 
       title.textContent =
-        template.title;
+        template.title ||
+        "MAKYAMA Message";
 
       if (template.nameRequired) {
+
         nameBox.style.display =
           "block";
+
       }
 
       renderMessage();
 
     } catch (error) {
 
-      messageBox.innerHTML = `
-        <div class="loading">
-          Message could not be loaded.
-        </div>
-      `;
-
       console.error(error);
+
+      showError(
+        "Message could not be loaded."
+      );
+
     }
+
   }
+
+  /* ================= ERROR ================= */
+
+  function showError(message) {
+
+    messageBox.innerHTML = `
+      <div class="loading">
+
+        <div style="
+          font-size:42px;
+          margin-bottom:5px;
+        ">
+          📭
+        </div>
+
+        <div style="
+          color:#a1aec6;
+          font-weight:700;
+        ">
+          ${escapeHtml(message)}
+        </div>
+
+        <a
+          href="/"
+          style="
+            margin-top:7px;
+            color:#72a5ff;
+            text-decoration:none;
+            font-size:11px;
+          "
+        >
+          ← Return to messages
+        </a>
+
+      </div>
+    `;
+
+  }
+
+  /* ================= RENDER ================= */
 
   function renderMessage() {
 
@@ -272,7 +777,10 @@
       html;
 
     runAnimations();
+
   }
+
+  /* ================= ANIMATION ================= */
 
   function runAnimations() {
 
@@ -287,16 +795,27 @@
         const animation =
           element.dataset.animation;
 
+        if (!animation) return;
+
         element.style.animation =
           "none";
+
+        /*
+          Force browser reflow so that
+          animation can restart.
+        */
 
         void element.offsetWidth;
 
         element.style.animation =
           animation;
+
       }
     );
+
   }
+
+  /* ================= ESCAPE ================= */
 
   function escapeHtml(value) {
 
@@ -307,103 +826,234 @@
       value;
 
     return div.innerHTML;
+
   }
+
+  /* ================= NAME ================= */
 
   nameInput.addEventListener(
     "input",
-    renderMessage
+    () => {
+
+      renderMessage();
+
+    }
   );
 
-  document
-    .getElementById("playBtn")
-    .addEventListener(
-      "click",
-      renderMessage
-    );
+  /* ================= PLAY ================= */
 
-  document
-    .getElementById("shareBtn")
-    .addEventListener(
-      "click",
-      async () => {
+  playBtn.addEventListener(
+    "click",
+    () => {
 
-        const shareUrl =
-          window.location.href;
+      if (!template) return;
 
-        try {
+      renderMessage();
 
-          if (
-            navigator.share
-          ) {
+      playBtn.textContent =
+        "↻ Replay Animation";
 
-            await navigator.share({
-              title:
-                template?.title ||
-                "MAKYAMA Message",
-              url: shareUrl
-            });
+      setTimeout(() => {
 
-          } else {
+        playBtn.textContent =
+          "▶ Play Animation";
 
-            await navigator.clipboard
-              .writeText(shareUrl);
+      }, 1200);
 
-            alert(
-              "Message link copied."
-            );
-          }
+    }
+  );
 
-        } catch (error) {
-          console.log(error);
-        }
+  /* ================= SHARE ================= */
 
-      }
-    );
+  shareBtn.addEventListener(
+    "click",
+    async () => {
 
-  document
-    .getElementById("downloadBtn")
-    .addEventListener(
-      "click",
-      async () => {
+      if (!template) return;
 
-        if (!template) return;
+      const shareUrl =
+        window.location.href;
 
-        try {
+      try {
 
-          await fetch(
-            "/api/analytics/download",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
+        if (
+          navigator.share
+        ) {
 
-              body: JSON.stringify({
-                templateId: template.id
-              })
-            }
+          await navigator.share({
+
+            title:
+              template.title ||
+              "MAKYAMA Message",
+
+            text:
+              "Check out this animated message on MAKYAMA MESSAGES.",
+
+            url:
+              shareUrl
+
+          });
+
+        } else {
+
+          await navigator.clipboard
+            .writeText(shareUrl);
+
+          showTemporaryMessage(
+            "✓ Message link copied"
           );
 
-        } catch (error) {
-          console.log(error);
         }
 
-        /*
-          Video conversion will be connected
-          here in the next stage using browser
-          recording / WebM and later MP4 support.
-        */
+      } catch (error) {
 
-        alert(
-          "Download system is ready to be connected."
-        );
+        console.log(error);
+
       }
-    );
+
+    }
+  );
+
+  /* ================= TEMP MESSAGE ================= */
+
+  function showTemporaryMessage(message) {
+
+    const old =
+      document.getElementById(
+        "temporaryMessage"
+      );
+
+    if (old) {
+      old.remove();
+    }
+
+    const box =
+      document.createElement("div");
+
+    box.id =
+      "temporaryMessage";
+
+    box.textContent =
+      message;
+
+    box.style.position =
+      "fixed";
+
+    box.style.left =
+      "50%";
+
+    box.style.bottom =
+      "25px";
+
+    box.style.transform =
+      "translateX(-50%)";
+
+    box.style.padding =
+      "11px 16px";
+
+    box.style.borderRadius =
+      "999px";
+
+    box.style.background =
+      "rgba(25,35,65,.95)";
+
+    box.style.border =
+      "1px solid rgba(255,255,255,.1)";
+
+    box.style.color =
+      "white";
+
+    box.style.fontSize =
+      "12px";
+
+    box.style.fontWeight =
+      "700";
+
+    box.style.zIndex =
+      "99999";
+
+    document.body.appendChild(box);
+
+    setTimeout(() => {
+
+      box.remove();
+
+    }, 2200);
+
+  }
+
+  /* ================= DOWNLOAD ================= */
+
+  downloadBtn.addEventListener(
+    "click",
+    async () => {
+
+      if (!template) return;
+
+      downloadBtn.disabled =
+        true;
+
+      downloadBtn.textContent =
+        "Preparing...";
+
+      try {
+
+        await fetch(
+          "/api/analytics/download",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                templateId:
+                  template.id
+              })
+          }
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+      /*
+        Video recording will be connected
+        here in the next stage.
+
+        Browser recording:
+        - WebM first
+        - MP4 later using FFmpeg.wasm
+      */
+
+      setTimeout(() => {
+
+        downloadBtn.disabled =
+          false;
+
+        downloadBtn.textContent =
+          "↓ Download";
+
+        showTemporaryMessage(
+          "Download feature is being prepared."
+        );
+
+      }, 600);
+
+    }
+  );
+
+  /* ================= START ================= */
 
   loadTemplate();
 
 </script>
 
 </body>
+
 </html>
