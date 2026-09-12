@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MAKYAMA Messages — Admin</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #06101c;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background: #0b1c30;
+      padding: 15px 20px;
+      border-bottom: 1px solid #1d3a53;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      color: #4dd9ff;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .login {
+      max-width: 420px;
+      margin: 70px auto;
+      background: #0b1d31;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #23435d;
+    }
+
+    h1,
+    h2 {
+      margin-bottom: 18px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #294a63;
+      background: #081827;
+      color: white;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      font-family: monospace;
+    }
+
+    button {
+      border: none;
+      padding: 11px 16px;
+      border-radius: 8px;
+      background: #159bd5;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button.danger {
+      background: #a93232;
+    }
+
+    button.gray {
+      background: #263c51;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: #0b1d31;
+      border: 1px solid #203d56;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .stat span {
+      display: block;
+      color: #839caf;
+      margin-bottom: 8px;
+    }
+
+    .stat strong {
+      font-size: 28px;
+    }
+
+    .panel {
+      background: #0b1d31;
+      border: 1px solid #203d56;
+      border-radius: 13px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .template-item,
+    .ad-item {
+      background: #071522;
+      border: 1px solid #1e3a51;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns:
+        repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      color: #9bb0c2;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .check input {
+      width: auto;
+      margin: 0;
+    }
+
+    .message {
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: #102c43;
+      color: #9ddfff;
+    }
+
+    @media(max-width:700px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="header-inner">
+
+    <div class="logo">
+      MAKYAMA MESSAGES ADMIN
+    </div>
+
+    <button
+      id="logoutBtn"
+      class="gray hidden"
+    >
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+<main>
+
+  <section id="loginSection" class="login">
+
+    <h1>Admin Login</h1>
+
+    <div id="loginMessage"></div>
+
+    <label>
+      Username
+    </label>
+
+    <input
+      id="username"
+      type="text"
+      autocomplete="username"
+    >
+
+    <label>
+      Password
+    </label>
+
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="loginBtn"
+      style="width:100%;"
+    >
+      Login
+    </button>
+
+  </section>
+
+  <section
+    id="dashboard"
+    class="hidden"
+  >
+
+    <h1>Dashboard</h1>
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>Live Users</span>
+        <strong id="onlineUsers">
+          0
+        </strong>
+      </div>
+
+      <div class="stat">
+        <span>Total Views</span>
+        <strong id="totalViews">
+          0
+        </strong>
+      </div>
+
+      <div class="stat">
+        <span>Total Downloads</span>
+        <strong id="totalDownloads">
+          0
+        </strong>
+      </div>
+
+      <div class="stat">
+        <span>Templates</span>
+        <strong id="templatesCount">
+          0
+        </strong>
+      </div>
+
+    </div>
+
+    <section class="panel">
+
+      <h2>Add / Edit Template</h2>
+
+      <input
+        type="hidden"
+        id="templateId"
+      >
+
+      <div class="row">
+
+        <div>
+
+          <label>
+            Title
+          </label>
+
+          <input
+            id="templateTitle"
+            placeholder="Example: Birthday Message"
+          >
+
+        </div>
+
+        <div>
+
+          <label>
+            Category
+          </label>
+
+          <select id="templateCategory">
+
+            <option>Love</option>
+            <option>Birthday</option>
+            <option>Celebration</option>
+            <option>Sad</option>
+            <option>Funny</option>
+            <option>Quotes</option>
+            <option>Appreciation</option>
+            <option>Other</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <label>
+        Thumbnail URL (optional)
+      </label>
+
+      <input
+        id="templateThumbnail"
+        placeholder="https://..."
+      >
+
+      <label>
+        Animation HTML
+      </label>
+
+      <textarea
+        id="templateHtml"
+        placeholder="Write your HTML animation here..."
+      ></textarea>
+
+      <label class="check">
+
+        <input
+          id="nameRequired"
+          type="checkbox"
+        >
+
+        User must enter a name
+
+      </label>
+
+      <label class="check">
+
+        <input
+          id="published"
+          type="checkbox"
+          checked
+        >
+
+        Published
+
+      </label>
+
+      <div class="item-actions">
+
+        <button id="saveTemplateBtn">
+          Save Template
+        </button>
+
+        <button
+          id="clearTemplateBtn"
+          class="gray"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Templates</h2>
+
+      <div id="templateList">
+        Loading...
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Advertisements</h2>
+
+      <input
+        type="hidden"
+        id="adId"
+      >
+
+      <label>
+        Ad Title
+      </label>
+
+      <input
+        id="adTitle"
+        placeholder="Advertisement"
+      >
+
+      <label>
+        Position
+      </label>
+
+      <select id="adPosition">
+
+        <option value="top">
+          Top
+        </option>
+
+        <option value="middle">
+          Middle
+        </option>
+
+        <option value="download">
+          Download
+        </option>
+
+      </select>
+
+      <label>
+        Ad Code
+      </label>
+
+      <textarea
+        id="adCode"
+        placeholder="Paste your ad code here..."
+      ></textarea>
+
+      <label class="check">
+
+        <input
+          id="adEnabled"
+          type="checkbox"
+        >
+
+        Enabled
+
+      </label>
+
+      <div class="item-actions">
+
+        <button id="saveAdBtn">
+          Save Advertisement
+        </button>
+
+        <button
+          id="clearAdBtn"
+          class="gray"
+        >
+          Clear
+        </button>
+
+      </div>
+
+      <hr
+        style="
+          border-color:#203d56;
+          margin:20px 0;
+        "
+      >
+
+      <div id="adList">
+        Loading...
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Trending Templates</h2>
+
+      <div id="trending">
+        Loading...
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Most Downloaded</h2>
+
+      <div id="mostDownloaded">
+        Loading...
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<script>
+
+  const loginSection =
+    document.getElementById(
+      "loginSection"
+    );
+
+  const dashboard =
+    document.getElementById(
+      "dashboard"
+    );
+
+  const logoutBtn =
+    document.getElementById(
+      "logoutBtn"
+    );
+
+  async function api(
+    url,
+    options = {}
+  ) {
+
+    const response =
+      await fetch(
+        url,
+        options
+      );
+
+    const data =
+      await response.json()
+        .catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "Request failed."
+      );
+    }
+
+    return data;
+  }
+
+  async function checkLogin() {
+
+    try {
+
+      await api(
+        "/api/admin/me"
+      );
+
+      showDashboard();
+
+    } catch {
+
+      showLogin();
+
+    }
+
+  }
+
+  function showLogin() {
+
+    loginSection.classList.remove(
+      "hidden"
+    );
+
+    dashboard.classList.add(
+      "hidden"
+    );
+
+    logoutBtn.classList.add(
+      "hidden"
+    );
+  }
+
+  function showDashboard() {
+
+    loginSection.classList.add(
+      "hidden"
+    );
+
+    dashboard.classList.remove(
+      "hidden"
+    );
+
+    logoutBtn.classList.remove(
+      "hidden"
+    );
+
+    loadDashboard();
+  }
+
+  document
+    .getElementById("loginBtn")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const username =
+          document.getElementById(
+            "username"
+          ).value;
+
+        const password =
+          document.getElementById(
+            "password"
+          ).value;
+
+        const message =
+          document.getElementById(
+            "loginMessage"
+          );
+
+        try {
+
+          await api(
+            "/api/admin/login",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                username,
+                password
+              })
+            }
+          );
+
+          showDashboard();
+
+        } catch (error) {
+
+          message.innerHTML = `
+            <div class="message">
+              ${escapeHtml(error.message)}
+            </div>
+          `;
+
+        }
+
+      }
+    );
+
+  logoutBtn.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await api(
+          "/api/admin/logout",
+          {
+            method: "POST"
+          }
+        );
+
+      } finally {
+
+        showLogin();
+
+      }
+
+    }
+  );
+
+  async function loadDashboard() {
+
+    await Promise.all([
+      loadStats(),
+      loadTemplates(),
+      loadAds()
+    ]);
+
+  }
+
+  async function loadStats() {
+
+    try {
+
+      const data =
+        await api(
+          "/api/admin/stats"
+        );
+
+      document.getElementById(
+        "onlineUsers"
+      ).textContent =
+        data.onlineUsers;
+
+      document.getElementById(
+        "totalViews"
+      ).textContent =
+        data.totalViews;
+
+      document.getElementById(
+        "totalDownloads"
+      ).textContent =
+        data.totalDownloads;
+
+      document.getElementById(
+        "templatesCount"
+      ).textContent =
+        data.templatesCount;
+
+      document.getElementById(
+        "trending"
+      ).innerHTML =
+        renderStatsList(
+          data.trending,
+          "views"
+        );
+
+      document.getElementById(
+        "mostDownloaded"
+      ).innerHTML =
+        renderStatsList(
+          data.mostDownloaded,
+          "downloads"
+        );
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+  function renderStatsList(
+    items,
+    property
+  ) {
+
+    if (!items.length) {
+      return `
+        <div class="message">
+          No data yet.
+        </div>
+      `;
+    }
+
+    return items.map(item => `
+      <div class="template-item">
+        <strong>
+          ${escapeHtml(item.title)}
+        </strong>
+        <div>
+          ${Number(item[property] || 0)}
+          ${property}
+        </div>
+      </div>
+    `).join("");
+
+  }
+
+  async function loadTemplates() {
+
+    const list =
+      document.getElementById(
+        "templateList"
+      );
+
+    try {
+
+      const templates =
+        await api(
+          "/api/admin/templates"
+        );
+
+      if (!templates.length) {
+
+        list.innerHTML = `
+          <div class="message">
+            No templates yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      list.innerHTML =
+        templates.map(template => `
+
+          <div class="template-item">
+
+            <strong>
+              ${escapeHtml(template.title)}
+            </strong>
+
+            <div style="color:#8ca5b8;">
+              ${escapeHtml(template.category)}
+              ·
+              ${template.published ? "Published" : "Unpublished"}
+              ·
+              ${Number(template.views || 0)} views
+              ·
+              ${Number(template.downloads || 0)} downloads
+            </div>
+
+            <div class="item-actions">
+
+              <button
+                onclick="editTemplate('${template.id}')"
+              >
+                Edit
+              </button>
+
+              <button
+                class="danger"
+                onclick="deleteTemplate('${template.id}')"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+
+        `).join("");
+
+    } catch (error) {
+
+      list.innerHTML = `
+        <div class="message">
+          ${escapeHtml(error.message)}
+        </div>
+      `;
+
+    }
+
+  }
+
+  async function editTemplate(id) {
+
+    const templates =
+      await api(
+        "/api/admin/templates"
+      );
+
+    const template =
+      templates.find(
+        item => item.id === id
+      );
+
+    if (!template) return;
+
+    document.getElementById(
+      "templateId"
+    ).value =
+      template.id;
+
+    document.getElementById(
+      "templateTitle"
+    ).value =
+      template.title || "";
+
+    document.getElementById(
+      "templateCategory"
+    ).value =
+      template.category || "Other";
+
+    document.getElementById(
+      "templateThumbnail"
+    ).value =
+      template.thumbnail || "";
+
+    document.getElementById(
+      "templateHtml"
+    ).value =
+      template.html || "";
+
+    document.getElementById(
+      "nameRequired"
+    ).checked =
+      Boolean(template.nameRequired);
+
+    document.getElementById(
+      "published"
+    ).checked =
+      Boolean(template.published);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+  async function deleteTemplate(id) {
+
+    if (
+      !confirm(
+        "Delete this template?"
+      )
+    ) {
+      return;
+    }
+
+    try {
+
+      await api(
+        "/api/admin/templates/" +
+        encodeURIComponent(id),
+        {
+          method: "DELETE"
+        }
+      );
+
+      await loadDashboard();
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  }
+
+  document
+    .getElementById(
+      "saveTemplateBtn"
+    )
+    .addEventListener(
+      "click",
+      async () => {
+
+        const id =
+          document.getElementById(
+            "templateId"
+          ).value;
+
+        const payload = {
+
+          title:
+            document.getElementById(
+              "templateTitle"
+            ).value,
+
+          category:
+            document.getElementById(
+              "templateCategory"
+            ).value,
+
+          thumbnail:
+            document.getElementById(
+              "templateThumbnail"
+            ).value,
+
+          html:
+            document.getElementById(
+              "templateHtml"
+            ).value,
+
+          nameRequired:
+            document.getElementById(
+              "nameRequired"
+            ).checked,
+
+          published:
+            document.getElementById(
+              "published"
+            ).checked
+
+        };
+
+        try {
+
+          await api(
+            id
+              ? "/api/admin/templates/" +
+                encodeURIComponent(id)
+              : "/api/admin/templates",
+
+            {
+              method:
+                id ? "PUT" : "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+          clearTemplateForm();
+
+          await loadDashboard();
+
+          alert(
+            "Template saved successfully."
+          );
+
+        } catch (error) {
+
+          alert(error.message);
+
+        }
+
+      }
+    );
+
+  function clearTemplateForm() {
+
+    document.getElementById(
+      "templateId"
+    ).value = "";
+
+    document.getElementById(
+      "templateTitle"
+    ).value = "";
+
+    document.getElementById(
+      "templateThumbnail"
+    ).value = "";
+
+    document.getElementById(
+      "templateHtml"
+    ).value = "";
+
+    document.getElementById(
+      "nameRequired"
+    ).checked = false;
+
+    document.getElementById(
+      "published"
+    ).checked = true;
+
+  }
+
+  document
+    .getElementById(
+      "clearTemplateBtn"
+    )
+    .addEventListener(
+      "click",
+      clearTemplateForm
+    );
+
+  async function loadAds() {
+
+    const list =
+      document.getElementById(
+        "adList"
+      );
+
+    try {
+
+      const ads =
+        await api(
+          "/api/admin/ads"
+        );
+
+      if (!ads.length) {
+
+        list.innerHTML = `
+          <div class="message">
+            No advertisements yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      list.innerHTML =
+        ads.map(ad => `
+
+          <div class="ad-item">
+
+            <strong>
+              ${escapeHtml(ad.title)}
+            </strong>
+
+            <div style="color:#8ca5b8;">
+              Position:
+              ${escapeHtml(ad.position)}
+              ·
+              ${ad.enabled ? "Enabled" : "Disabled"}
+            </div>
+
+            <div class="item-actions">
+
+              <button
+                onclick="editAd('${ad.id}')"
+              >
+                Edit
+              </button>
+
+              <button
+                class="danger"
+                onclick="deleteAd('${ad.id}')"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+
+        `).join("");
+
+    } catch (error) {
+
+      list.innerHTML = `
+        <div class="message">
+          ${escapeHtml(error.message)}
+        </div>
+      `;
+
+    }
+
+  }
+
+  async function editAd(id) {
+
+    const ads =
+      await api(
+        "/api/admin/ads"
+      );
+
+    const ad =
+      ads.find(
+        item => item.id === id
+      );
+
+    if (!ad) return;
+
+    document.getElementById(
+      "adId"
+    ).value =
+      ad.id;
+
+    document.getElementById(
+      "adTitle"
+    ).value =
+      ad.title || "";
+
+    document.getElementById(
+      "adPosition"
+    ).value =
+      ad.position || "middle";
+
+    document.getElementById(
+      "adCode"
+    ).value =
+      ad.code || "";
+
+    document.getElementById(
+      "adEnabled"
+    ).checked =
+      Boolean(ad.enabled);
+
+  }
+
+  async function deleteAd(id) {
+
+    if (
+      !confirm(
+        "Delete this advertisement?"
+      )
+    ) {
+      return;
+    }
+
+    try {
+
+      await api(
+        "/api/admin/ads/" +
+        encodeURIComponent(id),
+        {
+          method: "DELETE"
+        }
+      );
+
+      await loadAds();
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  }
+
+  document
+    .getElementById(
+      "saveAdBtn"
+    )
+    .addEventListener(
+      "click",
+      async () => {
+
+        const id =
+          document.getElementById(
+            "adId"
+          ).value;
+
+        const payload = {
+
+          title:
+            document.getElementById(
+              "adTitle"
+            ).value,
+
+          position:
+            document.getElementById(
+              "adPosition"
+            ).value,
+
+          code:
+            document.getElementById(
+              "adCode"
+            ).value,
+
+          enabled:
+            document.getElementById(
+              "adEnabled"
+            ).checked
+
+        };
+
+        try {
+
+          await api(
+            id
+              ? "/api/admin/ads/" +
+                encodeURIComponent(id)
+              : "/api/admin/ads",
+
+            {
+              method:
+                id ? "PUT" : "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+          clearAdForm();
+
+          await loadAds();
+
+          alert(
+            "Advertisement saved."
+          );
+
+        } catch (error) {
+
+          alert(error.message);
+
+        }
+
+      }
+    );
+
+  function clearAdForm() {
+
+    document.getElementById(
+      "adId"
+    ).value = "";
+
+    document.getElementById(
+      "adTitle"
+    ).value = "";
+
+    document.getElementById(
+      "adPosition"
+    ).value = "middle";
+
+    document.getElementById(
+      "adCode"
+    ).value = "";
+
+    document.getElementById(
+      "adEnabled"
+    ).checked = false;
+
+  }
+
+  document
+    .getElementById(
+      "clearAdBtn"
+    )
+    .addEventListener(
+      "click",
+      clearAdForm
+    );
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+  checkLogin();
+
+</script>
+
+</body>
+</html>
