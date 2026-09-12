@@ -10,189 +10,571 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>MAKYAMA Messages — Admin</title>
+  <title>MAKYAMA Messages — Admin Dashboard</title>
 
   <style>
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #050816;
+      --panel: rgba(15, 23, 47, .82);
+      --panel2: rgba(10, 17, 36, .9);
+      --line: rgba(255,255,255,.09);
+      --text: #fff;
+      --muted: #8c9ab8;
+      --blue: #5b8cff;
+      --purple: #8b5cff;
+      --cyan: #39d9ff;
+      --green: #25d366;
+      --red: #ff5f6d;
     }
 
     body {
-      margin: 0;
-      background: #06101c;
-      color: white;
-      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at 10% 5%,
+          rgba(91,140,255,.14),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 15%,
+          rgba(139,92,255,.13),
+          transparent 30%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
     }
 
+    /* ================= HEADER ================= */
+
     header {
-      background: #0b1c30;
-      padding: 15px 20px;
-      border-bottom: 1px solid #1d3a53;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 13px 18px;
+      background: rgba(5,8,22,.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
     }
 
     .header-inner {
-      max-width: 1200px;
+      max-width: 1250px;
       margin: auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
     }
 
     .logo {
-      color: #4dd9ff;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: .5px;
     }
+
+    .logo-mark {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background:
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
+      box-shadow:
+        0 0 25px rgba(91,140,255,.25);
+    }
+
+    .logo-text {
+      font-size: 14px;
+    }
+
+    .logo-text span {
+      color: #8299cc;
+      font-size: 10px;
+      display: block;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    /* ================= MAIN ================= */
 
     main {
-      max-width: 1200px;
+      max-width: 1250px;
       margin: auto;
-      padding: 20px;
+      padding: 25px 18px 60px;
     }
+
+    /* ================= LOGIN ================= */
 
     .login {
-      max-width: 420px;
+      width: min(430px, 100%);
       margin: 70px auto;
-      background: #0b1d31;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #23435d;
+      padding: 35px 28px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 25px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(18,28,57,.92),
+          rgba(8,14,30,.94)
+        );
+      box-shadow:
+        0 30px 90px rgba(0,0,0,.35);
     }
 
-    h1,
-    h2 {
-      margin-bottom: 18px;
+    .login::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      top: -100px;
+      right: -80px;
+      background: rgba(91,140,255,.13);
+      filter: blur(20px);
+    }
+
+    .login-logo {
+      width: 65px;
+      height: 65px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background:
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
+      font-size: 27px;
+      font-weight: 950;
+      box-shadow:
+        0 15px 40px rgba(91,140,255,.2);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .login h1 {
+      text-align: center;
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 25px;
+    }
+
+    /* ================= FORM ================= */
+
+    label {
+      display: block;
+      color: #9ba8c3;
+      margin-bottom: 7px;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      border: 1px solid #294a63;
-      background: #081827;
+      padding: 13px;
+      margin-bottom: 14px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(7,14,30,.88);
       color: white;
       outline: none;
+      font-family: inherit;
+      transition: .25s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(91,140,255,.6);
+      box-shadow:
+        0 0 0 4px rgba(91,140,255,.07);
     }
 
     textarea {
-      min-height: 180px;
+      min-height: 200px;
       resize: vertical;
       font-family: monospace;
+      line-height: 1.5;
     }
 
     button {
       border: none;
       padding: 11px 16px;
-      border-radius: 8px;
-      background: #159bd5;
+      border-radius: 10px;
+      background:
+        linear-gradient(
+          135deg,
+          #4f82ff,
+          #795cff
+        );
       color: white;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 800;
+      transition: .25s;
     }
 
-    button.danger {
-      background: #a93232;
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 10px 25px rgba(0,0,0,.22);
     }
 
     button.gray {
-      background: #263c51;
+      background: #202e49;
+    }
+
+    button.danger {
+      background:
+        linear-gradient(
+          135deg,
+          #bd3847,
+          #8e2937
+        );
+    }
+
+    .login button {
+      width: 100%;
+      min-height: 50px;
     }
 
     .hidden {
       display: none !important;
     }
 
+    /* ================= MESSAGE ================= */
+
+    .message {
+      padding: 11px 13px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      background: rgba(91,140,255,.08);
+      border: 1px solid rgba(91,140,255,.13);
+      color: #9dc0ff;
+      font-size: 12px;
+    }
+
+    /* ================= DASHBOARD HEADER ================= */
+
+    .dashboard-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .dashboard-heading h1 {
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .dashboard-heading p {
+      color: #74819d;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .logout {
+      background:
+        rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* ================= STATS ================= */
+
     .stats {
       display: grid;
       grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-bottom: 25px;
+        repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-bottom: 22px;
     }
 
     .stat {
-      background: #0b1d31;
-      border: 1px solid #203d56;
-      border-radius: 12px;
-      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      padding: 19px;
+      border-radius: 17px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(17,27,55,.9),
+          rgba(9,15,31,.9)
+        );
+    }
+
+    .stat::after {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      right: -35px;
+      bottom: -35px;
+      background: rgba(91,140,255,.1);
     }
 
     .stat span {
       display: block;
-      color: #839caf;
-      margin-bottom: 8px;
+      color: #7786a4;
+      font-size: 10px;
+      margin-bottom: 9px;
     }
 
     .stat strong {
-      font-size: 28px;
+      font-size: 30px;
     }
+
+    /* ================= PANELS ================= */
 
     .panel {
-      background: #0b1d31;
-      border: 1px solid #203d56;
-      border-radius: 13px;
-      padding: 18px;
+      padding: 21px;
       margin-bottom: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(14,22,45,.88),
+          rgba(8,14,29,.92)
+        );
     }
 
-    .template-item,
-    .ad-item {
-      background: #071522;
-      border: 1px solid #1e3a51;
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 10px;
-    }
-
-    .item-actions {
+    .panel-header {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 10px;
     }
+
+    .panel h2 {
+      font-size: 18px;
+    }
+
+    .panel-subtitle {
+      color: #687695;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    /* ================= ROW ================= */
 
     .row {
       display: grid;
       grid-template-columns:
         repeat(2, 1fr);
-      gap: 12px;
+      gap: 13px;
     }
 
-    label {
-      display: block;
-      color: #9bb0c2;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
+    /* ================= CHECK ================= */
 
     .check {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 9px;
+      margin-bottom: 13px;
+      color: #9ba9c3;
+      font-size: 12px;
+      cursor: pointer;
     }
 
     .check input {
-      width: auto;
+      width: 17px;
+      height: 17px;
       margin: 0;
+      accent-color: var(--blue);
     }
 
-    .message {
-      padding: 10px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      background: #102c43;
-      color: #9ddfff;
+    /* ================= ACTIONS ================= */
+
+    .item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 11px;
+    }
+
+    /* ================= ITEMS ================= */
+
+    .template-item,
+    .ad-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.07);
+      background:
+        rgba(7,14,29,.72);
+      transition: .25s;
+    }
+
+    .template-item:hover,
+    .ad-item:hover {
+      border-color: rgba(91,140,255,.25);
+      transform: translateX(2px);
+    }
+
+    .item-title {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .item-meta {
+      color: #687796;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 7px;
+      border-radius: 999px;
+      font-size: 8px;
+      margin-left: 5px;
+    }
+
+    .status.on {
+      color: #73edac;
+      background: rgba(37,211,102,.08);
+    }
+
+    .status.off {
+      color: #ff8892;
+      background: rgba(255,95,109,.08);
+    }
+
+    /* ================= GRID LIST ================= */
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    /* ================= DIVIDER ================= */
+
+    hr {
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,.07);
+      margin: 22px 0;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media(max-width:900px) {
+
+      .stats {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
     }
 
     @media(max-width:700px) {
-      .row {
+
+      main {
+        padding:
+          18px 12px 45px;
+      }
+
+      .header-inner {
+        padding: 0 2px;
+      }
+
+      .logo-text {
+        font-size: 11px;
+      }
+
+      .logo-text span {
+        font-size: 8px;
+      }
+
+      .dashboard-heading {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .row,
+      .insight-grid {
         grid-template-columns: 1fr;
       }
+
+      .panel {
+        padding: 16px;
+      }
+
+    }
+
+    @media(max-width:480px) {
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .stat {
+        padding: 14px;
+      }
+
+      .stat strong {
+        font-size: 23px;
+      }
+
+      .stat span {
+        font-size: 9px;
+      }
+
+      .login {
+        margin: 40px auto;
+        padding: 28px 20px;
+      }
+
+      .item-actions button {
+        flex: 1;
+      }
+
     }
 
   </style>
@@ -206,12 +588,21 @@
   <div class="header-inner">
 
     <div class="logo">
-      MAKYAMA MESSAGES ADMIN
+
+      <div class="logo-mark">
+        M
+      </div>
+
+      <div class="logo-text">
+        MAKYAMA MESSAGES
+        <span>ADMIN CONTROL CENTER</span>
+      </div>
+
     </div>
 
     <button
       id="logoutBtn"
-      class="gray hidden"
+      class="logout hidden"
     >
       Logout
     </button>
@@ -222,83 +613,123 @@
 
 <main>
 
-  <section id="loginSection" class="login">
+  <!-- ================= LOGIN ================= -->
 
-    <h1>Admin Login</h1>
+  <section
+    id="loginSection"
+    class="login"
+  >
+
+    <div class="login-logo">
+      M
+    </div>
+
+    <h1>
+      Admin Login
+    </h1>
+
+    <p class="login-subtitle">
+      Manage MAKYAMA animated messages
+    </p>
 
     <div id="loginMessage"></div>
 
-    <label>
+    <label for="username">
       Username
     </label>
 
     <input
       id="username"
       type="text"
+      placeholder="Enter username"
       autocomplete="username"
     >
 
-    <label>
+    <label for="password">
       Password
     </label>
 
     <input
       id="password"
       type="password"
+      placeholder="Enter password"
       autocomplete="current-password"
     >
 
-    <button
-      id="loginBtn"
-      style="width:100%;"
-    >
-      Login
+    <button id="loginBtn">
+      🔐 Login to Dashboard
     </button>
 
   </section>
+
+  <!-- ================= DASHBOARD ================= -->
 
   <section
     id="dashboard"
     class="hidden"
   >
 
-    <h1>Dashboard</h1>
+    <div class="dashboard-heading">
 
-    <div class="stats">
+      <div>
 
-      <div class="stat">
-        <span>Live Users</span>
-        <strong id="onlineUsers">
-          0
-        </strong>
-      </div>
+        <h1>
+          Dashboard
+        </h1>
 
-      <div class="stat">
-        <span>Total Views</span>
-        <strong id="totalViews">
-          0
-        </strong>
-      </div>
+        <p>
+          Control your animated message platform.
+        </p>
 
-      <div class="stat">
-        <span>Total Downloads</span>
-        <strong id="totalDownloads">
-          0
-        </strong>
-      </div>
-
-      <div class="stat">
-        <span>Templates</span>
-        <strong id="templatesCount">
-          0
-        </strong>
       </div>
 
     </div>
 
+    <!-- ================= STATS ================= -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>🟢 Live Users</span>
+        <strong id="onlineUsers">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>👁 Total Views</span>
+        <strong id="totalViews">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>⬇ Total Downloads</span>
+        <strong id="totalDownloads">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>✨ Templates</span>
+        <strong id="templatesCount">0</strong>
+      </div>
+
+    </div>
+
+    <!-- ================= TEMPLATE FORM ================= -->
+
     <section class="panel">
 
-      <h2>Add / Edit Template</h2>
+      <div class="panel-header">
+
+        <div>
+
+          <h2>
+            ✨ Add / Edit Animated Message
+          </h2>
+
+          <div class="panel-subtitle">
+            Create the Swahili message that users will see.
+          </div>
+
+        </div>
+
+      </div>
 
       <input
         type="hidden"
@@ -309,8 +740,8 @@
 
         <div>
 
-          <label>
-            Title
+          <label for="templateTitle">
+            Message Title
           </label>
 
           <input
@@ -322,20 +753,43 @@
 
         <div>
 
-          <label>
+          <label for="templateCategory">
             Category
           </label>
 
           <select id="templateCategory">
 
-            <option>Love</option>
-            <option>Birthday</option>
-            <option>Celebration</option>
-            <option>Sad</option>
-            <option>Funny</option>
-            <option>Quotes</option>
-            <option>Appreciation</option>
-            <option>Other</option>
+            <option value="Love">
+              ❤️ Love
+            </option>
+
+            <option value="Birthday">
+              🎂 Birthday
+            </option>
+
+            <option value="Celebration">
+              🎉 Celebration
+            </option>
+
+            <option value="Sad">
+              💔 Sad
+            </option>
+
+            <option value="Funny">
+              😂 Funny
+            </option>
+
+            <option value="Quotes">
+              💎 Quotes
+            </option>
+
+            <option value="Appreciation">
+              👏 Appreciation
+            </option>
+
+            <option value="Other">
+              ✨ Other
+            </option>
 
           </select>
 
@@ -343,22 +797,22 @@
 
       </div>
 
-      <label>
-        Thumbnail URL (optional)
+      <label for="templateThumbnail">
+        Thumbnail URL — optional
       </label>
 
       <input
         id="templateThumbnail"
-        placeholder="https://..."
+        placeholder="https://example.com/image.jpg"
       >
 
-      <label>
+      <label for="templateHtml">
         Animation HTML
       </label>
 
       <textarea
         id="templateHtml"
-        placeholder="Write your HTML animation here..."
+        placeholder="Paste your animated HTML here..."
       ></textarea>
 
       <label class="check">
@@ -380,14 +834,14 @@
           checked
         >
 
-        Published
+        Publish this message
 
       </label>
 
       <div class="item-actions">
 
         <button id="saveTemplateBtn">
-          Save Template
+          ✓ Save Template
         </button>
 
         <button
@@ -401,9 +855,25 @@
 
     </section>
 
+    <!-- ================= TEMPLATES ================= -->
+
     <section class="panel">
 
-      <h2>Templates</h2>
+      <div class="panel-header">
+
+        <div>
+
+          <h2>
+            💌 Message Templates
+          </h2>
+
+          <div class="panel-subtitle">
+            Manage all published and unpublished messages.
+          </div>
+
+        </div>
+
+      </div>
 
       <div id="templateList">
         Loading...
@@ -411,17 +881,33 @@
 
     </section>
 
+    <!-- ================= ADS ================= -->
+
     <section class="panel">
 
-      <h2>Advertisements</h2>
+      <div class="panel-header">
+
+        <div>
+
+          <h2>
+            📢 Advertisements
+          </h2>
+
+          <div class="panel-subtitle">
+            Control where advertisements appear.
+          </div>
+
+        </div>
+
+      </div>
 
       <input
         type="hidden"
         id="adId"
       >
 
-      <label>
-        Ad Title
+      <label for="adTitle">
+        Advertisement Title
       </label>
 
       <input
@@ -429,7 +915,7 @@
         placeholder="Advertisement"
       >
 
-      <label>
+      <label for="adPosition">
         Position
       </label>
 
@@ -449,8 +935,8 @@
 
       </select>
 
-      <label>
-        Ad Code
+      <label for="adCode">
+        Advertisement Code
       </label>
 
       <textarea
@@ -465,14 +951,14 @@
           type="checkbox"
         >
 
-        Enabled
+        Enable this advertisement
 
       </label>
 
       <div class="item-actions">
 
         <button id="saveAdBtn">
-          Save Advertisement
+          ✓ Save Advertisement
         </button>
 
         <button
@@ -484,12 +970,7 @@
 
       </div>
 
-      <hr
-        style="
-          border-color:#203d56;
-          margin:20px 0;
-        "
-      >
+      <hr>
 
       <div id="adList">
         Loading...
@@ -497,31 +978,98 @@
 
     </section>
 
-    <section class="panel">
+    <!-- ================= INSIGHTS ================= -->
 
-      <h2>Trending Templates</h2>
+    <div class="insight-grid">
 
-      <div id="trending">
-        Loading...
-      </div>
+      <section class="panel">
 
-    </section>
+        <div class="panel-header">
 
-    <section class="panel">
+          <div>
 
-      <h2>Most Downloaded</h2>
+            <h2>
+              🔥 Trending Templates
+            </h2>
 
-      <div id="mostDownloaded">
-        Loading...
-      </div>
+            <div class="panel-subtitle">
+              Most viewed messages.
+            </div>
 
-    </section>
+          </div>
+
+        </div>
+
+        <div id="trending">
+          Loading...
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <h2>
+              🏆 Most Downloaded
+            </h2>
+
+            <div class="panel-subtitle">
+              Messages users download most.
+            </div>
+
+          </div>
+
+        </div>
+
+        <div id="mostDownloaded">
+          Loading...
+        </div>
+
+      </section>
+
+    </div>
 
   </section>
 
 </main>
 
 <script>
+
+  /* ================= API ================= */
+
+  async function api(
+    url,
+    options = {}
+  ) {
+
+    const response =
+      await fetch(
+        url,
+        options
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(() => ({}));
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Request failed."
+      );
+
+    }
+
+    return data;
+
+  }
+
+  /* ================= ELEMENTS ================= */
 
   const loginSection =
     document.getElementById(
@@ -538,30 +1086,7 @@
       "logoutBtn"
     );
 
-  async function api(
-    url,
-    options = {}
-  ) {
-
-    const response =
-      await fetch(
-        url,
-        options
-      );
-
-    const data =
-      await response.json()
-        .catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "Request failed."
-      );
-    }
-
-    return data;
-  }
+  /* ================= LOGIN ================= */
 
   async function checkLogin() {
 
@@ -594,6 +1119,7 @@
     logoutBtn.classList.add(
       "hidden"
     );
+
   }
 
   function showDashboard() {
@@ -611,62 +1137,114 @@
     );
 
     loadDashboard();
+
   }
 
   document
     .getElementById("loginBtn")
     .addEventListener(
       "click",
-      async () => {
+      login
+    );
 
-        const username =
-          document.getElementById(
-            "username"
-          ).value;
+  document
+    .getElementById("password")
+    .addEventListener(
+      "keydown",
+      event => {
 
-        const password =
-          document.getElementById(
-            "password"
-          ).value;
-
-        const message =
-          document.getElementById(
-            "loginMessage"
-          );
-
-        try {
-
-          await api(
-            "/api/admin/login",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                username,
-                password
-              })
-            }
-          );
-
-          showDashboard();
-
-        } catch (error) {
-
-          message.innerHTML = `
-            <div class="message">
-              ${escapeHtml(error.message)}
-            </div>
-          `;
-
+        if (
+          event.key === "Enter"
+        ) {
+          login();
         }
 
       }
     );
+
+  async function login() {
+
+    const username =
+      document.getElementById(
+        "username"
+      ).value.trim();
+
+    const password =
+      document.getElementById(
+        "password"
+      ).value;
+
+    const message =
+      document.getElementById(
+        "loginMessage"
+      );
+
+    if (!username || !password) {
+
+      message.innerHTML = `
+        <div class="message">
+          Please enter username and password.
+        </div>
+      `;
+
+      return;
+
+    }
+
+    const button =
+      document.getElementById(
+        "loginBtn"
+      );
+
+    button.disabled = true;
+
+    button.textContent =
+      "Checking...";
+
+    try {
+
+      await api(
+        "/api/admin/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              username,
+              password
+            })
+        }
+      );
+
+      message.innerHTML = "";
+
+      showDashboard();
+
+    } catch (error) {
+
+      message.innerHTML = `
+        <div class="message">
+          ❌ ${escapeHtml(error.message)}
+        </div>
+      `;
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🔐 Login to Dashboard";
+
+    }
+
+  }
+
+  /* ================= LOGOUT ================= */
 
   logoutBtn.addEventListener(
     "click",
@@ -681,14 +1259,18 @@
           }
         );
 
-      } finally {
+      } catch (error) {
 
-        showLogin();
+        console.error(error);
 
       }
 
+      showLogin();
+
     }
   );
+
+  /* ================= DASHBOARD ================= */
 
   async function loadDashboard() {
 
@@ -699,6 +1281,8 @@
     ]);
 
   }
+
+  /* ================= STATS ================= */
 
   async function loadStats() {
 
@@ -712,28 +1296,36 @@
       document.getElementById(
         "onlineUsers"
       ).textContent =
-        data.onlineUsers;
+        formatNumber(
+          data.onlineUsers
+        );
 
       document.getElementById(
         "totalViews"
       ).textContent =
-        data.totalViews;
+        formatNumber(
+          data.totalViews
+        );
 
       document.getElementById(
         "totalDownloads"
       ).textContent =
-        data.totalDownloads;
+        formatNumber(
+          data.totalDownloads
+        );
 
       document.getElementById(
         "templatesCount"
       ).textContent =
-        data.templatesCount;
+        formatNumber(
+          data.templatesCount
+        );
 
       document.getElementById(
         "trending"
       ).innerHTML =
         renderStatsList(
-          data.trending,
+          data.trending || [],
           "views"
         );
 
@@ -741,7 +1333,7 @@
         "mostDownloaded"
       ).innerHTML =
         renderStatsList(
-          data.mostDownloaded,
+          data.mostDownloaded || [],
           "downloads"
         );
 
@@ -753,32 +1345,56 @@
 
   }
 
+  function formatNumber(value) {
+
+    return Number(
+      value || 0
+    ).toLocaleString();
+
+  }
+
   function renderStatsList(
     items,
     property
   ) {
 
     if (!items.length) {
+
       return `
         <div class="message">
           No data yet.
         </div>
       `;
+
     }
 
-    return items.map(item => `
-      <div class="template-item">
-        <strong>
-          ${escapeHtml(item.title)}
-        </strong>
-        <div>
-          ${Number(item[property] || 0)}
-          ${property}
+    return items
+      .map(item => `
+
+        <div class="template-item">
+
+          <div class="item-title">
+            ${escapeHtml(
+              item.title ||
+              "Untitled"
+            )}
+          </div>
+
+          <div class="item-meta">
+            ${formatNumber(
+              item[property] || 0
+            )}
+            ${property}
+          </div>
+
         </div>
-      </div>
-    `).join("");
+
+      `)
+      .join("");
 
   }
+
+  /* ================= TEMPLATES ================= */
 
   async function loadTemplates() {
 
@@ -798,52 +1414,97 @@
 
         list.innerHTML = `
           <div class="message">
-            No templates yet.
+            No templates yet. Create your first animated message above.
           </div>
         `;
 
         return;
+
       }
 
       list.innerHTML =
-        templates.map(template => `
+        templates
+          .map(
+            template => `
 
-          <div class="template-item">
+              <div class="template-item">
 
-            <strong>
-              ${escapeHtml(template.title)}
-            </strong>
+                <div class="item-title">
 
-            <div style="color:#8ca5b8;">
-              ${escapeHtml(template.category)}
-              ·
-              ${template.published ? "Published" : "Unpublished"}
-              ·
-              ${Number(template.views || 0)} views
-              ·
-              ${Number(template.downloads || 0)} downloads
-            </div>
+                  ${escapeHtml(
+                    template.title ||
+                    "Untitled"
+                  )}
 
-            <div class="item-actions">
+                  ${
+                    template.published
+                      ? `
+                        <span class="status on">
+                          Published
+                        </span>
+                      `
+                      : `
+                        <span class="status off">
+                          Unpublished
+                        </span>
+                      `
+                  }
 
-              <button
-                onclick="editTemplate('${template.id}')"
-              >
-                Edit
-              </button>
+                </div>
 
-              <button
-                class="danger"
-                onclick="deleteTemplate('${template.id}')"
-              >
-                Delete
-              </button>
+                <div class="item-meta">
 
-            </div>
+                  Category:
+                  ${escapeHtml(
+                    template.category ||
+                    "Other"
+                  )}
 
-          </div>
+                  <br>
 
-        `).join("");
+                  Views:
+                  ${formatNumber(
+                    template.views
+                  )}
+
+                  ·
+
+                  Downloads:
+                  ${formatNumber(
+                    template.downloads
+                  )}
+
+                </div>
+
+                <div class="item-actions">
+
+                  <button
+                    onclick="editTemplate('${escapeJs(template.id)}')"
+                  >
+                    ✏ Edit
+                  </button>
+
+                  <button
+                    class="danger"
+                    onclick="deleteTemplate('${escapeJs(template.id)}')"
+                  >
+                    🗑 Delete
+                  </button>
+
+                  <button
+                    class="gray"
+                    onclick="previewTemplate('${escapeJs(template.id)}')"
+                  >
+                    👁 Preview
+                  </button>
+
+                </div>
+
+              </div>
+
+            `
+          )
+          .join("");
 
     } catch (error) {
 
@@ -857,70 +1518,113 @@
 
   }
 
+  /* ================= EDIT TEMPLATE ================= */
+
   async function editTemplate(id) {
 
-    const templates =
-      await api(
-        "/api/admin/templates"
+    try {
+
+      const templates =
+        await api(
+          "/api/admin/templates"
+        );
+
+      const template =
+        templates.find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+      if (!template) {
+
+        alert(
+          "Template not found."
+        );
+
+        return;
+
+      }
+
+      document.getElementById(
+        "templateId"
+      ).value =
+        template.id || "";
+
+      document.getElementById(
+        "templateTitle"
+      ).value =
+        template.title || "";
+
+      document.getElementById(
+        "templateCategory"
+      ).value =
+        template.category ||
+        "Other";
+
+      document.getElementById(
+        "templateThumbnail"
+      ).value =
+        template.thumbnail || "";
+
+      document.getElementById(
+        "templateHtml"
+      ).value =
+        template.html || "";
+
+      document.getElementById(
+        "nameRequired"
+      ).checked =
+        Boolean(
+          template.nameRequired
+        );
+
+      document.getElementById(
+        "published"
+      ).checked =
+        Boolean(
+          template.published
+        );
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    } catch (error) {
+
+      alert(
+        error.message
       );
 
-    const template =
-      templates.find(
-        item => item.id === id
-      );
-
-    if (!template) return;
-
-    document.getElementById(
-      "templateId"
-    ).value =
-      template.id;
-
-    document.getElementById(
-      "templateTitle"
-    ).value =
-      template.title || "";
-
-    document.getElementById(
-      "templateCategory"
-    ).value =
-      template.category || "Other";
-
-    document.getElementById(
-      "templateThumbnail"
-    ).value =
-      template.thumbnail || "";
-
-    document.getElementById(
-      "templateHtml"
-    ).value =
-      template.html || "";
-
-    document.getElementById(
-      "nameRequired"
-    ).checked =
-      Boolean(template.nameRequired);
-
-    document.getElementById(
-      "published"
-    ).checked =
-      Boolean(template.published);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    }
 
   }
+
+  /* ================= PREVIEW ================= */
+
+  function previewTemplate(id) {
+
+    window.open(
+      "/template?id=" +
+      encodeURIComponent(id),
+      "_blank"
+    );
+
+  }
+
+  /* ================= DELETE TEMPLATE ================= */
 
   async function deleteTemplate(id) {
 
     if (
       !confirm(
-        "Delete this template?"
+        "Delete this animated message?"
       )
     ) {
+
       return;
+
     }
 
     try {
@@ -937,11 +1641,15 @@
 
     } catch (error) {
 
-      alert(error.message);
+      alert(
+        error.message
+      );
 
     }
 
   }
+
+  /* ================= SAVE TEMPLATE ================= */
 
   document
     .getElementById(
@@ -949,85 +1657,108 @@
     )
     .addEventListener(
       "click",
-      async () => {
-
-        const id =
-          document.getElementById(
-            "templateId"
-          ).value;
-
-        const payload = {
-
-          title:
-            document.getElementById(
-              "templateTitle"
-            ).value,
-
-          category:
-            document.getElementById(
-              "templateCategory"
-            ).value,
-
-          thumbnail:
-            document.getElementById(
-              "templateThumbnail"
-            ).value,
-
-          html:
-            document.getElementById(
-              "templateHtml"
-            ).value,
-
-          nameRequired:
-            document.getElementById(
-              "nameRequired"
-            ).checked,
-
-          published:
-            document.getElementById(
-              "published"
-            ).checked
-
-        };
-
-        try {
-
-          await api(
-            id
-              ? "/api/admin/templates/" +
-                encodeURIComponent(id)
-              : "/api/admin/templates",
-
-            {
-              method:
-                id ? "PUT" : "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify(payload)
-            }
-          );
-
-          clearTemplateForm();
-
-          await loadDashboard();
-
-          alert(
-            "Template saved successfully."
-          );
-
-        } catch (error) {
-
-          alert(error.message);
-
-        }
-
-      }
+      saveTemplate
     );
+
+  async function saveTemplate() {
+
+    const id =
+      document.getElementById(
+        "templateId"
+      ).value;
+
+    const payload = {
+
+      title:
+        document.getElementById(
+          "templateTitle"
+        ).value.trim(),
+
+      category:
+        document.getElementById(
+          "templateCategory"
+        ).value,
+
+      thumbnail:
+        document.getElementById(
+          "templateThumbnail"
+        ).value.trim(),
+
+      html:
+        document.getElementById(
+          "templateHtml"
+        ).value,
+
+      nameRequired:
+        document.getElementById(
+          "nameRequired"
+        ).checked,
+
+      published:
+        document.getElementById(
+          "published"
+        ).checked
+
+    };
+
+    if (
+      !payload.title ||
+      !payload.html
+    ) {
+
+      alert(
+        "Title and Animation HTML are required."
+      );
+
+      return;
+
+    }
+
+    try {
+
+      await api(
+        id
+          ? "/api/admin/templates/" +
+            encodeURIComponent(id)
+          : "/api/admin/templates",
+
+        {
+          method:
+            id
+              ? "PUT"
+              : "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
+
+      clearTemplateForm();
+
+      await loadDashboard();
+
+      alert(
+        "✓ Template saved successfully."
+      );
+
+    } catch (error) {
+
+      alert(
+        error.message
+      );
+
+    }
+
+  }
+
+  /* ================= CLEAR TEMPLATE ================= */
 
   function clearTemplateForm() {
 
@@ -1038,6 +1769,10 @@
     document.getElementById(
       "templateTitle"
     ).value = "";
+
+    document.getElementById(
+      "templateCategory"
+    ).value = "Love";
 
     document.getElementById(
       "templateThumbnail"
@@ -1066,6 +1801,8 @@
       clearTemplateForm
     );
 
+  /* ================= ADS ================= */
+
   async function loadAds() {
 
     const list =
@@ -1089,44 +1826,71 @@
         `;
 
         return;
+
       }
 
       list.innerHTML =
-        ads.map(ad => `
+        ads
+          .map(
+            ad => `
 
-          <div class="ad-item">
+              <div class="ad-item">
 
-            <strong>
-              ${escapeHtml(ad.title)}
-            </strong>
+                <div class="item-title">
 
-            <div style="color:#8ca5b8;">
-              Position:
-              ${escapeHtml(ad.position)}
-              ·
-              ${ad.enabled ? "Enabled" : "Disabled"}
-            </div>
+                  ${escapeHtml(
+                    ad.title ||
+                    "Advertisement"
+                  )}
 
-            <div class="item-actions">
+                  ${
+                    ad.enabled
+                      ? `
+                        <span class="status on">
+                          Enabled
+                        </span>
+                      `
+                      : `
+                        <span class="status off">
+                          Disabled
+                        </span>
+                      `
+                  }
 
-              <button
-                onclick="editAd('${ad.id}')"
-              >
-                Edit
-              </button>
+                </div>
 
-              <button
-                class="danger"
-                onclick="deleteAd('${ad.id}')"
-              >
-                Delete
-              </button>
+                <div class="item-meta">
 
-            </div>
+                  Position:
+                  ${escapeHtml(
+                    ad.position ||
+                    "middle"
+                  )}
 
-          </div>
+                </div>
 
-        `).join("");
+                <div class="item-actions">
+
+                  <button
+                    onclick="editAd('${escapeJs(ad.id)}')"
+                  >
+                    ✏ Edit
+                  </button>
+
+                  <button
+                    class="danger"
+                    onclick="deleteAd('${escapeJs(ad.id)}')"
+                  >
+                    🗑 Delete
+                  </button>
+
+                </div>
+
+              </div>
+
+            `
+          )
+          .join("");
 
     } catch (error) {
 
@@ -1140,46 +1904,65 @@
 
   }
 
+  /* ================= EDIT AD ================= */
+
   async function editAd(id) {
 
-    const ads =
-      await api(
-        "/api/admin/ads"
+    try {
+
+      const ads =
+        await api(
+          "/api/admin/ads"
+        );
+
+      const ad =
+        ads.find(
+          item =>
+            String(item.id) ===
+            String(id)
+        );
+
+      if (!ad) return;
+
+      document.getElementById(
+        "adId"
+      ).value =
+        ad.id || "";
+
+      document.getElementById(
+        "adTitle"
+      ).value =
+        ad.title || "";
+
+      document.getElementById(
+        "adPosition"
+      ).value =
+        ad.position ||
+        "middle";
+
+      document.getElementById(
+        "adCode"
+      ).value =
+        ad.code || "";
+
+      document.getElementById(
+        "adEnabled"
+      ).checked =
+        Boolean(
+          ad.enabled
+        );
+
+    } catch (error) {
+
+      alert(
+        error.message
       );
 
-    const ad =
-      ads.find(
-        item => item.id === id
-      );
-
-    if (!ad) return;
-
-    document.getElementById(
-      "adId"
-    ).value =
-      ad.id;
-
-    document.getElementById(
-      "adTitle"
-    ).value =
-      ad.title || "";
-
-    document.getElementById(
-      "adPosition"
-    ).value =
-      ad.position || "middle";
-
-    document.getElementById(
-      "adCode"
-    ).value =
-      ad.code || "";
-
-    document.getElementById(
-      "adEnabled"
-    ).checked =
-      Boolean(ad.enabled);
+    }
 
   }
+
+  /* ================= DELETE AD ================= */
 
   async function deleteAd(id) {
 
@@ -1188,7 +1971,9 @@
         "Delete this advertisement?"
       )
     ) {
+
       return;
+
     }
 
     try {
@@ -1205,11 +1990,15 @@
 
     } catch (error) {
 
-      alert(error.message);
+      alert(
+        error.message
+      );
 
     }
 
   }
+
+  /* ================= SAVE AD ================= */
 
   document
     .getElementById(
@@ -1217,75 +2006,97 @@
     )
     .addEventListener(
       "click",
-      async () => {
-
-        const id =
-          document.getElementById(
-            "adId"
-          ).value;
-
-        const payload = {
-
-          title:
-            document.getElementById(
-              "adTitle"
-            ).value,
-
-          position:
-            document.getElementById(
-              "adPosition"
-            ).value,
-
-          code:
-            document.getElementById(
-              "adCode"
-            ).value,
-
-          enabled:
-            document.getElementById(
-              "adEnabled"
-            ).checked
-
-        };
-
-        try {
-
-          await api(
-            id
-              ? "/api/admin/ads/" +
-                encodeURIComponent(id)
-              : "/api/admin/ads",
-
-            {
-              method:
-                id ? "PUT" : "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify(payload)
-            }
-          );
-
-          clearAdForm();
-
-          await loadAds();
-
-          alert(
-            "Advertisement saved."
-          );
-
-        } catch (error) {
-
-          alert(error.message);
-
-        }
-
-      }
+      saveAd
     );
+
+  async function saveAd() {
+
+    const id =
+      document.getElementById(
+        "adId"
+      ).value;
+
+    const payload = {
+
+      title:
+        document.getElementById(
+          "adTitle"
+        ).value.trim(),
+
+      position:
+        document.getElementById(
+          "adPosition"
+        ).value,
+
+      code:
+        document.getElementById(
+          "adCode"
+        ).value,
+
+      enabled:
+        document.getElementById(
+          "adEnabled"
+        ).checked
+
+    };
+
+    if (
+      !payload.title
+    ) {
+
+      alert(
+        "Advertisement title is required."
+      );
+
+      return;
+
+    }
+
+    try {
+
+      await api(
+        id
+          ? "/api/admin/ads/" +
+            encodeURIComponent(id)
+          : "/api/admin/ads",
+
+        {
+          method:
+            id
+              ? "PUT"
+              : "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
+
+      clearAdForm();
+
+      await loadAds();
+
+      alert(
+        "✓ Advertisement saved."
+      );
+
+    } catch (error) {
+
+      alert(
+        error.message
+      );
+
+    }
+
+  }
+
+  /* ================= CLEAR AD ================= */
 
   function clearAdForm() {
 
@@ -1320,6 +2131,8 @@
       clearAdForm
     );
 
+  /* ================= ESCAPE ================= */
+
   function escapeHtml(value) {
 
     return String(value)
@@ -1331,9 +2144,22 @@
 
   }
 
+  function escapeJs(value) {
+
+    return String(value)
+      .replaceAll("\\", "\\\\")
+      .replaceAll("'", "\\'")
+      .replaceAll("\n", "\\n")
+      .replaceAll("\r", "\\r");
+
+  }
+
+  /* ================= START ================= */
+
   checkLogin();
 
 </script>
 
 </body>
-</html>
+
+          </html>
