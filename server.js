@@ -4,31 +4,29 @@ const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
-const { spawn } = require("child_process");
 
 const admin = require("firebase-admin");
 
 const app = express();
 
-const PORT =
-process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 /* =====================================================
 MIDDLEWARE
 ===================================================== */
 
 app.use(
-express.json({
-limit: "5mb"
-})
+  express.json({
+    limit: "5mb"
+  })
 );
 
 app.use(cookieParser());
 
 app.use(
-express.static(
-path.join(__dirname, "public")
-)
+  express.static(
+    path.join(__dirname, "public")
+  )
 );
 
 /* =====================================================
@@ -39,127 +37,121 @@ let db = null;
 
 function initFirebase() {
 
-if (db) return db;
+  if (db) return db;
 
-const serviceAccount =
-process.env.FIREBASE_SERVICE_ACCOUNT;
+  const serviceAccount =
+    process.env.FIREBASE_SERVICE_ACCOUNT;
 
-const databaseURL =
-process.env.FIREBASE_DATABASE_URL;
+  const databaseURL =
+    process.env.FIREBASE_DATABASE_URL;
 
-if (
-!serviceAccount ||
-!databaseURL
-) {
+  if (
+    !serviceAccount ||
+    !databaseURL
+  ) {
+    return null;
+  }
 
-return null;
+  try {
 
-}
+    const credentials =
+      JSON.parse(serviceAccount);
 
-try {
+    if (!admin.apps.length) {
 
-const credentials =
-  JSON.parse(serviceAccount);
+      admin.initializeApp({
 
+        credential:
+          admin.credential.cert(
+            credentials
+          ),
 
-if (!admin.apps.length) {
+        databaseURL
 
-  admin.initializeApp({
+      });
 
-    credential:
-      admin.credential.cert(
-        credentials
-      ),
+    }
 
-    databaseURL
+    db =
+      admin.database();
 
-  });
+    return db;
 
-}
+  } catch (error) {
 
+    console.error(
+      "Firebase error:",
+      error.message
+    );
 
-db =
-  admin.database();
+    return null;
 
-
-return db;
-
-} catch (error) {
-
-console.error(
-  "Firebase error:",
-  error.message
-);
-
-
-return null;
-
-}
+  }
 
 }
 
 async function firebaseGet(ref) {
 
-const database =
-initFirebase();
+  const database =
+    initFirebase();
 
-if (!database) {
+  if (!database) {
 
-throw new Error(
-  "Firebase is not configured."
-);
+    throw new Error(
+      "Firebase is not configured."
+    );
 
-}
+  }
 
-const snapshot =
-await database
-.ref(ref)
-.once("value");
+  const snapshot =
+    await database
+      .ref(ref)
+      .once("value");
 
-return snapshot.val();
+  return snapshot.val();
 
 }
 
 async function firebaseSet(
-ref,
-value
+  ref,
+  value
 ) {
 
-const database =
-initFirebase();
+  const database =
+    initFirebase();
 
-if (!database) {
+  if (!database) {
 
-throw new Error(
-  "Firebase is not configured."
-);
+    throw new Error(
+      "Firebase is not configured."
+    );
 
-}
+  }
 
-await database
-.ref(ref)
-.set(value);
+  await database
+    .ref(ref)
+    .set(value);
 
 }
 
 async function increment(ref) {
 
-const database =
-initFirebase();
+  const database =
+    initFirebase();
 
-if (!database) return;
+  if (!database) return;
 
-await database
-.ref(ref)
-.transaction(
-current => {
+  await database
+    .ref(ref)
+    .transaction(
+      current => {
 
-    return (
-      Number(current) || 0
-    ) + 1;
+        return (
+          Number(current) || 0
+        ) + 1;
 
-  }
-);
+      }
+    );
 
 }
 
@@ -168,62 +160,59 @@ ADMIN SESSION
 ===================================================== */
 
 const adminSessions =
-new Map();
+  new Map();
 
 function requireAdmin(
-req,
-res,
-next
+  req,
+  res,
+  next
 ) {
 
-const token =
-req.cookies.makyama_admin;
+  const token =
+    req.cookies.makyama_admin;
 
-if (!token) {
+  if (!token) {
 
-return res.status(401).json({
+    return res.status(401).json({
 
-  error:
-    "Admin login required."
+      error:
+        "Admin login required."
 
-});
+    });
 
-}
+  }
 
-const session =
-adminSessions.get(token);
+  const session =
+    adminSessions.get(token);
 
-if (!session) {
+  if (!session) {
 
-return res.status(401).json({
+    return res.status(401).json({
 
-  error:
-    "Invalid admin session."
+      error:
+        "Invalid admin session."
 
-});
+    });
 
-}
+  }
 
-if (
-session.expiresAt <
-Date.now()
-) {
+  if (
+    session.expiresAt <
+    Date.now()
+  ) {
 
-adminSessions.delete(
-  token
-);
+    adminSessions.delete(token);
 
+    return res.status(401).json({
 
-return res.status(401).json({
+      error:
+        "Admin session expired."
 
-  error:
-    "Admin session expired."
+    });
 
-});
+  }
 
-}
-
-next();
+  next();
 
 }
 
@@ -232,27 +221,62 @@ HEALTH
 ===================================================== */
 
 app.get(
-"/health",
-(req, res) => {
+  "/health",
+  (req, res) => {
 
-res.json({
+    let playwrightAvailable = false;
+    let ffmpegAvailable = false;
 
-  ok: true,
+    try {
 
-  server:
-    "MAKYAMA MESSAGE SERVER",
+      require("playwright");
 
-  firebase:
-    Boolean(
-      initFirebase()
-    ),
+      playwrightAvailable = true;
 
-  time:
-    new Date().toISOString()
+    } catch (error) {
 
-});
+      playwrightAvailable = false;
 
-}
+    }
+
+    try {
+
+      const ffmpeg =
+        require("ffmpeg-static");
+
+      ffmpegAvailable =
+        Boolean(ffmpeg);
+
+    } catch (error) {
+
+      ffmpegAvailable = false;
+
+    }
+
+    res.json({
+
+      ok: true,
+
+      server:
+        "MAKYAMA MESSAGE SERVER",
+
+      firebase:
+        Boolean(
+          initFirebase()
+        ),
+
+      playwright:
+        playwrightAvailable,
+
+      ffmpeg:
+        ffmpegAvailable,
+
+      time:
+        new Date().toISOString()
+
+    });
+
+  }
 );
 
 /* =====================================================
@@ -260,155 +284,143 @@ ADMIN LOGIN
 ===================================================== */
 
 app.post(
-"/api/admin/login",
-(req, res) => {
+  "/api/admin/login",
+  (req, res) => {
 
-const username =
-  String(
-    req.body.username || ""
-  );
+    const username =
+      String(
+        req.body.username || ""
+      );
 
+    const password =
+      String(
+        req.body.password || ""
+      );
 
-const password =
-  String(
-    req.body.password || ""
-  );
+    const correctUsername =
+      process.env.ADMIN_USERNAME;
 
+    const correctPassword =
+      process.env.ADMIN_PASSWORD;
 
-const correctUsername =
-  process.env.ADMIN_USERNAME;
+    if (
+      !correctUsername ||
+      !correctPassword
+    ) {
 
+      return res.status(500).json({
 
-const correctPassword =
-  process.env.ADMIN_PASSWORD;
+        error:
+          "Admin credentials are not configured on Render."
 
+      });
 
-if (
-  !correctUsername ||
-  !correctPassword
-) {
+    }
 
-  return res.status(500).json({
+    if (
+      username !==
+        correctUsername ||
+      password !==
+        correctPassword
+    ) {
 
-    error:
-      "Admin credentials are not configured on Render."
+      return res.status(401).json({
 
-  });
+        error:
+          "Invalid username or password."
 
-}
+      });
 
+    }
 
-if (
-  username !==
-    correctUsername ||
-  password !==
-    correctPassword
-) {
+    const token =
+      crypto.randomBytes(32)
+        .toString("hex");
 
-  return res.status(401).json({
+    adminSessions.set(
+      token,
+      {
 
-    error:
-      "Invalid username or password."
+        username,
 
-  });
+        expiresAt:
+          Date.now() +
+          12 * 60 * 60 * 1000
 
-}
+      }
+    );
 
+    res.cookie(
+      "makyama_admin",
+      token,
+      {
 
-const token =
-  crypto.randomBytes(32)
-    .toString("hex");
+        httpOnly: true,
 
+        sameSite: "lax",
 
-adminSessions.set(
-  token,
-  {
+        secure:
+          process.env.NODE_ENV ===
+          "production",
 
-    username,
+        maxAge:
+          12 * 60 * 60 * 1000
 
-    expiresAt:
-      Date.now() +
-      12 * 60 * 60 * 1000
+      }
+    );
+
+    res.json({
+
+      ok: true,
+
+      message:
+        "Admin login successful."
+
+    });
 
   }
-);
-
-
-res.cookie(
-  "makyama_admin",
-  token,
-  {
-
-    httpOnly: true,
-
-    sameSite: "lax",
-
-    secure:
-      process.env.NODE_ENV ===
-      "production",
-
-    maxAge:
-      12 * 60 * 60 * 1000
-
-  }
-);
-
-
-res.json({
-
-  ok: true,
-
-  message:
-    "Admin login successful."
-
-});
-
-}
 );
 
 app.get(
-"/api/admin/me",
-requireAdmin,
-(req, res) => {
+  "/api/admin/me",
+  requireAdmin,
+  (req, res) => {
 
-res.json({
+    res.json({
 
-  ok: true,
+      ok: true,
 
-  username:
-    process.env.ADMIN_USERNAME
+      username:
+        process.env.ADMIN_USERNAME
 
-});
+    });
 
-}
+  }
 );
 
 app.post(
-"/api/admin/logout",
-requireAdmin,
-(req, res) => {
+  "/api/admin/logout",
+  requireAdmin,
+  (req, res) => {
 
-const token =
-  req.cookies.makyama_admin;
+    const token =
+      req.cookies.makyama_admin;
 
+    adminSessions.delete(
+      token
+    );
 
-adminSessions.delete(
-  token
-);
+    res.clearCookie(
+      "makyama_admin"
+    );
 
+    res.json({
 
-res.clearCookie(
-  "makyama_admin"
-);
+      ok: true
 
+    });
 
-res.json({
-
-  ok: true
-
-});
-
-}
+  }
 );
 
 /* =====================================================
@@ -416,84 +428,82 @@ PUBLIC TEMPLATES
 ===================================================== */
 
 app.get(
-"/api/templates",
-async (req, res) => {
+  "/api/templates",
+  async (req, res) => {
 
-try {
+    try {
 
-  const data =
-    await firebaseGet(
-      "templates"
-    );
-
-
-  const templates =
-    Object.values(
-      data || {}
-    )
-
-    .filter(
-      template => {
-
-        return (
-          template &&
-          template.published === true
+      const data =
+        await firebaseGet(
+          "templates"
         );
 
-      }
-    )
+      const templates =
+        Object.values(
+          data || {}
+        )
 
-    .map(
-      template => ({
+        .filter(
+          template => {
 
-        id:
-          template.id,
+            return (
+              template &&
+              template.published === true
+            );
 
-        title:
-          template.title,
+          }
+        )
 
-        category:
-          template.category,
+        .map(
+          template => ({
 
-        thumbnail:
-          template.thumbnail ||
-          "",
+            id:
+              template.id,
 
-        nameRequired:
-          Boolean(
-            template.nameRequired
-          ),
+            title:
+              template.title,
 
-        views:
-          Number(
-            template.views || 0
-          ),
+            category:
+              template.category,
 
-        downloads:
-          Number(
-            template.downloads || 0
-          )
+            thumbnail:
+              template.thumbnail ||
+              "",
 
-      })
-    );
+            nameRequired:
+              Boolean(
+                template.nameRequired
+              ),
 
+            views:
+              Number(
+                template.views || 0
+              ),
 
-  res.json(
-    templates
-  );
+            downloads:
+              Number(
+                template.downloads || 0
+              )
 
-} catch (error) {
+          })
+        );
 
-  res.status(500).json({
+      res.json(
+        templates
+      );
 
-    error:
-      error.message
+    } catch (error) {
 
-  });
+      res.status(500).json({
 
-}
+        error:
+          error.message
 
-}
+      });
+
+    }
+
+  }
 );
 
 /* =====================================================
@@ -501,62 +511,57 @@ SINGLE TEMPLATE
 ===================================================== */
 
 app.get(
-"/api/templates/:id",
-async (req, res) => {
+  "/api/templates/:id",
+  async (req, res) => {
 
-try {
+    try {
 
-  const id =
-    req.params.id;
+      const id =
+        req.params.id;
 
+      const template =
+        await firebaseGet(
+          `templates/${id}`
+        );
 
-  const template =
-    await firebaseGet(
-      `templates/${id}`
-    );
+      if (
+        !template ||
+        template.published !== true
+      ) {
 
+        return res.status(404).json({
 
-  if (
-    !template ||
-    template.published !== true
-  ) {
+          error:
+            "Template not found."
 
-    return res.status(404).json({
+        });
 
-      error:
-        "Template not found."
+      }
 
-    });
+      await increment(
+        `templates/${id}/views`
+      );
+
+      await increment(
+        "stats/totalViews"
+      );
+
+      res.json(
+        template
+      );
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
 
   }
-
-
-  await increment(
-    `templates/${id}/views`
-  );
-
-
-  await increment(
-    "stats/totalViews"
-  );
-
-
-  res.json(
-    template
-  );
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
 );
 
 /* =====================================================
@@ -564,315 +569,292 @@ ADMIN TEMPLATES
 ===================================================== */
 
 app.get(
-"/api/admin/templates",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const data =
-    await firebaseGet(
-      "templates"
-    );
+      const data =
+        await firebaseGet(
+          "templates"
+        );
 
+      res.json(
+        Object.values(
+          data || {}
+        )
+      );
 
-  res.json(
-    Object.values(
-      data || {}
-    )
-  );
+    } catch (error) {
 
-} catch (error) {
+      res.status(500).json({
 
-  res.status(500).json({
+        error:
+          error.message
 
-    error:
-      error.message
+      });
 
-  });
+    }
 
-}
-
-}
+  }
 );
 
 app.post(
-"/api/admin/templates",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const id =
-    crypto.randomUUID();
+      const id =
+        crypto.randomUUID();
 
+      const title =
+        String(
+          req.body.title || ""
+        ).trim();
 
-  const title =
-    String(
-      req.body.title || ""
-    ).trim();
+      const category =
+        String(
+          req.body.category ||
+          "Other"
+        ).trim();
 
+      const html =
+        String(
+          req.body.html || ""
+        );
 
-  const category =
-    String(
-      req.body.category ||
-      "Other"
-    ).trim();
+      const thumbnail =
+        String(
+          req.body.thumbnail || ""
+        );
 
+      const nameRequired =
+        Boolean(
+          req.body.nameRequired
+        );
 
-  const html =
-    String(
-      req.body.html || ""
-    );
+      const published =
+        Boolean(
+          req.body.published
+        );
 
+      if (
+        !title ||
+        !html
+      ) {
 
-  const thumbnail =
-    String(
-      req.body.thumbnail || ""
-    );
+        return res.status(400).json({
 
+          error:
+            "Title and HTML are required."
 
-  const nameRequired =
-    Boolean(
-      req.body.nameRequired
-    );
+        });
 
+      }
 
-  const published =
-    Boolean(
-      req.body.published
-    );
+      const template = {
 
+        id,
 
-  if (
-    !title ||
-    !html
-  ) {
+        title,
 
-    return res.status(400).json({
+        category,
 
-      error:
-        "Title and HTML are required."
+        html,
 
-    });
+        thumbnail,
+
+        nameRequired,
+
+        published,
+
+        views: 0,
+
+        downloads: 0,
+
+        createdAt:
+          Date.now(),
+
+        updatedAt:
+          Date.now()
+
+      };
+
+      await firebaseSet(
+        `templates/${id}`,
+        template
+      );
+
+      res.json({
+
+        ok: true,
+
+        template
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
 
   }
-
-
-  const template = {
-
-    id,
-
-    title,
-
-    category,
-
-    html,
-
-    thumbnail,
-
-    nameRequired,
-
-    published,
-
-    views: 0,
-
-    downloads: 0,
-
-    createdAt:
-      Date.now(),
-
-    updatedAt:
-      Date.now()
-
-  };
-
-
-  await firebaseSet(
-    `templates/${id}`,
-    template
-  );
-
-
-  res.json({
-
-    ok: true,
-
-    template
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
 );
 
 app.put(
-"/api/admin/templates/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates/:id",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const id =
-    req.params.id;
+      const id =
+        req.params.id;
 
+      const old =
+        await firebaseGet(
+          `templates/${id}`
+        );
 
-  const old =
-    await firebaseGet(
-      `templates/${id}`
-    );
+      if (!old) {
 
+        return res.status(404).json({
 
-  if (!old) {
+          error:
+            "Template not found."
 
-    return res.status(404).json({
+        });
 
-      error:
-        "Template not found."
+      }
 
-    });
+      const updated = {
+
+        ...old,
+
+        title:
+          String(
+            req.body.title ??
+            old.title ??
+            ""
+          ).trim(),
+
+        category:
+          String(
+            req.body.category ??
+            old.category ??
+            "Other"
+          ).trim(),
+
+        html:
+          String(
+            req.body.html ??
+            old.html ??
+            ""
+          ),
+
+        thumbnail:
+          String(
+            req.body.thumbnail ??
+            old.thumbnail ??
+            ""
+          ),
+
+        nameRequired:
+          req.body.nameRequired ===
+          undefined
+
+            ? Boolean(
+                old.nameRequired
+              )
+
+            : Boolean(
+                req.body.nameRequired
+              ),
+
+        published:
+          req.body.published ===
+          undefined
+
+            ? Boolean(
+                old.published
+              )
+
+            : Boolean(
+                req.body.published
+              ),
+
+        updatedAt:
+          Date.now()
+
+      };
+
+      await firebaseSet(
+        `templates/${id}`,
+        updated
+      );
+
+      res.json({
+
+        ok: true,
+
+        template:
+          updated
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
 
   }
-
-
-  const updated = {
-
-    ...old,
-
-    title:
-      String(
-        req.body.title ??
-        old.title ??
-        ""
-      ).trim(),
-
-
-    category:
-      String(
-        req.body.category ??
-        old.category ??
-        "Other"
-      ).trim(),
-
-
-    html:
-      String(
-        req.body.html ??
-        old.html ??
-        ""
-      ),
-
-
-    thumbnail:
-      String(
-        req.body.thumbnail ??
-        old.thumbnail ??
-        ""
-      ),
-
-
-    nameRequired:
-      req.body.nameRequired ===
-      undefined
-
-        ? Boolean(
-            old.nameRequired
-          )
-
-        : Boolean(
-            req.body.nameRequired
-          ),
-
-
-    published:
-      req.body.published ===
-      undefined
-
-        ? Boolean(
-            old.published
-          )
-
-        : Boolean(
-            req.body.published
-          ),
-
-
-    updatedAt:
-      Date.now()
-
-  };
-
-
-  await firebaseSet(
-    `templates/${id}`,
-    updated
-  );
-
-
-  res.json({
-
-    ok: true,
-
-    template:
-      updated
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
 );
 
 app.delete(
-"/api/admin/templates/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates/:id",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  await firebaseSet(
-    `templates/${req.params.id}`,
-    null
-  );
+      await firebaseSet(
+        `templates/${req.params.id}`,
+        null
+      );
 
+      res.json({
 
-  res.json({
+        ok: true
 
-    ok: true
+      });
 
-  });
+    } catch (error) {
 
-} catch (error) {
+      res.status(500).json({
 
-  res.status(500).json({
+        error:
+          error.message
 
-    error:
-      error.message
+      });
 
-  });
+    }
 
-}
-
-}
+  }
 );
 
 /* =====================================================
@@ -880,78 +862,75 @@ ADS
 ===================================================== */
 
 app.get(
-"/api/ads",
-async (req, res) => {
+  "/api/ads",
+  async (req, res) => {
 
-try {
+    try {
 
-  const data =
-    await firebaseGet(
-      "ads"
-    );
+      const data =
+        await firebaseGet(
+          "ads"
+        );
 
+      const ads =
+        Object.values(
+          data || {}
+        )
 
-  const ads =
-    Object.values(
-      data || {}
-    )
+        .filter(
+          ad =>
+            ad &&
+            ad.enabled === true
+        );
 
-    .filter(
-      ad =>
-        ad &&
-        ad.enabled === true
-    );
+      res.json(
+        ads
+      );
 
+    } catch (error) {
 
-  res.json(
-    ads
-  );
+      res.status(500).json({
 
-} catch (error) {
+        error:
+          error.message
 
-  res.status(500).json({
+      });
 
-    error:
-      error.message
+    }
 
-  });
-
-}
-
-}
+  }
 );
 
 app.get(
-"/api/admin/ads",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const data =
-    await firebaseGet(
-      "ads"
-    );
+      const data =
+        await firebaseGet(
+          "ads"
+        );
 
+      res.json(
+        Object.values(
+          data || {}
+        )
+      );
 
-  res.json(
-    Object.values(
-      data || {}
-    )
-  );
+    } catch (error) {
 
-} catch (error) {
+      res.status(500).json({
 
-  res.status(500).json({
+        error:
+          error.message
 
-    error:
-      error.message
+      });
 
-  });
+    }
 
-}
-
-}
+  }
 );
 
 /* =====================================================
@@ -959,111 +938,92 @@ CREATE AD
 ===================================================== */
 
 app.post(
-"/api/admin/ads",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const id =
-    crypto.randomUUID();
+      const id =
+        crypto.randomUUID();
 
+      const validPositions = [
 
-  /*
-    Supported positions:
+        "top",
 
-    top
-    middle
-    social
-    download
-  */
+        "middle",
 
-  const validPositions = [
+        "social",
 
-    "top",
+        "download"
 
-    "middle",
+      ];
 
-    "social",
+      const position =
+        validPositions.includes(
+          req.body.position
+        )
 
-    "download"
+          ? req.body.position
 
-  ];
+          : "middle";
 
+      const ad = {
 
-  const position =
-    validPositions.includes(
-      req.body.position
-    )
+        id,
 
-      ? req.body.position
+        title:
+          String(
+            req.body.title ||
+            "Advertisement"
+          ),
 
-      : "middle";
+        position,
 
+        code:
+          String(
+            req.body.code ||
+            ""
+          ),
 
-  const ad = {
+        enabled:
+          Boolean(
+            req.body.enabled
+          ),
 
-    id,
+        createdAt:
+          Date.now(),
 
-    title:
-      String(
-        req.body.title ||
-        "Advertisement"
-      ),
+        updatedAt:
+          Date.now()
 
+      };
 
-    position,
+      await firebaseSet(
+        `ads/${id}`,
+        ad
+      );
 
+      res.json({
 
-    code:
-      String(
-        req.body.code ||
-        ""
-      ),
+        ok: true,
 
+        ad
 
-    enabled:
-      Boolean(
-        req.body.enabled
-      ),
+      });
 
+    } catch (error) {
 
-    createdAt:
-      Date.now(),
+      res.status(500).json({
 
+        error:
+          error.message
 
-    updatedAt:
-      Date.now()
+      });
 
-  };
+    }
 
-
-  await firebaseSet(
-    `ads/${id}`,
-    ad
-  );
-
-
-  res.json({
-
-    ok: true,
-
-    ad
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
+  }
 );
 
 /* =====================================================
@@ -1071,127 +1031,115 @@ UPDATE AD
 ===================================================== */
 
 app.put(
-"/api/admin/ads/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads/:id",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const id =
-    req.params.id;
+      const id =
+        req.params.id;
 
+      const old =
+        await firebaseGet(
+          `ads/${id}`
+        );
 
-  const old =
-    await firebaseGet(
-      `ads/${id}`
-    );
+      if (!old) {
 
+        return res.status(404).json({
 
-  if (!old) {
+          error:
+            "Advertisement not found."
 
-    return res.status(404).json({
+        });
 
-      error:
-        "Advertisement not found."
+      }
 
-    });
+      const validPositions = [
 
-  }
+        "top",
 
+        "middle",
 
-  const validPositions = [
+        "social",
 
-    "top",
+        "download"
 
-    "middle",
+      ];
 
-    "social",
+      const position =
+        validPositions.includes(
+          req.body.position
+        )
 
-    "download"
+          ? req.body.position
 
-  ];
+          : old.position;
 
+      const updated = {
 
-  const position =
-    validPositions.includes(
-      req.body.position
-    )
+        ...old,
 
-      ? req.body.position
-
-      : old.position;
-
-
-  const updated = {
-
-    ...old,
-
-
-    title:
-      String(
-        req.body.title ??
-        old.title ??
-        "Advertisement"
-      ),
-
-
-    position,
-
-
-    code:
-      String(
-        req.body.code ??
-        old.code ??
-        ""
-      ),
-
-
-    enabled:
-      req.body.enabled ===
-      undefined
-
-        ? Boolean(
-            old.enabled
-          )
-
-        : Boolean(
-            req.body.enabled
+        title:
+          String(
+            req.body.title ??
+            old.title ??
+            "Advertisement"
           ),
 
+        position,
 
-    updatedAt:
-      Date.now()
+        code:
+          String(
+            req.body.code ??
+            old.code ??
+            ""
+          ),
 
-  };
+        enabled:
+          req.body.enabled ===
+          undefined
 
+            ? Boolean(
+                old.enabled
+              )
 
-  await firebaseSet(
-    `ads/${id}`,
-    updated
-  );
+            : Boolean(
+                req.body.enabled
+              ),
 
+        updatedAt:
+          Date.now()
 
-  res.json({
+      };
 
-    ok: true,
+      await firebaseSet(
+        `ads/${id}`,
+        updated
+      );
 
-    ad:
-      updated
+      res.json({
 
-  });
+        ok: true,
 
-} catch (error) {
+        ad:
+          updated
 
-  res.status(500).json({
+      });
 
-    error:
-      error.message
+    } catch (error) {
 
-  });
+      res.status(500).json({
 
-}
+        error:
+          error.message
 
-}
+      });
+
+    }
+
+  }
 );
 
 /* =====================================================
@@ -1199,36 +1147,35 @@ DELETE AD
 ===================================================== */
 
 app.delete(
-"/api/admin/ads/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads/:id",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  await firebaseSet(
-    `ads/${req.params.id}`,
-    null
-  );
+      await firebaseSet(
+        `ads/${req.params.id}`,
+        null
+      );
 
+      res.json({
 
-  res.json({
+        ok: true
 
-    ok: true
+      });
 
-  });
+    } catch (error) {
 
-} catch (error) {
+      res.status(500).json({
 
-  res.status(500).json({
+        error:
+          error.message
 
-    error:
-      error.message
+      });
 
-  });
+    }
 
-}
-
-}
+  }
 );
 
 /* =====================================================
@@ -1236,87 +1183,83 @@ ANALYTICS
 ===================================================== */
 
 app.post(
-"/api/analytics/view",
-async (req, res) => {
+  "/api/analytics/view",
+  async (req, res) => {
 
-try {
+    try {
 
-  await increment(
-    "stats/totalViews"
-  );
+      await increment(
+        "stats/totalViews"
+      );
 
+      if (
+        req.body.templateId
+      ) {
 
-  if (
-    req.body.templateId
-  ) {
+        await increment(
+          `templates/${req.body.templateId}/views`
+        );
 
-    await increment(
-      `templates/${req.body.templateId}/views`
-    );
+      }
+
+      res.json({
+
+        ok: true
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
 
   }
-
-
-  res.json({
-
-    ok: true
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
 );
 
 app.post(
-"/api/analytics/download",
-async (req, res) => {
+  "/api/analytics/download",
+  async (req, res) => {
 
-try {
+    try {
 
-  await increment(
-    "stats/totalDownloads"
-  );
+      await increment(
+        "stats/totalDownloads"
+      );
 
+      if (
+        req.body.templateId
+      ) {
 
-  if (
-    req.body.templateId
-  ) {
+        await increment(
+          `templates/${req.body.templateId}/downloads`
+        );
 
-    await increment(
-      `templates/${req.body.templateId}/downloads`
-    );
+      }
+
+      res.json({
+
+        ok: true
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
 
   }
-
-
-  res.json({
-
-    ok: true
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
 );
 
 /* =====================================================
@@ -1324,68 +1267,63 @@ ONLINE USERS
 ===================================================== */
 
 app.post(
-"/api/online/heartbeat",
-async (req, res) => {
+  "/api/online/heartbeat",
+  async (req, res) => {
 
-try {
+    try {
 
-  const clientId =
-    String(
-      req.body.clientId || ""
-    )
+      const clientId =
+        String(
+          req.body.clientId || ""
+        )
+        .replace(
+          /[^a-zA-Z0-9_-]/g,
+          ""
+        )
+        .slice(
+          0,
+          80
+        );
 
-    .replace(
-      /[^a-zA-Z0-9_-]/g,
-      ""
-    )
+      if (!clientId) {
 
-    .slice(
-      0,
-      80
-    );
+        return res.status(400).json({
 
+          error:
+            "Client ID is required."
 
-  if (!clientId) {
+        });
 
-    return res.status(400).json({
+      }
 
-      error:
-        "Client ID is required."
+      await firebaseSet(
+        `onlineUsers/${clientId}`,
+        {
 
-    });
+          lastSeen:
+            Date.now()
 
-  }
+        }
+      );
 
+      res.json({
 
-  await firebaseSet(
-    `onlineUsers/${clientId}`,
-    {
+        ok: true
 
-      lastSeen:
-        Date.now()
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
 
     }
-  );
 
-
-  res.json({
-
-    ok: true
-
-  });
-
-} catch (error) {
-
-  res.status(500).json({
-
-    error:
-      error.message
-
-  });
-
-}
-
-}
+  }
 );
 
 /* =====================================================
@@ -1393,348 +1331,315 @@ ADMIN STATISTICS
 ===================================================== */
 
 app.get(
-"/api/admin/stats",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/stats",
+  requireAdmin,
+  async (req, res) => {
 
-try {
+    try {
 
-  const stats =
-    await firebaseGet(
-      "stats"
-    );
-
-
-  const templates =
-    await firebaseGet(
-      "templates"
-    );
-
-
-  const onlineUsers =
-    await firebaseGet(
-      "onlineUsers"
-    );
-
-
-  const now =
-    Date.now();
-
-
-  const onlineLimit =
-    now -
-    90 * 1000;
-
-
-  const onlineCount =
-    Object.values(
-      onlineUsers || {}
-    )
-
-    .filter(
-      user => {
-
-        return (
-
-          user &&
-
-          Number(
-            user.lastSeen
-          ) >= onlineLimit
-
+      const stats =
+        await firebaseGet(
+          "stats"
         );
 
-      }
-    )
-
-    .length;
-
-
-  const templateList =
-    Object.values(
-      templates || {}
-    )
-
-    .filter(Boolean);
-
-
-  const trending =
-    [...templateList]
-
-    .sort(
-      (a, b) => {
-
-        return (
-
-          Number(
-            b.views || 0
-          ) -
-
-          Number(
-            a.views || 0
-          )
-
+      const templates =
+        await firebaseGet(
+          "templates"
         );
 
-      }
-    )
-
-    .slice(
-      0,
-      10
-    )
-
-    .map(
-      template => ({
-
-        id:
-          template.id,
-
-        title:
-          template.title,
-
-        views:
-          Number(
-            template.views || 0
-          )
-
-      })
-    );
-
-
-  const mostDownloaded =
-    [...templateList]
-
-    .sort(
-      (a, b) => {
-
-        return (
-
-          Number(
-            b.downloads || 0
-          ) -
-
-          Number(
-            a.downloads || 0
-          )
-
+      const onlineUsers =
+        await firebaseGet(
+          "onlineUsers"
         );
 
-      }
-    )
+      const now =
+        Date.now();
 
-    .slice(
-      0,
-      10
-    )
+      const onlineLimit =
+        now -
+        90 * 1000;
 
-    .map(
-      template => ({
+      const onlineCount =
+        Object.values(
+          onlineUsers || {}
+        )
 
-        id:
-          template.id,
+        .filter(
+          user => {
 
-        title:
-          template.title,
+            return (
 
-        downloads:
-          Number(
-            template.downloads || 0
+              user &&
+
+              Number(
+                user.lastSeen
+              ) >= onlineLimit
+
+            );
+
+          }
+        )
+
+        .length;
+
+      const templateList =
+        Object.values(
+          templates || {}
+        )
+
+        .filter(Boolean);
+
+      const trending =
+        [...templateList]
+
+          .sort(
+            (a, b) => {
+
+              return (
+
+                Number(
+                  b.views || 0
+                ) -
+
+                Number(
+                  a.views || 0
+                )
+
+              );
+
+            }
           )
 
-      })
-    );
+          .slice(
+            0,
+            10
+          )
 
+          .map(
+            template => ({
 
-  res.json({
+              id:
+                template.id,
 
-    totalViews:
-      Number(
-        stats?.totalViews || 0
-      ),
+              title:
+                template.title,
 
+              views:
+                Number(
+                  template.views || 0
+                )
 
-    totalDownloads:
-      Number(
-        stats?.totalDownloads || 0
-      ),
+            })
+          );
 
+      const mostDownloaded =
+        [...templateList]
 
-    onlineUsers:
-      onlineCount,
+          .sort(
+            (a, b) => {
 
+              return (
 
-    templatesCount:
-      templateList.length,
+                Number(
+                  b.downloads || 0
+                ) -
 
+                Number(
+                  a.downloads || 0
+                )
 
-    trending,
+              );
 
+            }
+          )
 
-    mostDownloaded
+          .slice(
+            0,
+            10
+          )
 
-  });
+          .map(
+            template => ({
 
-} catch (error) {
+              id:
+                template.id,
 
-  res.status(500).json({
+              title:
+                template.title,
 
-    error:
-      error.message
+              downloads:
+                Number(
+                  template.downloads || 0
+                )
 
-  });
+            })
+          );
 
-}
+      res.json({
 
-}
+        totalViews:
+          Number(
+            stats?.totalViews || 0
+          ),
+
+        totalDownloads:
+          Number(
+            stats?.totalDownloads || 0
+          ),
+
+        onlineUsers:
+          onlineCount,
+
+        templatesCount:
+          templateList.length,
+
+        trending,
+
+        mostDownloaded
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
 );
 
 /* =====================================================
 SERVER-SIDE VIDEO GENERATION
 ===================================================== */
 
-/*
-IMPORTANT:
-
-This endpoint does NOT save videos
-in Firebase.
-
-The final implementation will:
-
-1. Receive templateId + name.
-2. Read template HTML from Firebase.
-3. Render the animation on the server.
-4. Use FFmpeg to create MP4.
-5. Send MP4 to visitor.
-6. Delete temporary files.
-
-Temporary files are stored only in
-the server's temporary directory.
-*/
-
 app.post(
-"/api/generate-video",
-async (req, res) => {
+  "/api/generate-video",
+  async (req, res) => {
 
-let tempDir = null;
+    let tempDir = null;
 
+    try {
 
-try {
+      const templateId =
+        String(
+          req.body.templateId || ""
+        ).trim();
 
-  const templateId =
-    String(
-      req.body.templateId || ""
-    ).trim();
+      const name =
+        String(
+          req.body.name ||
+          "Rafiki"
+        )
+        .trim()
+        .slice(
+          0,
+          80
+        );
 
+      if (!templateId) {
 
-  const name =
-    String(
-      req.body.name ||
-      "Rafiki"
-    )
-    .trim()
-    .slice(
-      0,
-      80
-    );
+        return res.status(400).json({
 
+          error:
+            "Template ID is required."
 
-  if (!templateId) {
+        });
 
-    return res.status(400).json({
+      }
 
-      error:
-        "Template ID is required."
+      const template =
+        await firebaseGet(
+          `templates/${templateId}`
+        );
 
-    });
+      if (
+        !template ||
+        template.published !== true
+      ) {
 
-  }
+        return res.status(404).json({
 
+          error:
+            "Template not found."
 
-  /*
-    Read template from Firebase.
-  */
+        });
 
-  const template =
-    await firebaseGet(
-      `templates/${templateId}`
-    );
+      }
 
+      tempDir =
+        await fs.promises.mkdtemp(
+          path.join(
+            os.tmpdir(),
+            "makyama-video-"
+          )
+        );
 
-  if (
-    !template ||
-    template.published !== true
-  ) {
+      const htmlPath =
+        path.join(
+          tempDir,
+          "render.html"
+        );
 
-    return res.status(404).json({
+      const framesDir =
+        path.join(
+          tempDir,
+          "frames"
+        );
 
-      error:
-        "Template not found."
+      const outputPath =
+        path.join(
+          tempDir,
+          "MAKYAMA_Message.mp4"
+        );
 
-    });
+      await fs.promises.mkdir(
+        framesDir,
+        {
+          recursive: true
+        }
+      );
 
-  }
+      const safeName =
+        escapeHtmlServer(
+          name || "Rafiki"
+        );
 
+      const templateHTML =
+        String(
+          template.html || ""
+        )
 
-  /*
-    Create temporary directory.
-  */
+        /*
+          Scripts kutoka template
+          haziruhusiwi ku-run server.
+        */
 
-  tempDir =
-    fs.mkdtempSync(
-      path.join(
-        os.tmpdir(),
-        "makyama-video-"
-      )
-    );
+        .replace(
+          /<script[\s\S]*?<\/script>/gi,
+          ""
+        )
 
+        .replaceAll(
+          "{name}",
+          safeName
+        );
 
-  const htmlPath =
-    path.join(
-      tempDir,
-      "template.html"
-    );
+      const fullHtml = `
+<!DOCTYPE html>
+<html>
+<head>
 
+<meta charset="UTF-8">
 
-  const outputPath =
-    path.join(
-      tempDir,
-      "makyama.mp4"
-    );
-
-
-  /*
-    Replace name.
-  */
-
-  const safeName =
-    escapeHtmlServer(
-      name || "Rafiki"
-    );
-
-
-  const html =
-    String(
-      template.html || ""
-    )
-    .replaceAll(
-      "{name}",
-      safeName
-    );
-
-
-  /*
-    Build a standalone HTML
-    document for rendering.
-  */
-
-  const fullHtml = `
-
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=720,height=720"
-
-«»
+<meta
+  name="viewport"
+  content="width=720,height=720,initial-scale=1"
+>
 
 <style>
 
@@ -1742,11 +1647,9 @@ html,
 body {
 
   margin: 0;
-
   padding: 0;
 
   width: 720px;
-
   height: 720px;
 
   overflow: hidden;
@@ -1755,177 +1658,184 @@ body {
 
 }
 
-</style></head><body>${html}
+* {
 
-</body></html>`;
+  box-sizing: border-box;
 
-  fs.writeFileSync(
-    htmlPath,
-    fullHtml,
-    "utf8"
-  );
+}
 
+#stage {
 
-  /*
-    The actual browser-rendering
-    and FFmpeg process is handled
-    by renderVideoWithTools().
-  */
+  width: 720px;
+  height: 720px;
 
-  await renderVideoWithTools(
-    htmlPath,
-    outputPath
-  );
+  position: relative;
 
+  overflow: hidden;
 
-  if (
-    !fs.existsSync(
-      outputPath
-    )
-  ) {
+}
 
-    throw new Error(
-      "Video file was not created."
-    );
+</style>
 
-  }
+</head>
 
+<body>
 
-  const fileSize =
-    fs.statSync(
-      outputPath
-    ).size;
+<div id="stage">
 
+${templateHTML}
 
-  if (
-    fileSize <= 0
-  ) {
+</div>
 
-    throw new Error(
-      "Generated video is empty."
-    );
+</body>
+</html>
+`;
 
-  }
+      await fs.promises.writeFile(
+        htmlPath,
+        fullHtml,
+        "utf8"
+      );
 
+      await renderVideoWithTools(
+        htmlPath,
+        framesDir,
+        outputPath
+      );
 
-  /*
-    Send MP4 to visitor.
-  */
+      if (
+        !fs.existsSync(
+          outputPath
+        )
+      ) {
 
-  res.download(
-    outputPath,
-    "MAKYAMA_Message.mp4",
-    async error => {
+        throw new Error(
+          "Video file was not created."
+        );
+
+      }
+
+      const fileSize =
+        (
+          await fs.promises.stat(
+            outputPath
+          )
+        ).size;
+
+      if (
+        fileSize <= 1000
+      ) {
+
+        throw new Error(
+          "Generated video is empty."
+        );
+
+      }
+
+      try {
+
+        await increment(
+          "stats/totalDownloads"
+        );
+
+        await increment(
+          `templates/${templateId}/downloads`
+        );
+
+      } catch (
+        analyticsError
+      ) {
+
+        console.error(
+          "Analytics error:",
+          analyticsError.message
+        );
+
+      }
+
+      res.download(
+        outputPath,
+        "MAKYAMA_Message.mp4",
+        async error => {
+
+          await cleanupTempDirectory(
+            tempDir
+          );
+
+          if (error) {
+
+            console.error(
+              "Video download error:",
+              error.message
+            );
+
+          }
+
+        }
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Generate video error:",
+        error
+      );
 
       await cleanupTempDirectory(
         tempDir
       );
 
+      if (!res.headersSent) {
 
-      if (error) {
+        res.status(500).json({
 
-        console.error(
-          "Video download error:",
-          error.message
-        );
+          error:
+            error.message ||
+            "Video generation failed."
+
+        });
 
       }
 
     }
-  );
-
-
-  /*
-    Count successful
-    generation request.
-  */
-
-  try {
-
-    await increment(
-      "stats/totalDownloads"
-    );
-
-
-    await increment(
-      `templates/${templateId}/downloads`
-    );
-
-  } catch (
-    analyticsError
-  ) {
-
-    console.error(
-      "Download analytics error:",
-      analyticsError.message
-    );
 
   }
-
-} catch (error) {
-
-  console.error(
-    "Generate video error:",
-    error
-  );
-
-
-  await cleanupTempDirectory(
-    tempDir
-  );
-
-
-  if (!res.headersSent) {
-
-    res.status(500).json({
-
-      error:
-        error.message ||
-        "Video generation failed."
-
-    });
-
-  }
-
-}
-
-}
 );
 
 /* =====================================================
-SERVER HTML ESCAPE
+ESCAPE HTML
 ===================================================== */
 
 function escapeHtmlServer(
-value
+  value
 ) {
 
-return String(value)
+  return String(value)
 
-.replace(
-  /&/g,
-  "&amp;"
-)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-.replace(
-  /</g,
-  "&lt;"
-)
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-.replace(
-  />/g,
-  "&gt;"
-)
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-.replace(
-  /"/g,
-  "&quot;"
-)
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-.replace(
-  /'/g,
-  "&#039;"
-);
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -1934,530 +1844,602 @@ VIDEO RENDER ENGINE
 ===================================================== */
 
 async function renderVideoWithTools(
-htmlPath,
-outputPath
+  htmlPath,
+  framesDir,
+  outputPath
 ) {
 
-/*
-Playwright is intentionally
-loaded here so the server can
-start even if the package has
-not been installed yet.
-*/
+  let playwright;
 
-let playwright;
+  try {
 
-try {
+    playwright =
+      require("playwright");
 
-playwright =
-  require("playwright");
+  } catch (error) {
 
-} catch (error) {
+    throw new Error(
+      "Playwright is not installed."
+    );
 
-throw new Error(
-  "Playwright is not installed on the server. Add Playwright to package.json and redeploy."
-);
-
-}
-
-const browser =
-await playwright.chromium.launch({
-
-  headless: true,
-
-  args: [
-
-    "--no-sandbox",
-
-    "--disable-setuid-sandbox",
-
-    "--disable-dev-shm-usage"
-
-  ]
-
-});
-
-try {
-
-const page =
-  await browser.newPage({
-
-    viewport: {
-
-      width: 720,
-
-      height: 720
-
-    },
-
-    deviceScaleFactor: 1
-
-  });
-
-
-/*
-  Open local template.
-*/
-
-await page.goto(
-  "file://" +
-  htmlPath,
-  {
-    waitUntil:
-      "load"
   }
-);
 
+  let ffmpegPath;
 
-/*
-  Allow fonts/images/styles
-  to settle.
-*/
+  try {
 
-await page.waitForTimeout(
-  500
-);
+    ffmpegPath =
+      require("ffmpeg-static");
 
+  } catch (error) {
 
-/*
-  Determine longest CSS
-  animation.
-*/
+    throw new Error(
+      "ffmpeg-static is not installed."
+    );
 
-const duration =
-  await page.evaluate(
-    () => {
+  }
 
-      let longest = 5000;
+  if (
+    !ffmpegPath
+  ) {
 
+    throw new Error(
+      "FFmpeg executable was not found."
+    );
 
-      const elements =
-        document.querySelectorAll(
-          "*"
-        );
+  }
 
+  const browser =
+    await playwright.chromium.launch({
 
-      elements.forEach(
-        element => {
+      headless: true,
 
-          const style =
-            getComputedStyle(
-              element
-            );
+      args: [
 
+        "--no-sandbox",
 
-          const durationValues =
-            style.animationDuration
-              .split(",");
+        "--disable-setuid-sandbox",
 
+        "--disable-dev-shm-usage",
 
-          const delayValues =
-            style.animationDelay
-              .split(",");
+        "--disable-gpu",
 
+        "--font-render-hinting=medium"
 
-          durationValues.forEach(
-            (
-              durationValue,
-              index
-            ) => {
+      ]
 
-              let durationMs =
-                parseCssTime(
-                  durationValue
-                );
+    });
 
+  try {
 
-              let delayMs =
-                parseCssTime(
-                  delayValues[
-                    index
-                  ] ||
-                  delayValues[0]
-                );
+    const page =
+      await browser.newPage({
 
+        viewport: {
 
-              longest =
-                Math.max(
-                  longest,
-                  durationMs +
-                  delayMs
-                );
+          width: 720,
+
+          height: 720
+
+        },
+
+        deviceScaleFactor: 1
+
+      });
+
+    await page.goto(
+      "file://" + htmlPath,
+      {
+        waitUntil:
+          "load"
+      }
+    );
+
+    /*
+      Subiri fonts na images.
+    */
+
+    await page.evaluate(
+      async () => {
+
+        if (
+          document.fonts &&
+          document.fonts.ready
+        ) {
+
+          await document.fonts.ready;
+
+        }
+
+        const images =
+          Array.from(
+            document.images
+          );
+
+        await Promise.all(
+
+          images.map(
+            image => {
+
+              if (
+                image.complete
+              ) {
+
+                return Promise.resolve();
+
+              }
+
+              return new Promise(
+                resolve => {
+
+                  image.onload =
+                    resolve;
+
+                  image.onerror =
+                    resolve;
+
+                }
+              );
 
             }
-          );
-
-        }
-      );
-
-
-      function parseCssTime(
-        value
-      ) {
-
-        value =
-          String(
-            value || ""
-          ).trim();
-
-
-        if (
-          value.endsWith(
-            "ms"
           )
-        ) {
 
-          return (
-            parseFloat(
-              value
-            ) || 0
-          );
-
-        }
-
-
-        if (
-          value.endsWith(
-            "s"
-          )
-        ) {
-
-          return (
-            (
-              parseFloat(
-                value
-              ) || 0
-            ) *
-            1000
-          );
-
-        }
-
-
-        return 0;
+        );
 
       }
+    );
 
+    await page.waitForTimeout(
+      700
+    );
 
-      return Math.min(
-        Math.max(
-          longest + 500,
-          3000
-        ),
-        15000
+    /*
+      Tafuta animation ndefu zaidi.
+    */
+
+    const duration =
+      await page.evaluate(
+        () => {
+
+          let longest =
+            5000;
+
+          function parseTime(
+            value
+          ) {
+
+            value =
+              String(
+                value || ""
+              ).trim();
+
+            if (
+              value.endsWith(
+                "ms"
+              )
+            ) {
+
+              return (
+                parseFloat(
+                  value
+                ) || 0
+              );
+
+            }
+
+            if (
+              value.endsWith(
+                "s"
+              )
+            ) {
+
+              return (
+
+                (
+                  parseFloat(
+                    value
+                  ) || 0
+                ) *
+
+                1000
+
+              );
+
+            }
+
+            return 0;
+
+          }
+
+          document
+            .querySelectorAll("*")
+            .forEach(
+              element => {
+
+                const style =
+                  getComputedStyle(
+                    element
+                  );
+
+                const durations =
+                  style
+                    .animationDuration
+                    .split(",");
+
+                const delays =
+                  style
+                    .animationDelay
+                    .split(",");
+
+                durations.forEach(
+                  (
+                    durationValue,
+                    index
+                  ) => {
+
+                    const d =
+                      parseTime(
+                        durationValue
+                      );
+
+                    const delay =
+                      parseTime(
+                        delays[index] ||
+                        delays[0] ||
+                        "0s"
+                      );
+
+                    longest =
+                      Math.max(
+                        longest,
+                        d + delay
+                      );
+
+                  }
+                );
+
+              }
+            );
+
+          return Math.min(
+            Math.max(
+              longest + 500,
+              3000
+            ),
+            15000
+          );
+
+        }
       );
 
-    }
-  );
+    await captureAnimationFrames(
+      page,
+      framesDir,
+      duration
+    );
 
+    await convertFramesToMp4(
+      ffmpegPath,
+      framesDir,
+      outputPath
+    );
 
-/*
-  Start video capture using
-  FFmpeg from the server.
+  } finally {
 
-  Chrome frames are captured
-  as screenshots and piped
-  into FFmpeg.
-*/
+    await browser.close();
 
-await capturePageToMp4(
-  page,
-  outputPath,
-  duration
-);
-
-} finally {
-
-await browser.close();
-
-}
+  }
 
 }
 
 /* =====================================================
-PAGE → MP4
+CAPTURE ANIMATION FRAMES
 ===================================================== */
 
-async function capturePageToMp4(
-page,
-outputPath,
-duration
+async function captureAnimationFrames(
+  page,
+  framesDir,
+  duration
 ) {
 
-/*
-FFmpeg must be available
-in the server environment.
-*/
-
-const ffmpegCommand =
-process.env.FFMPEG_PATH ||
-"ffmpeg";
-
-return new Promise(
-async (
-resolve,
-reject
-) => {
-
-  const ffmpeg =
-    spawn(
-      ffmpegCommand,
-      [
-
-        "-y",
-
-        "-f",
-        "image2pipe",
-
-        "-framerate",
-        "24",
-
-        "-i",
-        "-",
-
-        "-c:v",
-        "libx264",
-
-        "-preset",
-        "ultrafast",
-
-        "-pix_fmt",
-        "yuv420p",
-
-        "-movflags",
-        "+faststart",
-
-        outputPath
-
-      ],
-      {
-
-        stdio:
-          [
-            "pipe",
-            "pipe",
-            "pipe"
-          ]
-
-      }
-    );
-
-
-  let stderr = "";
-
-
-  ffmpeg.stderr.on(
-    "data",
-    data => {
-
-      stderr +=
-        data.toString();
-
-    }
-  );
-
-
-  ffmpeg.on(
-    "error",
-    error => {
-
-      reject(
-        new Error(
-          "FFmpeg could not start: " +
-          error.message
-        )
-      );
-
-    }
-  );
-
-
-  ffmpeg.on(
-    "close",
-    code => {
-
-      if (
-        code === 0
-      ) {
-
-        resolve();
-
-      } else {
-
-        reject(
-          new Error(
-            "FFmpeg failed: " +
-            stderr.slice(-2000)
-          )
-        );
-
-      }
-
-    }
-  );
-
-
-  try {
-
-    /*
-      Reset animation before
-      capture.
-    */
-
-    await page.evaluate(
-      () => {
-
-        document
-          .querySelectorAll(
-            "[data-animation]"
-          )
-          .forEach(
-            element => {
-
-              const animation =
-                element.dataset.animation;
-
-
-              if (!animation)
-                return;
-
-
-              element.style.animation =
-                "none";
-
-
-              void element.offsetWidth;
-
-
-              element.style.animation =
-                animation;
-
-            }
-          );
-
-      }
-    );
-
-
-    const start =
-      Date.now();
-
-
-    const frameTime =
-      1000 / 24;
-
-
-    let frameIndex =
-      0;
-
-
-    while (
-      Date.now() -
-        start <
-      duration
-    ) {
-
-      const screenshot =
-        await page.screenshot({
-
-          type:
-            "png",
-
-          omitBackground:
-            false
-
-        });
-
-
-      const canContinue =
-        ffmpeg.stdin.write(
-          screenshot
-        );
-
-
-      frameIndex++;
-
-
-      /*
-        Respect FFmpeg backpressure.
-      */
-
-      if (!canContinue) {
-
-        await new Promise(
-          resolveDrain => {
-
-            ffmpeg.stdin.once(
-              "drain",
-              resolveDrain
-            );
+  /*
+    Pause animations.
+  */
+
+  await page.evaluate(
+    () => {
+
+      document
+        .querySelectorAll("*")
+        .forEach(
+          element => {
+
+            element.style
+              .setProperty(
+                "animation-play-state",
+                "paused",
+                "important"
+              );
 
           }
         );
 
-      }
+    }
+  );
 
+  /*
+    Force layout.
+  */
 
-      const targetTime =
-        frameIndex *
-        frameTime;
+  await page.evaluate(
+    () => {
 
-
-      const elapsed =
-        Date.now() -
-        start;
-
-
-      const remaining =
-        targetTime -
-        elapsed;
-
-
-      if (
-        remaining > 0
-      ) {
-
-        await new Promise(
-          resolveWait =>
-            setTimeout(
-              resolveWait,
-              remaining
-            )
-        );
-
-      }
+      void document.body.offsetHeight;
 
     }
+  );
 
+  /*
+    Reset animation timing.
+  */
 
-    ffmpeg.stdin.end();
+  await page.evaluate(
+    () => {
 
-  } catch (error) {
+      document
+        .querySelectorAll("*")
+        .forEach(
+          element => {
 
-    try {
+            element.style
+              .setProperty(
+                "animation",
+                "none",
+                "important"
+              );
 
-      ffmpeg.stdin.end();
+          }
+        );
 
-    } catch (
-      closeError
+    }
+  );
+
+  await page.evaluate(
+    () => {
+
+      void document.body.offsetHeight;
+
+    }
+  );
+
+  /*
+    Rudisha animations.
+  */
+
+  await page.evaluate(
+    () => {
+
+      document
+        .querySelectorAll("*")
+        .forEach(
+          element => {
+
+            element.style
+              .removeProperty(
+                "animation"
+              );
+
+            element.style
+              .setProperty(
+                "animation-play-state",
+                "running",
+                "important"
+              );
+
+          }
+        );
+
+    }
+  );
+
+  const fps = 24;
+
+  const frameDuration =
+    1000 / fps;
+
+  const totalFrames =
+    Math.max(
+      1,
+      Math.ceil(
+        duration /
+        frameDuration
+      )
+    );
+
+  const start =
+    Date.now();
+
+  for (
+    let frame = 0;
+    frame < totalFrames;
+    frame++
+  ) {
+
+    const filename =
+      path.join(
+        framesDir,
+        `frame-${String(frame).padStart(5, "0")}.png`
+      );
+
+    await page
+      .locator("#stage")
+      .screenshot({
+
+        path:
+          filename,
+
+        type:
+          "png",
+
+        animations:
+          "allow"
+
+      });
+
+    const target =
+      (frame + 1) *
+      frameDuration;
+
+    const elapsed =
+      Date.now() -
+      start;
+
+    const wait =
+      target -
+      elapsed;
+
+    if (
+      wait > 0
     ) {
 
-      console.error(
-        closeError
+      await page.waitForTimeout(
+        wait
       );
 
     }
-
-
-    reject(
-      error
-    );
 
   }
 
 }
 
-);
+/* =====================================================
+FRAMES → MP4
+===================================================== */
+
+function convertFramesToMp4(
+  ffmpegPath,
+  framesDir,
+  outputPath
+) {
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+      const inputPattern =
+        path.join(
+          framesDir,
+          "frame-%05d.png"
+        );
+
+      const { spawn } =
+        require("child_process");
+
+      const ffmpeg =
+        spawn(
+          ffmpegPath,
+          [
+
+            "-y",
+
+            "-framerate",
+            "24",
+
+            "-start_number",
+            "0",
+
+            "-i",
+            inputPattern,
+
+            "-c:v",
+            "libx264",
+
+            "-preset",
+            "veryfast",
+
+            "-crf",
+            "20",
+
+            "-pix_fmt",
+            "yuv420p",
+
+            "-vf",
+            "scale=720:720:force_original_aspect_ratio=decrease,pad=720:720:(ow-iw)/2:(oh-ih)/2",
+
+            "-movflags",
+            "+faststart",
+
+            outputPath
+
+          ],
+
+          {
+
+            stdio:
+              [
+                "ignore",
+                "pipe",
+                "pipe"
+              ]
+
+          }
+
+        );
+
+      let stderr = "";
+
+      ffmpeg.stderr.on(
+        "data",
+        data => {
+
+          stderr +=
+            data.toString();
+
+        }
+      );
+
+      ffmpeg.on(
+        "error",
+        error => {
+
+          reject(
+            new Error(
+              "FFmpeg could not start: " +
+              error.message
+            )
+          );
+
+        }
+      );
+
+      ffmpeg.on(
+        "close",
+        code => {
+
+          if (
+            code === 0
+          ) {
+
+            resolve();
+
+          } else {
+
+            reject(
+              new Error(
+                "FFmpeg failed: " +
+                stderr.slice(-3000)
+              )
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
 
 }
 
@@ -2466,29 +2448,33 @@ TEMP FILE CLEANUP
 ===================================================== */
 
 async function cleanupTempDirectory(
-tempDir
+  tempDir
 ) {
 
-if (!tempDir) return;
+  if (!tempDir) return;
 
-try {
+  try {
 
-await fs.promises.rm(
-  tempDir,
-  {
-    recursive: true,
-    force: true
+    await fs.promises.rm(
+      tempDir,
+      {
+        recursive: true,
+        force: true
+      }
+    );
+
+    console.log(
+      "Temporary video files deleted."
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Temporary cleanup error:",
+      error.message
+    );
+
   }
-);
-
-} catch (error) {
-
-console.error(
-  "Temporary file cleanup error:",
-  error.message
-);
-
-}
 
 }
 
@@ -2497,48 +2483,48 @@ PAGES
 ===================================================== */
 
 app.get(
-"/",
-(req, res) => {
+  "/",
+  (req, res) => {
 
-res.sendFile(
-  path.join(
-    __dirname,
-    "public",
-    "index.html"
-  )
-);
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "index.html"
+      )
+    );
 
-}
-);
-
-app.get(
-"/template",
-(req, res) => {
-
-res.sendFile(
-  path.join(
-    __dirname,
-    "public",
-    "template.html"
-  )
-);
-
-}
+  }
 );
 
 app.get(
-"/admin",
-(req, res) => {
+  "/template",
+  (req, res) => {
 
-res.sendFile(
-  path.join(
-    __dirname,
-    "public",
-    "admin.html"
-  )
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "template.html"
+      )
+    );
+
+  }
 );
 
-}
+app.get(
+  "/admin",
+  (req, res) => {
+
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "admin.html"
+      )
+    );
+
+  }
 );
 
 /* =====================================================
@@ -2546,12 +2532,12 @@ SERVER
 ===================================================== */
 
 app.listen(
-PORT,
-() => {
+  PORT,
+  () => {
 
-console.log(
-  `MAKYAMA Message Server running on port ${PORT}`
-);
+    console.log(
+      `MAKYAMA Message Server running on port ${PORT}`
+    );
 
-}
+  }
 );
