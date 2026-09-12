@@ -4,7 +4,7 @@ content="width=device-width, initial-scale=1.0"
 
 «»
 
-  <title>MAKYAMA Message</title>  <!-- HTML TO CANVAS -->  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>  <!-- FFMPEG -->  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.11.1/dist/ffmpeg-util.min.js"></script>  <style>
+  <title>MAKYAMA Message</title>  <style>
 
     * {
       box-sizing: border-box;
@@ -30,6 +30,7 @@ content="width=device-width, initial-scale=1.0"
 
     body {
       min-height: 100vh;
+
       background:
         radial-gradient(
           circle at 15% 10%,
@@ -42,12 +43,15 @@ content="width=device-width, initial-scale=1.0"
           transparent 30%
         ),
         var(--bg);
+
       color: var(--text);
+
       font-family:
         Inter,
         Arial,
         Helvetica,
         sans-serif;
+
       overflow-x: hidden;
     }
 
@@ -57,43 +61,66 @@ content="width=device-width, initial-scale=1.0"
       position: sticky;
       top: 0;
       z-index: 1000;
+
       padding: 14px 18px;
-      background: rgba(5,8,22,.78);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--line);
+
+      background:
+        rgba(5,8,22,.78);
+
+      backdrop-filter:
+        blur(18px);
+
+      border-bottom:
+        1px solid var(--line);
     }
 
     .header-inner {
       max-width: 1000px;
       margin: auto;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       gap: 15px;
     }
 
     .back {
       display: inline-flex;
       align-items: center;
+
       gap: 8px;
+
       color: #d8e2f7;
+
       text-decoration: none;
+
       font-size: 13px;
+
       padding: 9px 12px;
+
       border-radius: 10px;
+
       transition: .25s;
     }
 
     .back:hover {
-      background: rgba(255,255,255,.07);
+      background:
+        rgba(255,255,255,.07);
+
       color: white;
-      transform: translateX(-3px);
+
+      transform:
+        translateX(-3px);
     }
 
     .brand {
       font-size: 13px;
+
       font-weight: 900;
+
       letter-spacing: .7px;
+
       color: #9eb5e8;
     }
 
@@ -101,36 +128,56 @@ content="width=device-width, initial-scale=1.0"
 
     .page {
       max-width: 1000px;
+
       margin: auto;
-      padding: 25px 18px 60px;
+
+      padding:
+        25px 18px 60px;
     }
 
     .title-area {
       text-align: center;
-      padding: 15px 0 25px;
+
+      padding:
+        15px 0 25px;
     }
 
     .eyebrow {
       display: inline-flex;
+
       align-items: center;
+
       gap: 7px;
+
       color: #9bb5ed;
+
       font-size: 10px;
+
       letter-spacing: 1.5px;
-      text-transform: uppercase;
+
+      text-transform:
+        uppercase;
+
       margin-bottom: 11px;
     }
 
     .eyebrow-dot {
       width: 6px;
       height: 6px;
+
       border-radius: 50%;
+
       background: #55e9a3;
-      box-shadow: 0 0 12px #55e9a3;
-      animation: pulse 1.5s infinite;
+
+      box-shadow:
+        0 0 12px #55e9a3;
+
+      animation:
+        pulse 1.5s infinite;
     }
 
     @keyframes pulse {
+
       0%,100% {
         transform: scale(1);
         opacity: 1;
@@ -140,13 +187,20 @@ content="width=device-width, initial-scale=1.0"
         transform: scale(.65);
         opacity: .5;
       }
+
     }
 
     .title {
-      font-size: clamp(28px, 6vw, 48px);
+      font-size:
+        clamp(28px, 6vw, 48px);
+
       line-height: 1.1;
+
       font-weight: 900;
-      letter-spacing: -1.5px;
+
+      letter-spacing:
+        -1.5px;
+
       background:
         linear-gradient(
           90deg,
@@ -155,32 +209,51 @@ content="width=device-width, initial-scale=1.0"
           #9e80ff,
           #fff
         );
-      background-size: 250% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
+
+      background-size:
+        250% auto;
+
+      -webkit-background-clip:
+        text;
+
+      background-clip:
+        text;
+
       color: transparent;
-      animation: titleGradient 5s linear infinite;
+
+      animation:
+        titleGradient 5s linear infinite;
     }
 
     @keyframes titleGradient {
+
       to {
-        background-position: 250% center;
+        background-position:
+          250% center;
       }
+
     }
 
     /* ================= NAME ================= */
 
     .name-box {
       display: none;
-      margin: 0 auto 17px;
+
+      margin:
+        0 auto 17px;
+
       max-width: 620px;
     }
 
     .name-label {
       display: block;
+
       color: #91a0bd;
+
       font-size: 11px;
-      margin: 0 0 7px 4px;
+
+      margin:
+        0 0 7px 4px;
     }
 
     .name-input-wrap {
@@ -189,23 +262,41 @@ content="width=device-width, initial-scale=1.0"
 
     .name-input-icon {
       position: absolute;
+
       left: 15px;
+
       top: 50%;
-      transform: translateY(-50%);
+
+      transform:
+        translateY(-50%);
+
       font-size: 17px;
+
       opacity: .7;
     }
 
     .name-box input {
       width: 100%;
+
       height: 52px;
-      padding: 0 15px 0 45px;
+
+      padding:
+        0 15px 0 45px;
+
       border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.10);
+
+      border:
+        1px solid rgba(255,255,255,.10);
+
       outline: none;
-      background: rgba(13,20,42,.85);
+
+      background:
+        rgba(13,20,42,.85);
+
       color: white;
+
       font-size: 15px;
+
       transition: .25s;
     }
 
@@ -214,19 +305,27 @@ content="width=device-width, initial-scale=1.0"
     }
 
     .name-box input:focus {
-      border-color: rgba(91,140,255,.6);
+      border-color:
+        rgba(91,140,255,.6);
+
       box-shadow:
-        0 0 0 4px rgba(91,140,255,.08);
+        0 0 0 4px
+        rgba(91,140,255,.08);
     }
 
     /* ================= MESSAGE ================= */
 
     .message-shell {
       position: relative;
+
       max-width: 900px;
+
       margin: auto;
+
       padding: 1px;
+
       border-radius: 25px;
+
       background:
         linear-gradient(
           135deg,
@@ -234,15 +333,21 @@ content="width=device-width, initial-scale=1.0"
           rgba(139,92,255,.22),
           rgba(57,217,255,.15)
         );
+
       box-shadow:
-        0 30px 90px rgba(0,0,0,.32);
+        0 30px 90px
+        rgba(0,0,0,.32);
     }
 
     .message-box {
       min-height: 520px;
+
       position: relative;
+
       overflow: hidden;
+
       border-radius: 24px;
+
       background:
         radial-gradient(
           circle at 50% 0%,
@@ -254,78 +359,130 @@ content="width=device-width, initial-scale=1.0"
 
     .message-box::before {
       content: "";
+
       position: absolute;
+
       width: 250px;
       height: 250px;
+
       border-radius: 50%;
+
       left: -130px;
       top: -120px;
-      background: rgba(91,140,255,.08);
-      filter: blur(30px);
+
+      background:
+        rgba(91,140,255,.08);
+
+      filter:
+        blur(30px);
+
       pointer-events: none;
     }
 
     .message-box::after {
       content: "";
+
       position: absolute;
+
       width: 250px;
       height: 250px;
+
       border-radius: 50%;
+
       right: -130px;
       bottom: -120px;
-      background: rgba(139,92,255,.08);
-      filter: blur(30px);
+
+      background:
+        rgba(139,92,255,.08);
+
+      filter:
+        blur(30px);
+
       pointer-events: none;
     }
 
     .loading {
       min-height: 520px;
+
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
+
       justify-content: center;
+
       gap: 13px;
+
       color: #8190ad;
+
       font-size: 12px;
     }
 
     .loader {
       width: 42px;
       height: 42px;
+
       border-radius: 50%;
-      border: 3px solid rgba(255,255,255,.08);
-      border-top-color: var(--blue);
-      border-right-color: var(--purple);
-      animation: spin .8s linear infinite;
+
+      border:
+        3px solid
+        rgba(255,255,255,.08);
+
+      border-top-color:
+        var(--blue);
+
+      border-right-color:
+        var(--purple);
+
+      animation:
+        spin .8s linear infinite;
     }
 
     @keyframes spin {
+
       to {
         transform: rotate(360deg);
       }
+
     }
 
     /* ================= CONTROLS ================= */
 
     .controls {
       max-width: 900px;
-      margin: 17px auto 0;
+
+      margin:
+        17px auto 0;
+
       display: grid;
+
       grid-template-columns:
         repeat(3, 1fr);
+
       gap: 10px;
     }
 
     button {
       min-height: 50px;
-      border: 1px solid rgba(255,255,255,.08);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
       border-radius: 13px;
+
       cursor: pointer;
+
       color: white;
+
       font-size: 13px;
+
       font-weight: 800;
+
       background:
         rgba(19,29,57,.9);
+
       transition:
         transform .25s,
         box-shadow .25s,
@@ -333,15 +490,23 @@ content="width=device-width, initial-scale=1.0"
     }
 
     button:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255,255,255,.18);
+      transform:
+        translateY(-3px);
+
+      border-color:
+        rgba(255,255,255,.18);
+
       box-shadow:
-        0 12px 30px rgba(0,0,0,.22);
+        0 12px 30px
+        rgba(0,0,0,.22);
     }
 
     button:disabled {
       opacity: .55;
-      cursor: not-allowed;
+
+      cursor:
+        not-allowed;
+
       transform: none;
     }
 
@@ -352,9 +517,13 @@ content="width=device-width, initial-scale=1.0"
           #4f82ff,
           #795cff
         );
-      border-color: transparent;
+
+      border-color:
+        transparent;
+
       box-shadow:
-        0 8px 25px rgba(79,130,255,.18);
+        0 8px 25px
+        rgba(79,130,255,.18);
     }
 
     #shareBtn {
@@ -373,46 +542,180 @@ content="width=device-width, initial-scale=1.0"
           #087fca,
           #0b9fd8
         );
-      border-color: transparent;
+
+      border-color:
+        transparent;
+
       box-shadow:
-        0 8px 25px rgba(11,159,216,.14);
+        0 8px 25px
+        rgba(11,159,216,.14);
     }
 
     /* ================= AD ================= */
 
     .ad {
       max-width: 900px;
+
       min-height: 70px;
-      margin: 20px auto 0;
-      border: 1px dashed rgba(126,154,255,.15);
+
+      margin:
+        20px auto 0;
+
+      border:
+        1px dashed
+        rgba(126,154,255,.15);
+
       border-radius: 14px;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       color: #52617c;
-      background: rgba(255,255,255,.012);
+
+      background:
+        rgba(255,255,255,.012);
+
       font-size: 10px;
+
       letter-spacing: 1px;
-      text-transform: uppercase;
+
+      text-transform:
+        uppercase;
+    }
+
+    .ad.has-ad {
+      border:
+        1px solid
+        rgba(126,154,255,.12);
+
+      text-transform:
+        none;
+
+      letter-spacing:
+        normal;
+    }
+
+    /* ================= DOWNLOAD AD OVERLAY ================= */
+
+    .download-ad-overlay {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 99999;
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        rgba(0,0,0,.72);
+
+      backdrop-filter:
+        blur(8px);
+    }
+
+    .download-ad-overlay.show {
+      display: flex;
+    }
+
+    .download-ad-box {
+      width: 100%;
+
+      max-width: 520px;
+
+      min-height: 180px;
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.10);
+
+      background:
+        rgba(11,18,38,.96);
+
+      box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.55);
+
+      text-align: center;
+    }
+
+    .download-ad-title {
+      color: #8fa4cc;
+
+      font-size: 11px;
+
+      text-transform:
+        uppercase;
+
+      letter-spacing: 1.3px;
+
+      margin-bottom: 12px;
+    }
+
+    #downloadAdContent {
+      width: 100%;
+
+      min-height: 100px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      overflow: hidden;
+    }
+
+    .ad-loading {
+      color: #7e8da9;
+
+      font-size: 12px;
     }
 
     /* ================= INFO ================= */
 
     .info {
       max-width: 900px;
-      margin: 18px auto 0;
+
+      margin:
+        18px auto 0;
+
       display: flex;
+
       justify-content: center;
+
       gap: 8px;
+
       flex-wrap: wrap;
     }
 
     .info-pill {
-      padding: 7px 10px;
+      padding:
+        7px 10px;
+
       border-radius: 999px;
-      background: rgba(255,255,255,.035);
-      border: 1px solid rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
       color: #667594;
+
       font-size: 9px;
     }
 
@@ -421,7 +724,8 @@ content="width=device-width, initial-scale=1.0"
     @media (max-width: 600px) {
 
       header {
-        padding: 11px 12px;
+        padding:
+          11px 12px;
       }
 
       .page {
@@ -435,7 +739,9 @@ content="width=device-width, initial-scale=1.0"
 
       .back {
         font-size: 11px;
-        padding: 7px 8px;
+
+        padding:
+          7px 8px;
       }
 
       .title-area {
@@ -452,6 +758,7 @@ content="width=device-width, initial-scale=1.0"
 
       .message-box {
         min-height: 460px;
+
         border-radius: 18px;
       }
 
@@ -469,1406 +776,1327 @@ content="width=device-width, initial-scale=1.0"
 
     }
 
-  </style></head><body><header>  <div class="header-inner"><a
-  class="back"
-  href="/"
->
-  ← Back to Messages
-</a>
+  </style></head><body>  <!-- ================= HEADER ================= -->  <header><div class="header-inner">
 
-<div class="brand">
-  MAKYAMA MESSAGES
-</div>
-
-  </div></header><main class="page">  <section class="title-area"><div class="eyebrow">
-
-  <span class="eyebrow-dot"></span>
-
-  Animated Message
-
-</div>
-
-<h1
-  id="title"
-  class="title"
->
-  Loading...
-</h1>
-
-  </section>  <!-- NAME -->  <div
-    id="nameBox"
-    class="name-box"
-  ><label
-  class="name-label"
-  for="nameInput"
->
-  Personalize this message
-</label>
-
-<div class="name-input-wrap">
-
-  <span class="name-input-icon">
-    👤
-  </span>
-
-  <input
-    id="nameInput"
-    type="text"
-    maxlength="80"
-    placeholder="Enter name..."
-    autocomplete="off"
+  <a
+    class="back"
+    href="/"
   >
+    ← Back to Messages
+  </a>
+
+  <div class="brand">
+    MAKYAMA MESSAGES
+  </div>
 
 </div>
 
-  </div>  <!-- MESSAGE -->  <div class="message-shell"><div
-  id="messageBox"
-  class="message-box"
+  </header>  <!-- ================= MAIN ================= -->  <main class="page"><!-- TITLE -->
+
+<section class="title-area">
+
+  <div class="eyebrow">
+
+    <span class="eyebrow-dot"></span>
+
+    Animated Message
+
+  </div>
+
+
+  <h1
+    id="title"
+    class="title"
+  >
+    Loading...
+  </h1>
+
+</section>
+
+
+<!-- NAME -->
+
+<div
+  id="nameBox"
+  class="name-box"
 >
 
-  <div class="loading">
+  <label
+    class="name-label"
+    for="nameInput"
+  >
+    Personalize this message
+  </label>
 
-    <div class="loader"></div>
 
-    <span>
-      Loading animated message...
+  <div class="name-input-wrap">
+
+    <span class="name-input-icon">
+      👤
     </span>
+
+
+    <input
+      id="nameInput"
+      type="text"
+      maxlength="80"
+      placeholder="Enter name..."
+      autocomplete="off"
+    >
 
   </div>
 
 </div>
 
-  </div>  <!-- CONTROLS -->  <div class="controls"><button id="playBtn">
-  ▶ Play Animation
-</button>
 
-<button id="shareBtn">
-  ↗ Share
-</button>
+<!-- MESSAGE -->
 
-<button id="downloadBtn">
-  🎥 Download MP4
-</button>
+<div class="message-shell">
 
-  </div>  <!-- INFO -->  <div class="info"><span class="info-pill">
-  ✨ Animated
-</span>
-
-<span class="info-pill">
-  💬 Swahili Message
-</span>
-
-<span class="info-pill">
-  📱 Shareable
-</span>
-
-<span class="info-pill">
-  🎥 MP4 Video
-</span>
-
-  </div>  <!-- DOWNLOAD AD -->  <div
-    id="downloadAd"
-    class="ad"
+  <div
+    id="messageBox"
+    class="message-box"
   >
+
+    <div class="loading">
+
+      <div class="loader"></div>
+
+      <span>
+        Loading animated message...
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CONTROLS -->
+
+<div class="controls">
+
+  <button id="playBtn">
+    ▶ Play Animation
+  </button>
+
+
+  <button id="shareBtn">
+    ↗ Share
+  </button>
+
+
+  <button id="downloadBtn">
+    🎥 Download MP4
+  </button>
+
+</div>
+
+
+<!-- INFO -->
+
+<div class="info">
+
+  <span class="info-pill">
+    ✨ Animated
+  </span>
+
+  <span class="info-pill">
+    💬 Swahili Message
+  </span>
+
+  <span class="info-pill">
+    📱 Shareable
+  </span>
+
+  <span class="info-pill">
+    🎥 MP4 Video
+  </span>
+
+</div>
+
+
+<!-- DOWNLOAD AD FALLBACK AREA -->
+
+<div
+  id="downloadAd"
+  class="ad"
+>
+  Advertisement
+</div>
+
+  </main>  <!-- ================= DOWNLOAD AD OVERLAY ================= -->  <div
+    id="downloadAdOverlay"
+    class="download-ad-overlay"
+  ><div class="download-ad-box">
+
+  <div class="download-ad-title">
     Advertisement
-  </div></main><script>
+  </div>
 
-  /* =====================================================
-     URL
-  ===================================================== */
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+  <div id="downloadAdContent">
 
-  const id =
-    params.get("id");
+    <div class="ad-loading">
+      Preparing advertisement...
+    </div>
 
-  /* =====================================================
-     ELEMENTS
-  ===================================================== */
+  </div>
 
-  const title =
-    document.getElementById("title");
+</div>
 
-  const messageBox =
-    document.getElementById("messageBox");
+  </div>  <script>
 
-  const nameBox =
-    document.getElementById("nameBox");
+    /* =====================================================
+       URL
+    ===================================================== */
 
-  const nameInput =
-    document.getElementById("nameInput");
-
-  const playBtn =
-    document.getElementById("playBtn");
-
-  const shareBtn =
-    document.getElementById("shareBtn");
-
-  const downloadBtn =
-    document.getElementById("downloadBtn");
-
-  const downloadAd =
-    document.getElementById("downloadAd");
-
-  /* =====================================================
-     DATA
-  ===================================================== */
-
-  let template = null;
-
-  /*
-    Video settings
-  */
-
-  const VIDEO_FPS = 24;
-
-  const VIDEO_WIDTH = 720;
-
-  const VIDEO_HEIGHT = 720;
-
-  const DEFAULT_DURATION = 5000;
-
-  /* =====================================================
-     LOAD TEMPLATE
-  ===================================================== */
-
-  async function loadTemplate() {
-
-    if (!id) {
-
-      showError(
-        "Message ID is missing."
+    const params =
+      new URLSearchParams(
+        window.location.search
       );
 
-      return;
 
-    }
+    const id =
+      params.get("id");
 
-    try {
 
-      const response =
-        await fetch(
-          "/api/templates/" +
-          encodeURIComponent(id)
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const title =
+      document.getElementById(
+        "title"
+      );
+
+
+    const messageBox =
+      document.getElementById(
+        "messageBox"
+      );
+
+
+    const nameBox =
+      document.getElementById(
+        "nameBox"
+      );
+
+
+    const nameInput =
+      document.getElementById(
+        "nameInput"
+      );
+
+
+    const playBtn =
+      document.getElementById(
+        "playBtn"
+      );
+
+
+    const shareBtn =
+      document.getElementById(
+        "shareBtn"
+      );
+
+
+    const downloadBtn =
+      document.getElementById(
+        "downloadBtn"
+      );
+
+
+    const downloadAd =
+      document.getElementById(
+        "downloadAd"
+      );
+
+
+    const downloadAdOverlay =
+      document.getElementById(
+        "downloadAdOverlay"
+      );
+
+
+    const downloadAdContent =
+      document.getElementById(
+        "downloadAdContent"
+      );
+
+
+    /* =====================================================
+       DATA
+    ===================================================== */
+
+    let template = null;
+
+    let ads = [];
+
+    let downloadAdData = null;
+
+
+    /* =====================================================
+       LOAD TEMPLATE
+    ===================================================== */
+
+    async function loadTemplate() {
+
+      if (!id) {
+
+        showError(
+          "Message ID is missing."
         );
 
-      if (!response.ok) {
-
-        throw new Error(
-          "Template not found."
-        );
+        return;
 
       }
 
-      template =
-        await response.json();
-
-      title.textContent =
-        template.title ||
-        "MAKYAMA Message";
-
-      if (template.nameRequired) {
-
-        nameBox.style.display =
-          "block";
-
-      }
-
-      renderMessage();
-
-      loadAds();
-
-    } catch (error) {
-
-      console.error(error);
-
-      showError(
-        "Message could not be loaded."
-      );
-
-    }
-
-  }
-
-  /* =====================================================
-     ERROR
-  ===================================================== */
-
-  function showError(message) {
-
-    messageBox.innerHTML = `
-
-      <div class="loading">
-
-        <div style="
-          font-size:42px;
-          margin-bottom:5px;
-        ">
-          📭
-        </div>
-
-        <div style="
-          color:#a1aec6;
-          font-weight:700;
-        ">
-          ${escapeHtml(message)}
-        </div>
-
-        <a
-          href="/"
-          style="
-            margin-top:7px;
-            color:#72a5ff;
-            text-decoration:none;
-            font-size:11px;
-          "
-        >
-          ← Return to messages
-        </a>
-
-      </div>
-
-    `;
-
-  }
-
-  /* =====================================================
-     RENDER MESSAGE
-  ===================================================== */
-
-  function renderMessage() {
-
-    if (!template) return;
-
-    let html =
-      template.html || "";
-
-    const name =
-      nameInput.value.trim() ||
-      "Rafiki";
-
-    html =
-      html.replaceAll(
-        "{name}",
-        escapeHtml(name)
-      );
-
-    messageBox.innerHTML =
-      html;
-
-    runAnimations();
-
-  }
-
-  /* =====================================================
-     RUN ANIMATIONS
-  ===================================================== */
-
-  function runAnimations() {
-
-    const elements =
-      messageBox.querySelectorAll(
-        "[data-animation]"
-      );
-
-    elements.forEach(
-      element => {
-
-        const animation =
-          element.dataset.animation;
-
-        if (!animation) return;
-
-        element.style.animation =
-          "none";
-
-        void element.offsetWidth;
-
-        element.style.animation =
-          animation;
-
-      }
-    );
-
-  }
-
-  /* =====================================================
-     ESCAPE
-  ===================================================== */
-
-  function escapeHtml(value) {
-
-    const div =
-      document.createElement("div");
-
-    div.textContent =
-      value;
-
-    return div.innerHTML;
-
-  }
-
-  /* =====================================================
-     NAME
-  ===================================================== */
-
-  nameInput.addEventListener(
-    "input",
-    () => {
-
-      renderMessage();
-
-    }
-  );
-
-  /* =====================================================
-     PLAY
-  ===================================================== */
-
-  playBtn.addEventListener(
-    "click",
-    () => {
-
-      if (!template) return;
-
-      renderMessage();
-
-      playBtn.textContent =
-        "↻ Replay Animation";
-
-      setTimeout(() => {
-
-        playBtn.textContent =
-          "▶ Play Animation";
-
-      }, 1500);
-
-    }
-  );
-
-  /* =====================================================
-     SHARE
-  ===================================================== */
-
-  shareBtn.addEventListener(
-    "click",
-    async () => {
-
-      if (!template) return;
-
-      /*
-        Put the name inside the URL
-        so the recipient can see it.
-      */
-
-      const url =
-        new URL(
-          window.location.href
-        );
-
-      const name =
-        nameInput.value.trim();
-
-      if (name) {
-
-        url.searchParams.set(
-          "name",
-          name
-        );
-
-      }
-
-      const shareUrl =
-        url.toString();
 
       try {
 
-        if (navigator.share) {
+        const response =
+          await fetch(
+            "/api/templates/" +
+            encodeURIComponent(id)
+          );
 
-          await navigator.share({
 
-            title:
-              template.title ||
-              "MAKYAMA Message",
+        if (!response.ok) {
 
-            text:
-              "Check out this animated message on MAKYAMA MESSAGES.",
-
-            url:
-              shareUrl
-
-          });
-
-        } else {
-
-          await navigator.clipboard
-            .writeText(shareUrl);
-
-          showTemporaryMessage(
-            "✓ Message link copied"
+          throw new Error(
+            "Template not found."
           );
 
         }
 
-      } catch (error) {
 
-        console.log(error);
+        template =
+          await response.json();
 
-      }
 
-    }
-  );
+        title.textContent =
+          template.title ||
+          "MAKYAMA Message";
 
-  /* =====================================================
-     TEMPORARY MESSAGE
-  ===================================================== */
-
-  function showTemporaryMessage(message) {
-
-    const old =
-      document.getElementById(
-        "temporaryMessage"
-      );
-
-    if (old) {
-
-      old.remove();
-
-    }
-
-    const box =
-      document.createElement("div");
-
-    box.id =
-      "temporaryMessage";
-
-    box.textContent =
-      message;
-
-    box.style.position =
-      "fixed";
-
-    box.style.left =
-      "50%";
-
-    box.style.bottom =
-      "25px";
-
-    box.style.transform =
-      "translateX(-50%)";
-
-    box.style.padding =
-      "11px 16px";
-
-    box.style.borderRadius =
-      "999px";
-
-    box.style.background =
-      "rgba(25,35,65,.95)";
-
-    box.style.border =
-      "1px solid rgba(255,255,255,.1)";
-
-    box.style.color =
-      "white";
-
-    box.style.fontSize =
-      "12px";
-
-    box.style.fontWeight =
-      "700";
-
-    box.style.zIndex =
-      "99999";
-
-    document.body.appendChild(box);
-
-    setTimeout(() => {
-
-      box.remove();
-
-    }, 2500);
-
-  }
-
-  /* =====================================================
-     GET ANIMATION DURATION
-  ===================================================== */
-
-  function getAnimationDuration() {
-
-    let longest =
-      DEFAULT_DURATION;
-
-    const elements =
-      messageBox.querySelectorAll("*");
-
-    elements.forEach(
-      element => {
-
-        const style =
-          getComputedStyle(element);
-
-        const duration =
-          parseTime(
-            style.animationDuration
-          );
-
-        const delay =
-          parseTime(
-            style.animationDelay
-          );
-
-        const total =
-          duration + delay;
 
         if (
-          Number.isFinite(total) &&
-          total > longest
+          template.nameRequired
         ) {
 
-          longest = total;
+          nameBox.style.display =
+            "block";
 
         }
 
-      }
-    );
 
-    /*
-      Give animations a little
-      extra time to finish.
-    */
+        const sharedName =
+          params.get("name");
 
-    longest += 500;
 
-    /*
-      Prevent extremely long videos.
-    */
+        if (sharedName) {
 
-    return Math.min(
-      Math.max(
-        longest,
-        3000
-      ),
-      15000
-    );
-
-  }
-
-  /* =====================================================
-     PARSE CSS TIME
-  ===================================================== */
-
-  function parseTime(value) {
-
-    if (!value) return 0;
-
-    const first =
-      value
-        .split(",")[0]
-        .trim();
-
-    if (
-      first.endsWith("ms")
-    ) {
-
-      return parseFloat(
-        first
-      ) || 0;
-
-    }
-
-    if (
-      first.endsWith("s")
-    ) {
-
-      return (
-        parseFloat(first) *
-        1000
-      ) || 0;
-
-    }
-
-    return 0;
-
-  }
-
-  /* =====================================================
-     WAIT
-  ===================================================== */
-
-  function wait(ms) {
-
-    return new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          ms
-        )
-    );
-
-  }
-
-  /* =====================================================
-     DOWNLOAD VIDEO
-  ===================================================== */
-
-  downloadBtn.addEventListener(
-    "click",
-    async () => {
-
-      if (!template) return;
-
-      /*
-        Prevent double clicks.
-      */
-
-      downloadBtn.disabled =
-        true;
-
-      playBtn.disabled =
-        true;
-
-      shareBtn.disabled =
-        true;
-
-      const oldText =
-        downloadBtn.textContent;
-
-      try {
-
-        /*
-          Count download.
-        */
-
-        try {
-
-          await fetch(
-            "/api/analytics/download",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  templateId:
-                    template.id
-                })
-            }
-          );
-
-        } catch (analyticsError) {
-
-          console.log(
-            "Analytics error:",
-            analyticsError
-          );
+          nameInput.value =
+            sharedName;
 
         }
 
-        /*
-          Make sure animation
-          starts from beginning.
-        */
 
         renderMessage();
 
-        await wait(100);
 
-        /*
-          Detect animation length.
-        */
+        await loadAds();
 
-        const duration =
-          getAnimationDuration();
 
-        /*
-          Show progress.
-        */
+      } catch (error) {
 
-        downloadBtn.textContent =
-          "⏳ Preparing 0%";
-
-        /*
-          Create canvas.
-        */
-
-        const canvas =
-          document.createElement(
-            "canvas"
-          );
-
-        canvas.width =
-          VIDEO_WIDTH;
-
-        canvas.height =
-          VIDEO_HEIGHT;
-
-        const ctx =
-          canvas.getContext(
-            "2d"
-          );
-
-        /*
-          Record canvas.
-        */
-
-        const stream =
-          canvas.captureStream(
-            VIDEO_FPS
-          );
-
-        /*
-          Try MP4 first.
-        */
-
-        let mimeType =
-          "";
-
-        if (
-          MediaRecorder.isTypeSupported(
-            "video/mp4;codecs=h264"
-          )
-        ) {
-
-          mimeType =
-            "video/mp4;codecs=h264";
-
-        } else if (
-          MediaRecorder.isTypeSupported(
-            "video/webm;codecs=vp9"
-          )
-        ) {
-
-          mimeType =
-            "video/webm;codecs=vp9";
-
-        } else {
-
-          mimeType =
-            "video/webm";
-
-        }
-
-        const recorder =
-          new MediaRecorder(
-            stream,
-            {
-              mimeType:
-                mimeType,
-
-              videoBitsPerSecond:
-                5000000
-            }
-          );
-
-        const chunks = [];
-
-        recorder.ondataavailable =
-          event => {
-
-            if (
-              event.data &&
-              event.data.size > 0
-            ) {
-
-              chunks.push(
-                event.data
-              );
-
-            }
-
-          };
-
-        /*
-          Start recording.
-        */
-
-        recorder.start();
-
-        /*
-          Render frames.
-        */
-
-        const start =
-          performance.now();
-
-        let lastFrame =
-          -1;
-
-        while (true) {
-
-          const now =
-            performance.now();
-
-          const elapsed =
-            now - start;
-
-          if (
-            elapsed >= duration
-          ) {
-
-            break;
-
-          }
-
-          const frame =
-            Math.floor(
-              elapsed /
-              (1000 / VIDEO_FPS)
-            );
-
-          if (
-            frame !== lastFrame
-          ) {
-
-            lastFrame =
-              frame;
-
-            try {
-
-              const shot =
-                await html2canvas(
-                  messageBox,
-                  {
-                    backgroundColor:
-                      "#07101f",
-
-                    scale: 1,
-
-                    useCORS: true,
-
-                    allowTaint: false,
-
-                    logging: false,
-
-                    width:
-                      messageBox.clientWidth,
-
-                    height:
-                      messageBox.clientHeight
-                  }
-                );
-
-              /*
-                Clear canvas.
-              */
-
-              ctx.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-              );
-
-              /*
-                Draw screenshot
-                into video canvas.
-              */
-
-              const sourceRatio =
-                shot.width /
-                shot.height;
-
-              const targetRatio =
-                canvas.width /
-                canvas.height;
-
-              let drawWidth =
-                canvas.width;
-
-              let drawHeight =
-                canvas.height;
-
-              let offsetX = 0;
-
-              let offsetY = 0;
-
-              if (
-                sourceRatio >
-                targetRatio
-              ) {
-
-                drawHeight =
-                  canvas.width /
-                  sourceRatio;
-
-                offsetY =
-                  (
-                    canvas.height -
-                    drawHeight
-                  ) / 2;
-
-              } else {
-
-                drawWidth =
-                  canvas.height *
-                  sourceRatio;
-
-                offsetX =
-                  (
-                    canvas.width -
-                    drawWidth
-                  ) / 2;
-
-              }
-
-              ctx.drawImage(
-                shot,
-                offsetX,
-                offsetY,
-                drawWidth,
-                drawHeight
-              );
-
-            } catch (frameError) {
-
-              console.log(
-                "Frame error:",
-                frameError
-              );
-
-            }
-
-            const percent =
-              Math.min(
-                99,
-                Math.floor(
-                  (
-                    elapsed /
-                    duration
-                  ) * 100
-                )
-              );
-
-            downloadBtn.textContent =
-              "⏳ Recording " +
-              percent +
-              "%";
-
-          }
-
-          /*
-            Wait for next frame.
-          */
-
-          await wait(
-            1000 /
-            VIDEO_FPS
-          );
-
-        }
-
-        /*
-          Stop recorder.
-        */
-
-        recorder.stop();
-
-        await new Promise(
-          resolve => {
-
-            recorder.onstop =
-              resolve;
-
-          }
+        console.error(
+          error
         );
 
-        /*
-          Create recorded video.
-        */
 
-        const recordedBlob =
-          new Blob(
-            chunks,
-            {
-              type:
-                mimeType
-            }
+        showError(
+          "Message could not be loaded."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    function showError(message) {
+
+      messageBox.innerHTML = `
+
+        <div class="loading">
+
+          <div style="
+            font-size:42px;
+            margin-bottom:5px;
+          ">
+            📭
+          </div>
+
+          <div style="
+            color:#a1aec6;
+            font-weight:700;
+          ">
+            ${escapeHtml(message)}
+          </div>
+
+          <a
+            href="/"
+            style="
+              margin-top:7px;
+              color:#72a5ff;
+              text-decoration:none;
+              font-size:11px;
+            "
+          >
+            ← Return to messages
+          </a>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =====================================================
+       RENDER MESSAGE
+    ===================================================== */
+
+    function renderMessage() {
+
+      if (!template) return;
+
+
+      let html =
+        template.html || "";
+
+
+      const name =
+        nameInput.value.trim() ||
+        "Rafiki";
+
+
+      html =
+        html.replaceAll(
+          "{name}",
+          escapeHtml(name)
+        );
+
+
+      messageBox.innerHTML =
+        html;
+
+
+      runAnimations();
+
+    }
+
+
+    /* =====================================================
+       RUN ANIMATIONS
+    ===================================================== */
+
+    function runAnimations() {
+
+      const elements =
+        messageBox.querySelectorAll(
+          "[data-animation]"
+        );
+
+
+      elements.forEach(
+        element => {
+
+          const animation =
+            element.dataset.animation;
+
+
+          if (!animation) return;
+
+
+          element.style.animation =
+            "none";
+
+
+          void element.offsetWidth;
+
+
+          element.style.animation =
+            animation;
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.textContent =
+        value;
+
+
+      return div.innerHTML;
+
+    }
+
+
+    /* =====================================================
+       NAME
+    ===================================================== */
+
+    nameInput.addEventListener(
+      "input",
+      () => {
+
+        renderMessage();
+
+      }
+    );
+
+
+    /* =====================================================
+       PLAY
+    ===================================================== */
+
+    playBtn.addEventListener(
+      "click",
+      () => {
+
+        if (!template) return;
+
+
+        renderMessage();
+
+
+        playBtn.textContent =
+          "↻ Replay Animation";
+
+
+        setTimeout(
+          () => {
+
+            playBtn.textContent =
+              "▶ Play Animation";
+
+          },
+          1500
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       SHARE
+    ===================================================== */
+
+    shareBtn.addEventListener(
+      "click",
+      async () => {
+
+        if (!template) return;
+
+
+        const url =
+          new URL(
+            window.location.href
           );
 
-        /*
-          If browser already recorded
-          MP4, download directly.
-        */
 
-        if (
-          mimeType.startsWith(
-            "video/mp4"
-          )
-        ) {
+        const name =
+          nameInput.value.trim();
 
-          downloadBlob(
-            recordedBlob,
-            makeFileName() +
-            ".mp4"
+
+        if (name) {
+
+          url.searchParams.set(
+            "name",
+            name
           );
 
-          showTemporaryMessage(
-            "✓ MP4 video ready"
+        }
+
+
+        const shareUrl =
+          url.toString();
+
+
+        try {
+
+          if (
+            navigator.share
+          ) {
+
+            await navigator.share({
+
+              title:
+                template.title ||
+                "MAKYAMA Message",
+
+              text:
+                "Check out this animated message on MAKYAMA MESSAGES.",
+
+              url:
+                shareUrl
+
+            });
+
+          } else {
+
+            await navigator.clipboard
+              .writeText(
+                shareUrl
+              );
+
+
+            showTemporaryMessage(
+              "✓ Message link copied"
+            );
+
+          }
+
+        } catch (error) {
+
+          console.log(
+            error
           );
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       TEMPORARY MESSAGE
+    ===================================================== */
+
+    function showTemporaryMessage(
+      message
+    ) {
+
+      const old =
+        document.getElementById(
+          "temporaryMessage"
+        );
+
+
+      if (old) {
+
+        old.remove();
+
+      }
+
+
+      const box =
+        document.createElement(
+          "div"
+        );
+
+
+      box.id =
+        "temporaryMessage";
+
+
+      box.textContent =
+        message;
+
+
+      box.style.position =
+        "fixed";
+
+
+      box.style.left =
+        "50%";
+
+
+      box.style.bottom =
+        "25px";
+
+
+      box.style.transform =
+        "translateX(-50%)";
+
+
+      box.style.padding =
+        "11px 16px";
+
+
+      box.style.borderRadius =
+        "999px";
+
+
+      box.style.background =
+        "rgba(25,35,65,.95)";
+
+
+      box.style.border =
+        "1px solid rgba(255,255,255,.1)";
+
+
+      box.style.color =
+        "white";
+
+
+      box.style.fontSize =
+        "12px";
+
+
+      box.style.fontWeight =
+        "700";
+
+
+      box.style.zIndex =
+        "999999";
+
+
+      document.body.appendChild(
+        box
+      );
+
+
+      setTimeout(
+        () => {
+
+          box.remove();
+
+        },
+        2500
+      );
+
+    }
+
+
+    /* =====================================================
+       LOAD ADS
+    ===================================================== */
+
+    async function loadAds() {
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/ads"
+          );
+
+
+        if (!response.ok) {
 
           return;
 
         }
 
+
+        ads =
+          await response.json();
+
+
         /*
-          Otherwise convert WebM
-          to MP4 with FFmpeg.
+          DOWNLOAD AD
         */
 
-        downloadBtn.textContent =
-          "⏳ Converting to MP4...";
-
-        const mp4Blob =
-          await convertWebMToMP4(
-            recordedBlob
+        const downloadAds =
+          ads.filter(
+            ad =>
+              ad &&
+              ad.enabled === true &&
+              ad.position ===
+                "download"
           );
 
-        downloadBlob(
-          mp4Blob,
-          makeFileName() +
-          ".mp4"
-        );
 
-        showTemporaryMessage(
-          "✓ MP4 video downloaded"
-        );
+        if (
+          downloadAds.length > 0
+        ) {
+
+          downloadAdData =
+            downloadAds[0];
+
+
+          renderNormalAd(
+            downloadAdData,
+            downloadAd
+          );
+
+        } else {
+
+          downloadAd.style.display =
+            "none";
+
+        }
 
       } catch (error) {
 
-        console.error(
-          "Video download error:",
+        console.log(
+          "Ad loading error:",
           error
         );
 
-        showTemporaryMessage(
-          "❌ Video failed. Try again."
-        );
-
-      } finally {
-
-        downloadBtn.disabled =
-          false;
-
-        playBtn.disabled =
-          false;
-
-        shareBtn.disabled =
-          false;
-
-        downloadBtn.textContent =
-          oldText;
-
-      }
-
-    }
-  );
-
-  /* =====================================================
-     FFMPEG CONVERSION
-  ===================================================== */
-
-  async function convertWebMToMP4(
-    webmBlob
-  ) {
-
-    /*
-      Check FFmpeg.
-    */
-
-    if (
-      typeof FFmpeg ===
-      "undefined"
-    ) {
-
-      throw new Error(
-        "FFmpeg is not available."
-      );
-
-    }
-
-    const {
-      createFFmpeg,
-      fetchFile
-    } = FFmpeg;
-
-    const ffmpeg =
-      createFFmpeg({
-        log: false
-      });
-
-    /*
-      Load FFmpeg.
-    */
-
-    if (!ffmpeg.isLoaded()) {
-
-      downloadBtn.textContent =
-        "⏳ Loading video engine...";
-
-      await ffmpeg.load();
-
-    }
-
-    /*
-      Convert Blob to bytes.
-    */
-
-    const input =
-      await fetchFile(
-        webmBlob
-      );
-
-    /*
-      Write WebM.
-    */
-
-    ffmpeg.FS(
-      "writeFile",
-      "input.webm",
-      input
-    );
-
-    /*
-      Convert to MP4.
-    */
-
-    await ffmpeg.run(
-      "-i",
-      "input.webm",
-
-      "-c:v",
-      "libx264",
-
-      "-preset",
-      "ultrafast",
-
-      "-pix_fmt",
-      "yuv420p",
-
-      "-movflags",
-      "+faststart",
-
-      "output.mp4"
-    );
-
-    /*
-      Read MP4.
-    */
-
-    const data =
-      ffmpeg.FS(
-        "readFile",
-        "output.mp4"
-      );
-
-    /*
-      Cleanup.
-    */
-
-    try {
-
-      ffmpeg.FS(
-        "unlink",
-        "input.webm"
-      );
-
-      ffmpeg.FS(
-        "unlink",
-        "output.mp4"
-      );
-
-    } catch (cleanupError) {
-
-      console.log(
-        cleanupError
-      );
-
-    }
-
-    return new Blob(
-      [data.buffer],
-      {
-        type:
-          "video/mp4"
-      }
-    );
-
-  }
-
-  /* =====================================================
-     DOWNLOAD BLOB
-  ===================================================== */
-
-  function downloadBlob(
-    blob,
-    filename
-  ) {
-
-    const url =
-      URL.createObjectURL(
-        blob
-      );
-
-    const link =
-      document.createElement(
-        "a"
-      );
-
-    link.href =
-      url;
-
-    link.download =
-      filename;
-
-    document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(() => {
-
-      URL.revokeObjectURL(
-        url
-      );
-
-    }, 5000);
-
-  }
-
-  /* =====================================================
-     FILE NAME
-  ===================================================== */
-
-  function makeFileName() {
-
-    const base =
-      template &&
-      template.title
-        ? template.title
-        : "MAKYAMA_Message";
-
-    const clean =
-      base
-        .replace(
-          /[^a-z0-9_\- ]/gi,
-          ""
-        )
-        .trim()
-        .replace(
-          /\s+/g,
-          "_"
-        );
-
-    return (
-      "MAKYAMA_" +
-      (
-        clean ||
-        "Message"
-      )
-    );
-
-  }
-
-  /* =====================================================
-     LOAD ADS
-  ===================================================== */
-
-  async function loadAds() {
-
-    try {
-
-      const response =
-        await fetch(
-          "/api/ads"
-        );
-
-      if (!response.ok) {
-        return;
-      }
-
-      const ads =
-        await response.json();
-
-      const downloadAds =
-        ads.filter(
-          ad =>
-            ad &&
-            ad.enabled === true &&
-            ad.position ===
-              "download"
-        );
-
-      if (
-        downloadAds.length === 0
-      ) {
 
         downloadAd.style.display =
           "none";
 
+      }
+
+    }
+
+
+    /* =====================================================
+       RENDER NORMAL AD
+    ===================================================== */
+
+    function renderNormalAd(
+      ad,
+      container
+    ) {
+
+      if (!ad) return;
+
+
+      if (!ad.code) {
+
+        container.textContent =
+          ad.title ||
+          "Advertisement";
+
         return;
 
       }
 
-      const ad =
-        downloadAds[0];
 
-      if (ad.code) {
+      container.innerHTML = "";
 
-        downloadAd.innerHTML =
-          ad.code;
 
-      } else {
-
-        downloadAd.textContent =
-          ad.title ||
-          "Advertisement";
-
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Ad loading error:",
-        error
+      executeAdCode(
+        ad.code,
+        container
       );
 
-      downloadAd.style.display =
-        "none";
+
+      container.classList.add(
+        "has-ad"
+      );
 
     }
 
-  }
 
-  /* =====================================================
-     NAME FROM SHARED URL
-  ===================================================== */
+    /* =====================================================
+       EXECUTE AD CODE
+    ===================================================== */
 
-  const sharedName =
-    params.get("name");
+    function executeAdCode(
+      code,
+      container
+    ) {
 
-  if (sharedName) {
+      /*
+        Parse HTML first.
+      */
 
-    nameInput.value =
-      sharedName;
+      const parser =
+        new DOMParser();
 
-  }
 
-  /* =====================================================
-     START
-  ===================================================== */
+      const documentFragment =
+        parser.parseFromString(
+          String(code),
+          "text/html"
+        );
 
-  loadTemplate();
 
-</script></body></html>
+      const nodes =
+        Array.from(
+          documentFragment.body.childNodes
+        );
+
+
+      nodes.forEach(
+        node => {
+
+          if (
+            node.nodeName
+              .toLowerCase() ===
+            "script"
+          ) {
+
+            const script =
+              document.createElement(
+                "script"
+              );
+
+
+            Array.from(
+              node.attributes
+            ).forEach(
+              attribute => {
+
+                script.setAttribute(
+                  attribute.name,
+                  attribute.value
+                );
+
+              }
+            );
+
+
+            script.textContent =
+              node.textContent;
+
+
+            container.appendChild(
+              script
+            );
+
+          } else {
+
+            container.appendChild(
+              document.importNode(
+                node,
+                true
+              )
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       TRIGGER DOWNLOAD AD
+    ===================================================== */
+
+    async function triggerDownloadAd() {
+
+      if (
+        !downloadAdData ||
+        !downloadAdData.code
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        Open the ad overlay while
+        the user click is still active.
+      */
+
+      downloadAdOverlay.classList.add(
+        "show"
+      );
+
+
+      downloadAdContent.innerHTML = "";
+
+
+      /*
+        Execute the ad code.
+      */
+
+      executeAdCode(
+        downloadAdData.code,
+        downloadAdContent
+      );
+
+
+      /*
+        Give the advertisement
+        time to initialize.
+      */
+
+      await wait(1800);
+
+
+      /*
+        Close the overlay.
+      */
+
+      downloadAdOverlay.classList.remove(
+        "show"
+      );
+
+
+      downloadAdContent.innerHTML = "";
+
+    }
+
+
+    /* =====================================================
+       WAIT
+    ===================================================== */
+
+    function wait(ms) {
+
+      return new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            ms
+          )
+      );
+
+    }
+
+
+    /* =====================================================
+       DOWNLOAD MP4
+    ===================================================== */
+
+    downloadBtn.addEventListener(
+      "click",
+      async () => {
+
+        if (!template) return;
+
+
+        /*
+          Prevent double clicks.
+        */
+
+        downloadBtn.disabled =
+          true;
+
+        playBtn.disabled =
+          true;
+
+        shareBtn.disabled =
+          true;
+
+
+        const oldText =
+          downloadBtn.textContent;
+
+
+        try {
+
+          /*
+            Count download.
+          */
+
+          try {
+
+            await fetch(
+              "/api/analytics/download",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+                    templateId:
+                      template.id
+                  })
+              }
+            );
+
+          } catch (
+            analyticsError
+          ) {
+
+            console.log(
+              "Analytics error:",
+              analyticsError
+            );
+
+          }
+
+
+          /*
+            Make sure the
+            message is current.
+          */
+
+          renderMessage();
+
+
+          /*
+            DOWNLOAD AD FIRST
+          */
+
+          downloadBtn.textContent =
+            "⏳ Opening advertisement...";
+
+
+          await triggerDownloadAd();
+
+
+          /*
+            Start server-side
+            video generation.
+          */
+
+          downloadBtn.textContent =
+            "⏳ Creating MP4...";
+
+
+          const response =
+            await fetch(
+              "/api/generate-video",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+
+                    templateId:
+                      template.id,
+
+                    name:
+                      nameInput.value.trim() ||
+                      "Rafiki"
+
+                  })
+              }
+            );
+
+
+          if (!response.ok) {
+
+            let errorMessage =
+              "Video generation failed.";
+
+
+            try {
+
+              const errorData =
+                await response.json();
+
+
+              if (
+                errorData &&
+                errorData.error
+              ) {
+
+                errorMessage =
+                  errorData.error;
+
+              }
+
+            } catch (
+              parseError
+            ) {
+
+              console.log(
+                parseError
+              );
+
+            }
+
+
+            throw new Error(
+              errorMessage
+            );
+
+          }
+
+
+          /*
+            Server returns the
+            generated MP4.
+          */
+
+          const blob =
+            await response.blob();
+
+
+          if (
+            !blob ||
+            blob.size === 0
+          ) {
+
+            throw new Error(
+              "Empty video received."
+            );
+
+          }
+
+
+          /*
+            Download MP4 automatically.
+          */
+
+          downloadBlob(
+            blob,
+            makeFileName() +
+            ".mp4"
+          );
+
+
+          showTemporaryMessage(
+            "✓ MP4 video downloaded"
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Video download error:",
+            error
+          );
+
+
+          showTemporaryMessage(
+            "❌ " +
+            (
+              error.message ||
+              "Video failed. Try again."
+            )
+          );
+
+
+        } finally {
+
+          downloadBtn.disabled =
+            false;
+
+
+          playBtn.disabled =
+            false;
+
+
+          shareBtn.disabled =
+            false;
+
+
+          downloadBtn.textContent =
+            oldText;
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       DOWNLOAD BLOB
+    ===================================================== */
+
+    function downloadBlob(
+      blob,
+      filename
+    ) {
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        filename;
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      setTimeout(
+        () => {
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        },
+        5000
+      );
+
+    }
+
+
+    /* =====================================================
+       FILE NAME
+    ===================================================== */
+
+    function makeFileName() {
+
+      const base =
+        template &&
+        template.title
+          ? template.title
+          : "MAKYAMA_Message";
+
+
+      const clean =
+        base
+          .replace(
+            /[^a-z0-9_\- ]/gi,
+            ""
+          )
+          .trim()
+          .replace(
+            /\s+/g,
+            "_"
+          );
+
+
+      return (
+        "MAKYAMA_" +
+        (
+          clean ||
+          "Message"
+        )
+      );
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    loadTemplate();
+
+  </script></body></html>
