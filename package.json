@@ -1,0 +1,17 @@
+{
+  "name": "makyama-messages",
+  "version": "1.0.0",
+  "description": "MAKYAMA Animated Swahili Messages",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.4.0"
+  }
+}
