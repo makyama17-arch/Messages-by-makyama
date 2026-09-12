@@ -1810,47 +1810,54 @@ MAKYAMA MESSAGES · Animated Swahili Messages
 
   /* ================= RENDER AD ================= */
 
-  function renderAd(
-    ads,
-    position,
-    container
-  ) {
+  function renderAd(ads, position, container) {
+  const ad = ads.find(
+    item =>
+      item &&
+      item.enabled === true &&
+      item.position === position &&
+      String(item.code || "").trim()
+  );
 
-    const ad =
-      ads.find(item => {
-
-        return (
-          item &&
-          item.enabled === true &&
-          item.position === position &&
-          String(item.code || "").trim()
-        );
-
-      });
-
-    if (!ad) {
-
-      hideAd(container);
-
-      return;
-
-    }
-
+  if (!ad) {
     container.innerHTML = "";
+    container.classList.remove("has-ad");
+    container.style.display = "none";
+    return;
+  }
 
-    const wrapper =
-      document.createElement("div");
+  container.innerHTML = "";
 
-    wrapper.innerHTML =
-      String(ad.code || "");
+  const wrapper = document.createElement("div");
+  wrapper.style.width = "100%";
+  wrapper.style.display = "flex";
+  wrapper.style.justifyContent = "center";
 
-    while (wrapper.firstChild) {
+  const temp = document.createElement("div");
+  temp.innerHTML = String(ad.code || "");
 
-      container.appendChild(
-        wrapper.firstChild
-      );
+  while (temp.firstChild) {
+    const node = temp.firstChild;
 
+    if (node.tagName === "SCRIPT") {
+      const script = document.createElement("script");
+
+      for (const attr of node.attributes) {
+        script.setAttribute(attr.name, attr.value);
+      }
+
+      script.textContent = node.textContent || "";
+      wrapper.appendChild(script);
+    } else {
+      wrapper.appendChild(node);
     }
+  }
+
+  container.appendChild(wrapper);
+
+  container.classList.add("has-ad");
+  container.style.display = position === "social" ? "block" : "flex";
+  }
 
     container.classList.add("has-ad");
 
