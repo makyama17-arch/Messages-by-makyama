@@ -1,1 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>MAKYAMA Messages — Animated Swahili Messages</title>
+
+  <meta
+    name="description"
+    content="Beautiful animated Swahili messages for love, birthdays, celebrations, appreciation and more."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #0b1c30;
+      border-bottom: 1px solid #18334f;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: bold;
+      color: #4dd9ff;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #4dd9ff;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 15px 35px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 7vw, 62px);
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      color: #a9bdd2;
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.7;
+    }
+
+    .search {
+      margin: 25px auto;
+      max-width: 650px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #244766;
+      border-radius: 12px;
+      background: #0d2035;
+      color: white;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0 20px;
+    }
+
+    .category {
+      border: 1px solid #315b7d;
+      background: #0d2035;
+      color: white;
+      border-radius: 20px;
+      padding: 9px 15px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .category.active,
+    .category:hover {
+      background: #164c70;
+    }
+
+    .ad {
+      min-height: 70px;
+      border: 1px dashed #31516c;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #68829a;
+      margin: 20px 0;
+    }
+
+    .section-title {
+      margin: 30px 0 15px;
+      font-size: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(230px, 1fr)
+      );
+      gap: 16px;
+    }
+
+    .card {
+      background: #0c1d31;
+      border: 1px solid #1c3852;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #3b89b5;
+    }
+
+    .thumbnail {
+      height: 150px;
+      background: linear-gradient(
+        135deg,
+        #102c45,
+        #16466a
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8eb5cc;
+      overflow: hidden;
+    }
+
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 7px;
+    }
+
+    .card small {
+      color: #8ca5bb;
+    }
+
+    .open-btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 11px;
+      border: none;
+      border-radius: 9px;
+      background: #169bd5;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .open-btn:hover {
+      background: #087fb3;
+    }
+
+    .empty {
+      text-align: center;
+      color: #8499ac;
+      padding: 40px 10px;
+    }
+
+    .contact {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .whatsapp {
+      display: inline-flex;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      font-size: 31px;
+      margin-top: 15px;
+      transition: .2s;
+    }
+
+    .whatsapp:hover {
+      transform: scale(1.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 15px;
+      color: #71879b;
+      border-top: 1px solid #173149;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        margin-left: 7px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding-top: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+
+    <div class="logo">
+      MAKYAMA MESSAGES
+    </div>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#contact">Contact Us</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+
+    <h1>Animated Messages</h1>
+
+    <p>
+      Discover beautiful animated Swahili messages
+      for every special moment.
+    </p>
+
+    <div class="search">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Search messages..."
+      >
+    </div>
+
+  </section>
+
+  <div id="topAd" class="ad">
+    Advertisement
+  </div>
+
+  <section id="categories">
+
+    <div class="categories">
+
+      <button class="category active" data-category="All">
+        All
+      </button>
+
+      <button class="category" data-category="Love">
+        Love
+      </button>
+
+      <button class="category" data-category="Birthday">
+        Birthday
+      </button>
+
+      <button class="category" data-category="Celebration">
+        Celebration
+      </button>
+
+      <button class="category" data-category="Sad">
+        Sad
+      </button>
+
+      <button class="category" data-category="Funny">
+        Funny
+      </button>
+
+      <button class="category" data-category="Quotes">
+        Quotes
+      </button>
+
+      <button class="category" data-category="Appreciation">
+        Appreciation
+      </button>
+
+      <button class="category" data-category="Other">
+        Other
+      </button>
+
+    </div>
+
+  </section>
+
+  <div id="middleAd" class="ad">
+    Advertisement
+  </div>
+
+  <h2 class="section-title">
+    Message Templates
+  </h2>
+
+  <section id="templates" class="grid">
+
+    <div class="empty">
+      Loading messages...
+    </div>
+
+  </section>
+
+  <section id="contact" class="contact">
+
+    <h2>Contact Us</h2>
+
+    <p style="margin-top:10px;color:#91a6b8;">
+      Need a custom message or assistance?
+    </p>
+
+    <a
+      class="whatsapp"
+      href="https://wa.me/255671952054"
+      target="_blank"
+      rel="noopener"
+      aria-label="Contact us on WhatsApp"
+      title="Contact us on WhatsApp"
+    >
+      ☎
+    </a>
+
+  </section>
+
+</main>
+
+<footer>
+  © <span id="year"></span> MAKYAMA MESSAGES
+</footer>
+
+<script>
+  const templatesContainer =
+    document.getElementById("templates");
+
+  const searchInput =
+    document.getElementById("searchInput");
+
+  const categoryButtons =
+    document.querySelectorAll(".category");
+
+  let templates = [];
+  let selectedCategory = "All";
+
+  async function loadTemplates() {
+    try {
+      const response =
+        await fetch("/api/templates");
+
+      if (!response.ok) {
+        throw new Error(
+          "Unable to load templates."
+        );
+      }
+
+      templates = await response.json();
+
+      renderTemplates();
+
+    } catch (error) {
+      templatesContainer.innerHTML = `
+        <div class="empty">
+          Messages are currently unavailable.
+          Please try again later.
+        </div>
+      `;
+
+      console.error(error);
+    }
+  }
+
+  function renderTemplates() {
+    const search =
+      searchInput.value
+        .trim()
+        .toLowerCase();
+
+    const filtered =
+      templates.filter(template => {
+
+        const categoryMatch =
+          selectedCategory === "All" ||
+          template.category === selectedCategory;
+
+        const searchMatch =
+          !search ||
+          template.title
+            .toLowerCase()
+            .includes(search) ||
+          template.category
+            .toLowerCase()
+            .includes(search);
+
+        return categoryMatch && searchMatch;
+      });
+
+    if (!filtered.length) {
+      templatesContainer.innerHTML = `
+        <div class="empty">
+          No messages found.
+        </div>
+      `;
+
+      return;
+    }
+
+    templatesContainer.innerHTML =
+      filtered.map(template => {
+
+        const thumbnail =
+          template.thumbnail
+            ? `<img src="${escapeHtml(template.thumbnail)}" alt="">`
+            : "Animated Message";
+
+        return `
+          <article class="card">
+
+            <div class="thumbnail">
+              ${thumbnail}
+            </div>
+
+            <div class="card-body">
+
+              <h3>
+                ${escapeHtml(template.title)}
+              </h3>
+
+              <small>
+                ${escapeHtml(template.category)}
+              </small>
+
+              <button
+                class="open-btn"
+                onclick="openTemplate('${template.id}')"
+              >
+                Open Message
+              </button>
+
+            </div>
+
+          </article>
+        `;
+      }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function openTemplate(id) {
+    window.location.href =
+      "/template?id=" +
+      encodeURIComponent(id);
+  }
+
+  searchInput.addEventListener(
+    "input",
+    renderTemplates
+  );
+
+  categoryButtons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        categoryButtons.forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        selectedCategory =
+          button.dataset.category;
+
+        renderTemplates();
+      }
+    );
+
+  });
+
+  document.getElementById("year")
+    .textContent =
+    new Date().getFullYear();
+
+  loadTemplates();
+</script>
+
+</body>
+</html>
