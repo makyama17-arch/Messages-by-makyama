@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
+«»
 
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>MAKYAMA Message</title>
-
-  <style>
+  <title>MAKYAMA Message</title>  <!-- HTML TO CANVAS -->  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>  <!-- FFMPEG -->  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.11.1/dist/ffmpeg-util.min.js"></script>  <style>
 
     * {
       box-sizing: border-box;
@@ -347,6 +339,12 @@
         0 12px 30px rgba(0,0,0,.22);
     }
 
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     #playBtn {
       background:
         linear-gradient(
@@ -471,159 +469,113 @@
 
     }
 
-  </style>
+  </style></head><body><header>  <div class="header-inner"><a
+  class="back"
+  href="/"
+>
+  ← Back to Messages
+</a>
 
-</head>
+<div class="brand">
+  MAKYAMA MESSAGES
+</div>
 
-<body>
+  </div></header><main class="page">  <section class="title-area"><div class="eyebrow">
 
-<header>
+  <span class="eyebrow-dot"></span>
 
-  <div class="header-inner">
+  Animated Message
 
-    <a
-      class="back"
-      href="/"
-    >
-      ← Back to Messages
-    </a>
+</div>
 
-    <div class="brand">
-      MAKYAMA MESSAGES
-    </div>
+<h1
+  id="title"
+  class="title"
+>
+  Loading...
+</h1>
 
-  </div>
-
-</header>
-
-<main class="page">
-
-  <!-- TITLE -->
-
-  <section class="title-area">
-
-    <div class="eyebrow">
-
-      <span class="eyebrow-dot"></span>
-
-      Animated Message
-
-    </div>
-
-    <h1
-      id="title"
-      class="title"
-    >
-      Loading...
-    </h1>
-
-  </section>
-
-  <!-- NAME -->
-
-  <div
+  </section>  <!-- NAME -->  <div
     id="nameBox"
     class="name-box"
+  ><label
+  class="name-label"
+  for="nameInput"
+>
+  Personalize this message
+</label>
+
+<div class="name-input-wrap">
+
+  <span class="name-input-icon">
+    👤
+  </span>
+
+  <input
+    id="nameInput"
+    type="text"
+    maxlength="80"
+    placeholder="Enter name..."
+    autocomplete="off"
   >
 
-    <label
-      class="name-label"
-      for="nameInput"
-    >
-      Personalize this message
-    </label>
+</div>
 
-    <div class="name-input-wrap">
+  </div>  <!-- MESSAGE -->  <div class="message-shell"><div
+  id="messageBox"
+  class="message-box"
+>
 
-      <span class="name-input-icon">
-        👤
-      </span>
+  <div class="loading">
 
-      <input
-        id="nameInput"
-        type="text"
-        maxlength="80"
-        placeholder="Enter name..."
-        autocomplete="off"
-      >
+    <div class="loader"></div>
 
-    </div>
-
-  </div>
-
-  <!-- MESSAGE -->
-
-  <div class="message-shell">
-
-    <div
-      id="messageBox"
-      class="message-box"
-    >
-
-      <div class="loading">
-
-        <div class="loader"></div>
-
-        <span>
-          Loading animated message...
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- CONTROLS -->
-
-  <div class="controls">
-
-    <button id="playBtn">
-      ▶ Play Animation
-    </button>
-
-    <button id="shareBtn">
-      ↗ Share
-    </button>
-
-    <button id="downloadBtn">
-      ↓ Download
-    </button>
-
-  </div>
-
-  <!-- INFO -->
-
-  <div class="info">
-
-    <span class="info-pill">
-      ✨ Animated
-    </span>
-
-    <span class="info-pill">
-      💬 Swahili Message
-    </span>
-
-    <span class="info-pill">
-      📱 Shareable
+    <span>
+      Loading animated message...
     </span>
 
   </div>
 
-  <!-- AD -->
+</div>
 
-  <div
+  </div>  <!-- CONTROLS -->  <div class="controls"><button id="playBtn">
+  ▶ Play Animation
+</button>
+
+<button id="shareBtn">
+  ↗ Share
+</button>
+
+<button id="downloadBtn">
+  🎥 Download MP4
+</button>
+
+  </div>  <!-- INFO -->  <div class="info"><span class="info-pill">
+  ✨ Animated
+</span>
+
+<span class="info-pill">
+  💬 Swahili Message
+</span>
+
+<span class="info-pill">
+  📱 Shareable
+</span>
+
+<span class="info-pill">
+  🎥 MP4 Video
+</span>
+
+  </div>  <!-- DOWNLOAD AD -->  <div
     id="downloadAd"
     class="ad"
   >
     Advertisement
-  </div>
+  </div></main><script>
 
-</main>
-
-<script>
-
-  /* ================= URL ================= */
+  /* =====================================================
+     URL
+  ===================================================== */
 
   const params =
     new URLSearchParams(
@@ -633,7 +585,9 @@
   const id =
     params.get("id");
 
-  /* ================= ELEMENTS ================= */
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
 
   const title =
     document.getElementById("title");
@@ -656,11 +610,30 @@
   const downloadBtn =
     document.getElementById("downloadBtn");
 
-  /* ================= DATA ================= */
+  const downloadAd =
+    document.getElementById("downloadAd");
+
+  /* =====================================================
+     DATA
+  ===================================================== */
 
   let template = null;
 
-  /* ================= LOAD TEMPLATE ================= */
+  /*
+    Video settings
+  */
+
+  const VIDEO_FPS = 24;
+
+  const VIDEO_WIDTH = 720;
+
+  const VIDEO_HEIGHT = 720;
+
+  const DEFAULT_DURATION = 5000;
+
+  /* =====================================================
+     LOAD TEMPLATE
+  ===================================================== */
 
   async function loadTemplate() {
 
@@ -683,9 +656,11 @@
         );
 
       if (!response.ok) {
+
         throw new Error(
           "Template not found."
         );
+
       }
 
       template =
@@ -704,6 +679,8 @@
 
       renderMessage();
 
+      loadAds();
+
     } catch (error) {
 
       console.error(error);
@@ -716,11 +693,14 @@
 
   }
 
-  /* ================= ERROR ================= */
+  /* =====================================================
+     ERROR
+  ===================================================== */
 
   function showError(message) {
 
     messageBox.innerHTML = `
+
       <div class="loading">
 
         <div style="
@@ -750,11 +730,14 @@
         </a>
 
       </div>
+
     `;
 
   }
 
-  /* ================= RENDER ================= */
+  /* =====================================================
+     RENDER MESSAGE
+  ===================================================== */
 
   function renderMessage() {
 
@@ -780,7 +763,9 @@
 
   }
 
-  /* ================= ANIMATION ================= */
+  /* =====================================================
+     RUN ANIMATIONS
+  ===================================================== */
 
   function runAnimations() {
 
@@ -800,11 +785,6 @@
         element.style.animation =
           "none";
 
-        /*
-          Force browser reflow so that
-          animation can restart.
-        */
-
         void element.offsetWidth;
 
         element.style.animation =
@@ -815,7 +795,9 @@
 
   }
 
-  /* ================= ESCAPE ================= */
+  /* =====================================================
+     ESCAPE
+  ===================================================== */
 
   function escapeHtml(value) {
 
@@ -829,7 +811,9 @@
 
   }
 
-  /* ================= NAME ================= */
+  /* =====================================================
+     NAME
+  ===================================================== */
 
   nameInput.addEventListener(
     "input",
@@ -840,7 +824,9 @@
     }
   );
 
-  /* ================= PLAY ================= */
+  /* =====================================================
+     PLAY
+  ===================================================== */
 
   playBtn.addEventListener(
     "click",
@@ -858,12 +844,14 @@
         playBtn.textContent =
           "▶ Play Animation";
 
-      }, 1200);
+      }, 1500);
 
     }
   );
 
-  /* ================= SHARE ================= */
+  /* =====================================================
+     SHARE
+  ===================================================== */
 
   shareBtn.addEventListener(
     "click",
@@ -871,14 +859,34 @@
 
       if (!template) return;
 
+      /*
+        Put the name inside the URL
+        so the recipient can see it.
+      */
+
+      const url =
+        new URL(
+          window.location.href
+        );
+
+      const name =
+        nameInput.value.trim();
+
+      if (name) {
+
+        url.searchParams.set(
+          "name",
+          name
+        );
+
+      }
+
       const shareUrl =
-        window.location.href;
+        url.toString();
 
       try {
 
-        if (
-          navigator.share
-        ) {
+        if (navigator.share) {
 
           await navigator.share({
 
@@ -914,7 +922,9 @@
     }
   );
 
-  /* ================= TEMP MESSAGE ================= */
+  /* =====================================================
+     TEMPORARY MESSAGE
+  ===================================================== */
 
   function showTemporaryMessage(message) {
 
@@ -924,7 +934,9 @@
       );
 
     if (old) {
+
       old.remove();
+
     }
 
     const box =
@@ -978,11 +990,131 @@
 
       box.remove();
 
-    }, 2200);
+    }, 2500);
 
   }
 
-  /* ================= DOWNLOAD ================= */
+  /* =====================================================
+     GET ANIMATION DURATION
+  ===================================================== */
+
+  function getAnimationDuration() {
+
+    let longest =
+      DEFAULT_DURATION;
+
+    const elements =
+      messageBox.querySelectorAll("*");
+
+    elements.forEach(
+      element => {
+
+        const style =
+          getComputedStyle(element);
+
+        const duration =
+          parseTime(
+            style.animationDuration
+          );
+
+        const delay =
+          parseTime(
+            style.animationDelay
+          );
+
+        const total =
+          duration + delay;
+
+        if (
+          Number.isFinite(total) &&
+          total > longest
+        ) {
+
+          longest = total;
+
+        }
+
+      }
+    );
+
+    /*
+      Give animations a little
+      extra time to finish.
+    */
+
+    longest += 500;
+
+    /*
+      Prevent extremely long videos.
+    */
+
+    return Math.min(
+      Math.max(
+        longest,
+        3000
+      ),
+      15000
+    );
+
+  }
+
+  /* =====================================================
+     PARSE CSS TIME
+  ===================================================== */
+
+  function parseTime(value) {
+
+    if (!value) return 0;
+
+    const first =
+      value
+        .split(",")[0]
+        .trim();
+
+    if (
+      first.endsWith("ms")
+    ) {
+
+      return parseFloat(
+        first
+      ) || 0;
+
+    }
+
+    if (
+      first.endsWith("s")
+    ) {
+
+      return (
+        parseFloat(first) *
+        1000
+      ) || 0;
+
+    }
+
+    return 0;
+
+  }
+
+  /* =====================================================
+     WAIT
+  ===================================================== */
+
+  function wait(ms) {
+
+    return new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
+
+  }
+
+  /* =====================================================
+     DOWNLOAD VIDEO
+  ===================================================== */
 
   downloadBtn.addEventListener(
     "click",
@@ -990,70 +1122,753 @@
 
       if (!template) return;
 
+      /*
+        Prevent double clicks.
+      */
+
       downloadBtn.disabled =
         true;
 
-      downloadBtn.textContent =
-        "Preparing...";
+      playBtn.disabled =
+        true;
+
+      shareBtn.disabled =
+        true;
+
+      const oldText =
+        downloadBtn.textContent;
 
       try {
 
-        await fetch(
-          "/api/analytics/download",
-          {
-            method: "POST",
+        /*
+          Count download.
+        */
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
+        try {
 
-            body:
-              JSON.stringify({
-                templateId:
-                  template.id
-              })
+          await fetch(
+            "/api/analytics/download",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  templateId:
+                    template.id
+                })
+            }
+          );
+
+        } catch (analyticsError) {
+
+          console.log(
+            "Analytics error:",
+            analyticsError
+          );
+
+        }
+
+        /*
+          Make sure animation
+          starts from beginning.
+        */
+
+        renderMessage();
+
+        await wait(100);
+
+        /*
+          Detect animation length.
+        */
+
+        const duration =
+          getAnimationDuration();
+
+        /*
+          Show progress.
+        */
+
+        downloadBtn.textContent =
+          "⏳ Preparing 0%";
+
+        /*
+          Create canvas.
+        */
+
+        const canvas =
+          document.createElement(
+            "canvas"
+          );
+
+        canvas.width =
+          VIDEO_WIDTH;
+
+        canvas.height =
+          VIDEO_HEIGHT;
+
+        const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+        /*
+          Record canvas.
+        */
+
+        const stream =
+          canvas.captureStream(
+            VIDEO_FPS
+          );
+
+        /*
+          Try MP4 first.
+        */
+
+        let mimeType =
+          "";
+
+        if (
+          MediaRecorder.isTypeSupported(
+            "video/mp4;codecs=h264"
+          )
+        ) {
+
+          mimeType =
+            "video/mp4;codecs=h264";
+
+        } else if (
+          MediaRecorder.isTypeSupported(
+            "video/webm;codecs=vp9"
+          )
+        ) {
+
+          mimeType =
+            "video/webm;codecs=vp9";
+
+        } else {
+
+          mimeType =
+            "video/webm";
+
+        }
+
+        const recorder =
+          new MediaRecorder(
+            stream,
+            {
+              mimeType:
+                mimeType,
+
+              videoBitsPerSecond:
+                5000000
+            }
+          );
+
+        const chunks = [];
+
+        recorder.ondataavailable =
+          event => {
+
+            if (
+              event.data &&
+              event.data.size > 0
+            ) {
+
+              chunks.push(
+                event.data
+              );
+
+            }
+
+          };
+
+        /*
+          Start recording.
+        */
+
+        recorder.start();
+
+        /*
+          Render frames.
+        */
+
+        const start =
+          performance.now();
+
+        let lastFrame =
+          -1;
+
+        while (true) {
+
+          const now =
+            performance.now();
+
+          const elapsed =
+            now - start;
+
+          if (
+            elapsed >= duration
+          ) {
+
+            break;
+
           }
+
+          const frame =
+            Math.floor(
+              elapsed /
+              (1000 / VIDEO_FPS)
+            );
+
+          if (
+            frame !== lastFrame
+          ) {
+
+            lastFrame =
+              frame;
+
+            try {
+
+              const shot =
+                await html2canvas(
+                  messageBox,
+                  {
+                    backgroundColor:
+                      "#07101f",
+
+                    scale: 1,
+
+                    useCORS: true,
+
+                    allowTaint: false,
+
+                    logging: false,
+
+                    width:
+                      messageBox.clientWidth,
+
+                    height:
+                      messageBox.clientHeight
+                  }
+                );
+
+              /*
+                Clear canvas.
+              */
+
+              ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+              );
+
+              /*
+                Draw screenshot
+                into video canvas.
+              */
+
+              const sourceRatio =
+                shot.width /
+                shot.height;
+
+              const targetRatio =
+                canvas.width /
+                canvas.height;
+
+              let drawWidth =
+                canvas.width;
+
+              let drawHeight =
+                canvas.height;
+
+              let offsetX = 0;
+
+              let offsetY = 0;
+
+              if (
+                sourceRatio >
+                targetRatio
+              ) {
+
+                drawHeight =
+                  canvas.width /
+                  sourceRatio;
+
+                offsetY =
+                  (
+                    canvas.height -
+                    drawHeight
+                  ) / 2;
+
+              } else {
+
+                drawWidth =
+                  canvas.height *
+                  sourceRatio;
+
+                offsetX =
+                  (
+                    canvas.width -
+                    drawWidth
+                  ) / 2;
+
+              }
+
+              ctx.drawImage(
+                shot,
+                offsetX,
+                offsetY,
+                drawWidth,
+                drawHeight
+              );
+
+            } catch (frameError) {
+
+              console.log(
+                "Frame error:",
+                frameError
+              );
+
+            }
+
+            const percent =
+              Math.min(
+                99,
+                Math.floor(
+                  (
+                    elapsed /
+                    duration
+                  ) * 100
+                )
+              );
+
+            downloadBtn.textContent =
+              "⏳ Recording " +
+              percent +
+              "%";
+
+          }
+
+          /*
+            Wait for next frame.
+          */
+
+          await wait(
+            1000 /
+            VIDEO_FPS
+          );
+
+        }
+
+        /*
+          Stop recorder.
+        */
+
+        recorder.stop();
+
+        await new Promise(
+          resolve => {
+
+            recorder.onstop =
+              resolve;
+
+          }
+        );
+
+        /*
+          Create recorded video.
+        */
+
+        const recordedBlob =
+          new Blob(
+            chunks,
+            {
+              type:
+                mimeType
+            }
+          );
+
+        /*
+          If browser already recorded
+          MP4, download directly.
+        */
+
+        if (
+          mimeType.startsWith(
+            "video/mp4"
+          )
+        ) {
+
+          downloadBlob(
+            recordedBlob,
+            makeFileName() +
+            ".mp4"
+          );
+
+          showTemporaryMessage(
+            "✓ MP4 video ready"
+          );
+
+          return;
+
+        }
+
+        /*
+          Otherwise convert WebM
+          to MP4 with FFmpeg.
+        */
+
+        downloadBtn.textContent =
+          "⏳ Converting to MP4...";
+
+        const mp4Blob =
+          await convertWebMToMP4(
+            recordedBlob
+          );
+
+        downloadBlob(
+          mp4Blob,
+          makeFileName() +
+          ".mp4"
+        );
+
+        showTemporaryMessage(
+          "✓ MP4 video downloaded"
         );
 
       } catch (error) {
 
-        console.log(error);
+        console.error(
+          "Video download error:",
+          error
+        );
 
-      }
+        showTemporaryMessage(
+          "❌ Video failed. Try again."
+        );
 
-      /*
-        Video recording will be connected
-        here in the next stage.
-
-        Browser recording:
-        - WebM first
-        - MP4 later using FFmpeg.wasm
-      */
-
-      setTimeout(() => {
+      } finally {
 
         downloadBtn.disabled =
           false;
 
+        playBtn.disabled =
+          false;
+
+        shareBtn.disabled =
+          false;
+
         downloadBtn.textContent =
-          "↓ Download";
+          oldText;
 
-        showTemporaryMessage(
-          "Download feature is being prepared."
-        );
-
-      }, 600);
+      }
 
     }
   );
 
-  /* ================= START ================= */
+  /* =====================================================
+     FFMPEG CONVERSION
+  ===================================================== */
+
+  async function convertWebMToMP4(
+    webmBlob
+  ) {
+
+    /*
+      Check FFmpeg.
+    */
+
+    if (
+      typeof FFmpeg ===
+      "undefined"
+    ) {
+
+      throw new Error(
+        "FFmpeg is not available."
+      );
+
+    }
+
+    const {
+      createFFmpeg,
+      fetchFile
+    } = FFmpeg;
+
+    const ffmpeg =
+      createFFmpeg({
+        log: false
+      });
+
+    /*
+      Load FFmpeg.
+    */
+
+    if (!ffmpeg.isLoaded()) {
+
+      downloadBtn.textContent =
+        "⏳ Loading video engine...";
+
+      await ffmpeg.load();
+
+    }
+
+    /*
+      Convert Blob to bytes.
+    */
+
+    const input =
+      await fetchFile(
+        webmBlob
+      );
+
+    /*
+      Write WebM.
+    */
+
+    ffmpeg.FS(
+      "writeFile",
+      "input.webm",
+      input
+    );
+
+    /*
+      Convert to MP4.
+    */
+
+    await ffmpeg.run(
+      "-i",
+      "input.webm",
+
+      "-c:v",
+      "libx264",
+
+      "-preset",
+      "ultrafast",
+
+      "-pix_fmt",
+      "yuv420p",
+
+      "-movflags",
+      "+faststart",
+
+      "output.mp4"
+    );
+
+    /*
+      Read MP4.
+    */
+
+    const data =
+      ffmpeg.FS(
+        "readFile",
+        "output.mp4"
+      );
+
+    /*
+      Cleanup.
+    */
+
+    try {
+
+      ffmpeg.FS(
+        "unlink",
+        "input.webm"
+      );
+
+      ffmpeg.FS(
+        "unlink",
+        "output.mp4"
+      );
+
+    } catch (cleanupError) {
+
+      console.log(
+        cleanupError
+      );
+
+    }
+
+    return new Blob(
+      [data.buffer],
+      {
+        type:
+          "video/mp4"
+      }
+    );
+
+  }
+
+  /* =====================================================
+     DOWNLOAD BLOB
+  ===================================================== */
+
+  function downloadBlob(
+    blob,
+    filename
+  ) {
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.href =
+      url;
+
+    link.download =
+      filename;
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => {
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }, 5000);
+
+  }
+
+  /* =====================================================
+     FILE NAME
+  ===================================================== */
+
+  function makeFileName() {
+
+    const base =
+      template &&
+      template.title
+        ? template.title
+        : "MAKYAMA_Message";
+
+    const clean =
+      base
+        .replace(
+          /[^a-z0-9_\- ]/gi,
+          ""
+        )
+        .trim()
+        .replace(
+          /\s+/g,
+          "_"
+        );
+
+    return (
+      "MAKYAMA_" +
+      (
+        clean ||
+        "Message"
+      )
+    );
+
+  }
+
+  /* =====================================================
+     LOAD ADS
+  ===================================================== */
+
+  async function loadAds() {
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/ads"
+        );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const ads =
+        await response.json();
+
+      const downloadAds =
+        ads.filter(
+          ad =>
+            ad &&
+            ad.enabled === true &&
+            ad.position ===
+              "download"
+        );
+
+      if (
+        downloadAds.length === 0
+      ) {
+
+        downloadAd.style.display =
+          "none";
+
+        return;
+
+      }
+
+      const ad =
+        downloadAds[0];
+
+      if (ad.code) {
+
+        downloadAd.innerHTML =
+          ad.code;
+
+      } else {
+
+        downloadAd.textContent =
+          ad.title ||
+          "Advertisement";
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Ad loading error:",
+        error
+      );
+
+      downloadAd.style.display =
+        "none";
+
+    }
+
+  }
+
+  /* =====================================================
+     NAME FROM SHARED URL
+  ===================================================== */
+
+  const sharedName =
+    params.get("name");
+
+  if (sharedName) {
+
+    nameInput.value =
+      sharedName;
+
+  }
+
+  /* =====================================================
+     START
+  ===================================================== */
 
   loadTemplate();
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>
