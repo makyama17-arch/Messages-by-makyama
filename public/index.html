@@ -2024,34 +2024,42 @@ renderTemplates
 /* ================= CATEGORIES ================= */
 
 categoryButtons.forEach(
-button => {
+  button => {
 
-button.addEventListener(  
-    "click",  
-    () => {  
+    button.addEventListener(
+      "click",
+      () => {
 
-      categoryButtons.forEach(  
-        btn => {  
-          btn.classList.remove(  
-            "active"  
-          );  
-        }  
-      );  
+        const category =
+          button.dataset.category;
 
-      button.classList.add(  
-        "active"  
-      );  
+        /* ALL MESSAGES */
+        if (category === "All") {
 
-      selectedCategory =  
-        button.dataset.category;  
+          categoryButtons.forEach(
+            btn => {
+              btn.classList.remove("active");
+            }
+          );
 
-      renderTemplates();  
+          button.classList.add("active");
 
-    }  
-  );  
+          selectedCategory = "All";
 
-}
+          renderTemplates();
 
+          return;
+        }
+
+        /* OPEN CATEGORY PAGE */
+        window.location.href =
+          "/category.html?category=" +
+          encodeURIComponent(category);
+
+      }
+    );
+
+  }
 );
 
 /* ================= YEAR ================= */
