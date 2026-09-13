@@ -483,6 +483,16 @@ app.get(
             downloads:
               Number(
                 template.downloads || 0
+              ),
+
+            likes:
+              Number(
+                template.likes || 0
+              ),
+
+            dislikes:
+              Number(
+                template.dislikes || 0
               )
 
           })
@@ -546,11 +556,228 @@ app.get(
         "stats/totalViews"
       );
 
-      res.json(
-        template
-      );
+      res.json({
+        ...template,
+
+        likes:
+          Number(
+            template.likes || 0
+          ),
+
+        dislikes:
+          Number(
+            template.dislikes || 0
+          )
+
+      });
 
     } catch (error) {
+
+      res.status(500).json({
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+/* =====================================================
+LIKE / DISLIKE
+===================================================== */
+
+app.post(
+  "/api/templates/:id/reaction",
+  async (req, res) => {
+
+    try {
+
+      const id =
+        String(
+          req.params.id || ""
+        ).trim();
+
+      const reaction =
+        String(
+          req.body.reaction || ""
+        ).trim();
+
+      const previous =
+        String(
+          req.body.previous || ""
+        ).trim();
+
+      if (
+        !id ||
+        ![
+          "like",
+          "dislike",
+          ""
+        ].includes(
+          reaction
+        ) ||
+        ![
+          "like",
+          "dislike",
+          ""
+        ].includes(
+          previous
+        )
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Invalid reaction."
+
+        });
+
+      }
+
+      const database =
+        initFirebase();
+
+      if (!database) {
+
+        throw new Error(
+          "Firebase is not configured."
+        );
+
+      }
+
+      const template =
+        await firebaseGet(
+          `templates/${id}`
+        );
+
+      if (
+        !template ||
+        template.published !== true
+      ) {
+
+        return res.status(404).json({
+
+          error:
+            "Template not found."
+
+        });
+
+      }
+
+      let likes =
+        Number(
+          template.likes || 0
+        );
+
+      let dislikes =
+        Number(
+          template.dislikes || 0
+        );
+
+      /*
+        Same reaction again:
+        usiongeze count mara mbili.
+      */
+
+      if (
+        reaction === previous
+      ) {
+
+        return res.json({
+
+          ok: true,
+
+          likes,
+
+          dislikes,
+
+          reaction
+
+        });
+
+      }
+
+      /*
+        Ondoa reaction ya zamani.
+      */
+
+      if (
+        previous === "like"
+      ) {
+
+        likes =
+          Math.max(
+            0,
+            likes - 1
+          );
+
+      }
+
+      if (
+        previous === "dislike"
+      ) {
+
+        dislikes =
+          Math.max(
+            0,
+            dislikes - 1
+          );
+
+      }
+
+      /*
+        Ongeza reaction mpya.
+      */
+
+      if (
+        reaction === "like"
+      ) {
+
+        likes++;
+
+      }
+
+      if (
+        reaction === "dislike"
+      ) {
+
+        dislikes++;
+
+      }
+
+      await database
+        .ref(
+          `templates/${id}/likes`
+        )
+        .set(likes);
+
+      await database
+        .ref(
+          `templates/${id}/dislikes`
+        )
+        .set(dislikes);
+
+      res.json({
+
+        ok: true,
+
+        likes,
+
+        dislikes,
+
+        reaction
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Reaction error:",
+        error.message
+      );
 
       res.status(500).json({
 
@@ -674,6 +901,10 @@ app.post(
         views: 0,
 
         downloads: 0,
+
+        likes: 0,
+
+        dislikes: 0,
 
         createdAt:
           Date.now(),
@@ -1473,6 +1704,7 @@ app.get(
                 )
 
             })
+
           );
 
       res.json({
@@ -1613,11 +1845,6 @@ app.post(
         String(
           template.html || ""
         )
-
-        /*
-          Scripts kutoka template
-          haziruhusiwi ku-run server.
-        */
 
         .replace(
           /<script[\s\S]*?<\/script>/gi,
@@ -1935,10 +2162,6 @@ async function renderVideoWithTools(
       }
     );
 
-    /*
-      Subiri fonts na images.
-    */
-
     await page.evaluate(
       async () => {
 
@@ -1992,10 +2215,6 @@ async function renderVideoWithTools(
     await page.waitForTimeout(
       700
     );
-
-    /*
-      Tafuta animation ndefu zaidi.
-    */
 
     const duration =
       await page.evaluate(
@@ -2142,10 +2361,6 @@ async function captureAnimationFrames(
   duration
 ) {
 
-  /*
-    Pause animations.
-  */
-
   await page.evaluate(
     () => {
 
@@ -2167,10 +2382,6 @@ async function captureAnimationFrames(
     }
   );
 
-  /*
-    Force layout.
-  */
-
   await page.evaluate(
     () => {
 
@@ -2178,10 +2389,6 @@ async function captureAnimationFrames(
 
     }
   );
-
-  /*
-    Reset animation timing.
-  */
 
   await page.evaluate(
     () => {
@@ -2211,10 +2418,6 @@ async function captureAnimationFrames(
 
     }
   );
-
-  /*
-    Rudisha animations.
-  */
 
   await page.evaluate(
     () => {
