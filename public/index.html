@@ -3,2120 +3,1828 @@
 
 <head>
 
-<meta
-  name="google-site-verification"
-  content="f1tsQNuvH_iCvSMUoNwgvfMYoHV3cv28NlPxl_ClzkY"
-/>
+  <meta name="google-site-verification"
+    content="f1tsQNuvH_iCvSMUoNwgvfMYoHV3cv28NlPxl_ClzkY" />
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-<!-- SEO & SOCIAL PREVIEW -->
+  <!-- ================= SEO & SOCIAL PREVIEW ================= -->
 
-<link
-  rel="icon"
-  type="image/png"
-  href="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
-/>
+  <link
+    rel="icon"
+    type="image/png"
+    href="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png">
 
-<meta
-  property="og:title"
-  content="MAKYAMA MESSAGES — Animated Swahili Messages"
-/>
+  <meta
+    property="og:title"
+    content="MAKYAMA MESSAGES — Animated Swahili Messages">
 
-<meta
-  property="og:description"
-  content="Create and share beautiful animated Swahili messages for birthdays, love, celebrations and more."
-/>
+  <meta
+    property="og:description"
+    content="Create and share beautiful animated Swahili messages for birthdays, love, celebrations and more.">
 
-<meta
-  property="og:image"
-  content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
-/>
+  <meta
+    property="og:image"
+    content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png">
 
-<meta
-  property="og:type"
-  content="website"
-/>
+  <meta property="og:type" content="website">
 
-<meta
-  property="og:url"
-  content="https://makyama.pntr.dev/"
-/>
+  <meta
+    property="og:url"
+    content="https://makyama.pntr.dev/">
 
-<meta
-  name="twitter:card"
-  content="summary_large_image"
-/>
+  <meta name="twitter:card"
+    content="summary_large_image">
 
-<meta
-  name="twitter:title"
-  content="MAKYAMA MESSAGES — Animated Swahili Messages"
-/>
+  <meta
+    name="twitter:title"
+    content="MAKYAMA MESSAGES — Animated Swahili Messages">
 
-<meta
-  name="twitter:description"
-  content="Create and share beautiful animated Swahili messages."
-/>
+  <meta
+    name="twitter:description"
+    content="Create and share beautiful animated Swahili messages.">
 
-<meta
-  name="twitter:image"
-  content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
-/>
+  <meta
+    name="twitter:image"
+    content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png">
 
-<meta
-  name="description"
-  content="Beautiful animated Swahili messages for love, birthdays, celebrations, appreciation and more."
-/>
+  <title>
+    MAKYAMA MESSAGES — Animated Swahili Messages
+  </title>
 
-<title>
-MAKYAMA MESSAGES — Animated Swahili Messages
-</title>
+  <meta
+    name="description"
+    content="Beautiful animated Swahili messages for love, birthdays, celebrations, appreciation and more.">
 
-<style>
+  <style>
 
-/* =========================================================
-   RESET
-========================================================= */
+    /* =====================================================
+       RESET
+    ===================================================== */
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-:root{
+    :root {
 
-  --bg:#040814;
+      --bg: #050816;
 
-  --bg2:#071126;
+      --card: rgba(16,24,48,.72);
 
-  --card:rgba(13,25,52,.72);
+      --card2: rgba(21,32,61,.9);
 
-  --card2:rgba(16,31,65,.9);
+      --line: rgba(255,255,255,.10);
 
-  --line:rgba(255,255,255,.09);
+      --text: #ffffff;
 
-  --text:#ffffff;
+      --muted: #9ba8c7;
 
-  --muted:#91a0bd;
+      --blue: #5b8cff;
 
-  --blue:#3d82ff;
+      --cyan: #39d9ff;
 
-  --blue2:#166cff;
+      --purple: #7c5cff;
 
-  --cyan:#32d8ff;
+      --pink: #ff5fa2;
 
-  --green:#25d366;
+      --green: #25d366;
 
-  --danger:#ff5d7a;
+    }
 
-  --shadow:
-    0 25px 70px rgba(0,0,0,.35);
+    html {
+      scroll-behavior: smooth;
+    }
 
-}
+    body {
 
-/* =========================================================
-   BODY
-========================================================= */
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 
-html{
-  scroll-behavior:smooth;
-}
+      background:
 
-body{
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(91,140,255,.18),
+          transparent 30%
+        ),
 
-  font-family:
-    Inter,
-    Arial,
-    Helvetica,
-    sans-serif;
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(124,92,255,.15),
+          transparent 28%
+        ),
 
-  color:var(--text);
+        radial-gradient(
+          circle at 50% 90%,
+          rgba(57,217,255,.08),
+          transparent 30%
+        ),
 
-  min-height:100vh;
+        var(--bg);
 
-  overflow-x:hidden;
+      color: var(--text);
 
-  background:
+      min-height: 100vh;
 
-    radial-gradient(
-      circle at 15% 5%,
-      rgba(38,112,255,.18),
-      transparent 28%
-    ),
+      overflow-x: hidden;
+    }
 
-    radial-gradient(
-      circle at 85% 12%,
-      rgba(32,201,255,.10),
-      transparent 25%
-    ),
+    body::before {
 
-    radial-gradient(
-      circle at 50% 65%,
-      rgba(51,92,255,.08),
-      transparent 30%
-    ),
+      content: "";
 
-    var(--bg);
+      position: fixed;
 
-}
+      inset: 0;
 
-body::before{
+      pointer-events: none;
 
-  content:"";
+      background-image:
 
-  position:fixed;
+        radial-gradient(
+          rgba(255,255,255,.6) 1px,
+          transparent 1px
+        );
 
-  inset:0;
+      background-size: 55px 55px;
 
-  pointer-events:none;
+      opacity: .035;
 
-  background-image:
+      z-index: -1;
+    }
 
-    radial-gradient(
-      rgba(255,255,255,.7) 1px,
-      transparent 1px
-    );
 
-  background-size:60px 60px;
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-  opacity:.025;
+    header {
 
-  z-index:-1;
+      position: sticky;
 
-}
+      top: 0;
 
-/* =========================================================
-   HEADER
-========================================================= */
+      z-index: 1000;
 
-header{
+      padding: 14px 18px;
 
-  position:sticky;
+      background:
+        rgba(5,8,22,.78);
 
-  top:0;
+      backdrop-filter:
+        blur(18px);
 
-  z-index:1000;
+      border-bottom:
+        1px solid var(--line);
+    }
 
-  background:
-    rgba(4,8,20,.78);
+    .nav {
 
-  backdrop-filter:
-    blur(20px);
+      max-width: 1180px;
 
-  border-bottom:
-    1px solid var(--line);
+      margin: auto;
 
-}
+      display: flex;
 
-.nav{
+      align-items: center;
 
-  max-width:1180px;
+      justify-content: space-between;
 
-  margin:auto;
+      gap: 20px;
+    }
 
-  min-height:70px;
+    .logo {
 
-  padding:0 18px;
+      display: flex;
 
-  display:flex;
+      align-items: center;
 
-  align-items:center;
+      gap: 10px;
 
-  justify-content:space-between;
+      font-size: 18px;
 
-  gap:20px;
+      font-weight: 900;
 
-}
+      letter-spacing: .5px;
 
-.logo-link{
+      white-space: nowrap;
+    }
 
-  color:white;
+    .logo-mark {
 
-  text-decoration:none;
+      width: 38px;
 
-}
+      height: 38px;
 
-.logo{
+      border-radius: 12px;
 
-  display:flex;
+      display: grid;
 
-  align-items:center;
+      place-items: center;
 
-  gap:10px;
+      background:
 
-  white-space:nowrap;
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
 
-}
+      box-shadow:
+        0 0 25px
+        rgba(91,140,255,.35);
+    }
 
-.logo-mark{
+    .logo span {
 
-  width:39px;
+      background:
 
-  height:39px;
+        linear-gradient(
+          90deg,
+          #fff,
+          #7bdfff
+        );
 
-  border-radius:12px;
+      -webkit-background-clip: text;
 
-  display:grid;
+      background-clip: text;
 
-  place-items:center;
+      color: transparent;
+    }
 
-  font-size:15px;
+    nav {
 
-  font-weight:1000;
+      display: flex;
 
-  background:
-    linear-gradient(
-      135deg,
-      #2877ff,
-      #35d9ff
-    );
+      align-items: center;
 
-  box-shadow:
-    0 0 28px rgba(48,126,255,.4);
+      gap: 7px;
+    }
 
-}
+    nav a {
 
-.logo-text{
+      color: #d9e2f7;
 
-  font-size:16px;
+      text-decoration: none;
 
-  font-weight:900;
+      font-size: 13px;
 
-  letter-spacing:.5px;
+      padding: 9px 12px;
 
-}
+      border-radius: 10px;
 
-.logo-text span{
+      transition: .25s ease;
+    }
 
-  background:
-    linear-gradient(
-      90deg,
-      white,
-      #70dfff
-    );
+    nav a:hover {
 
-  -webkit-background-clip:text;
+      background:
+        rgba(255,255,255,.07);
 
-  background-clip:text;
+      color: white;
+    }
 
-  color:transparent;
+    .admin-link {
 
-}
+      background:
 
-nav{
+        linear-gradient(
+          135deg,
+          rgba(91,140,255,.22),
+          rgba(124,92,255,.22)
+        );
 
-  display:flex;
+      border:
+        1px solid
+        rgba(126,154,255,.3);
+    }
 
-  align-items:center;
+    .admin-link:hover {
 
-  gap:4px;
+      transform:
+        translateY(-2px);
 
-}
+      box-shadow:
+        0 8px 25px
+        rgba(91,140,255,.2);
+    }
 
-nav a{
 
-  position:relative;
+    /* =====================================================
+       MAIN
+    ===================================================== */
 
-  color:#aebbd3;
+    main {
 
-  text-decoration:none;
+      max-width: 1180px;
 
-  font-size:13px;
+      margin: auto;
 
-  padding:9px 11px;
+      padding:
+        0 18px 50px;
+    }
 
-  border-radius:9px;
 
-  transition:.25s;
+    /* =====================================================
+       HERO
+    ===================================================== */
 
-}
+    .hero {
 
-nav a:hover{
+      min-height: 570px;
 
-  color:white;
+      display: flex;
 
-  background:
-    rgba(255,255,255,.05);
+      align-items: center;
 
-}
+      justify-content:
+        space-between;
 
-nav a.active{
+      text-align: left;
 
-  color:white;
+      position: relative;
 
-}
+      padding:
+        65px 35px 55px;
 
-nav a.active::after{
+      gap: 50px;
 
-  content:"";
+      overflow: hidden;
+    }
 
-  position:absolute;
+    .hero-content {
 
-  left:12px;
+      max-width: 560px;
 
-  right:12px;
+      position: relative;
 
-  bottom:2px;
+      z-index: 2;
+    }
 
-  height:2px;
+    .hero-badge {
 
-  border-radius:99px;
+      display: inline-flex;
 
-  background:
-    linear-gradient(
-      90deg,
-      var(--blue),
-      var(--cyan)
-    );
+      align-items: center;
 
-  box-shadow:
-    0 0 10px rgba(48,130,255,.7);
+      gap: 8px;
 
-}
+      padding: 8px 14px;
 
-.create-btn{
+      border:
+        1px solid
+        rgba(91,140,255,.3);
 
-  display:flex;
+      background:
+        rgba(91,140,255,.08);
 
-  align-items:center;
+      border-radius: 999px;
 
-  gap:7px;
+      color: #a9c7ff;
 
-  color:white !important;
+      font-size: 12px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #2476ff,
-      #149eea
-    );
+      margin-bottom: 22px;
 
-  border:
-    1px solid rgba(255,255,255,.12);
+      animation:
+        fadeUp .8s ease both;
+    }
 
-  padding:
-    10px 15px !important;
+    .badge-dot {
 
-  border-radius:12px !important;
+      width: 7px;
 
-  font-weight:800;
+      height: 7px;
 
-  box-shadow:
-    0 8px 25px rgba(31,117,255,.2);
+      border-radius: 50%;
 
-}
+      background: #4dffb4;
 
-.create-btn:hover{
+      box-shadow:
+        0 0 12px #4dffb4;
+    }
 
-  transform:translateY(-2px);
+    .hero h1 {
 
-  box-shadow:
-    0 12px 30px rgba(31,117,255,.35);
+      font-size:
+        clamp(45px,6vw,76px);
 
-}
+      line-height: 1.02;
 
-/* =========================================================
-   MAIN
-========================================================= */
+      letter-spacing: -3px;
 
-main{
+      font-weight: 950;
 
-  max-width:1180px;
+      margin-bottom: 24px;
 
-  margin:auto;
+      animation:
+        fadeUp .9s .1s ease both;
+    }
 
-  padding:
-    0 18px 60px;
+    .hero h1 .gradient {
 
-}
+      background:
 
-/* =========================================================
-   HERO
-========================================================= */
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #55dfff,
+          #5b8cff
+        );
 
-.hero{
+      -webkit-background-clip: text;
 
-  min-height:620px;
+      background-clip: text;
 
-  display:grid;
+      color: transparent;
+    }
 
-  grid-template-columns:
-    1fr 430px;
+    .hero p {
 
-  align-items:center;
+      max-width: 560px;
 
-  gap:50px;
+      margin: 0;
 
-  padding:
-    70px 10px 50px;
+      color: var(--muted);
 
-  position:relative;
+      line-height: 1.8;
 
-}
+      font-size: 16px;
 
-.hero-content{
+      animation:
+        fadeUp 1s .2s ease both;
+    }
 
-  position:relative;
+    @keyframes fadeUp {
 
-  z-index:2;
+      from {
 
-}
+        opacity: 0;
 
-.hero-label{
+        transform:
+          translateY(25px);
+      }
 
-  display:inline-flex;
+      to {
 
-  align-items:center;
+        opacity: 1;
 
-  gap:8px;
+        transform:
+          translateY(0);
+      }
 
-  color:#58cfff;
+    }
 
-  font-size:11px;
 
-  font-weight:900;
+    /* =====================================================
+       PHONE PREVIEW
+    ===================================================== */
 
-  letter-spacing:1.5px;
+    .hero-phone-wrap {
 
-  margin-bottom:20px;
+      position: relative;
 
-}
+      width: 430px;
 
-.hero-label::before{
+      min-width: 430px;
 
-  content:"";
+      height: 470px;
 
-  width:8px;
+      display: flex;
 
-  height:8px;
+      align-items: center;
 
-  border-radius:50%;
+      justify-content: center;
+    }
 
-  background:#32d8ff;
+    .hero-phone-glow {
 
-  box-shadow:
-    0 0 14px #32d8ff;
+      position: absolute;
 
-}
+      width: 330px;
 
-.hero h1{
+      height: 330px;
 
-  font-size:
-    clamp(45px,6vw,78px);
+      border-radius: 50%;
 
-  line-height:.98;
+      background:
+        rgba(35,120,255,.24);
 
-  letter-spacing:-4px;
+      filter: blur(65px);
+    }
 
-  font-weight:950;
+    .hero-phone {
 
-  margin-bottom:24px;
+      position: relative;
 
-}
+      width: 245px;
 
-.hero h1 .blue{
+      height: 455px;
 
-  color:#4ca0ff;
+      padding: 9px;
 
-  text-shadow:
-    0 0 35px rgba(54,139,255,.22);
+      border-radius: 38px;
 
-}
+      background:
 
-.hero-description{
+        linear-gradient(
+          145deg,
+          #202d52,
+          #050a19
+        );
 
-  max-width:590px;
+      border:
+        2px solid
+        rgba(255,255,255,.18);
 
-  color:var(--muted);
+      box-shadow:
 
-  font-size:15px;
+        0 35px 80px
+        rgba(0,0,0,.55),
 
-  line-height:1.8;
+        0 0 55px
+        rgba(52,130,255,.22);
 
-  margin-bottom:28px;
+      transform:
+        rotate(3deg);
 
-}
+      z-index: 3;
+    }
 
-.hero-actions{
+    .hero-phone-screen {
 
-  display:flex;
+      width: 100%;
 
-  align-items:center;
+      height: 100%;
 
-  gap:12px;
+      border-radius: 30px;
 
-  flex-wrap:wrap;
+      overflow: hidden;
 
-}
+      background:
 
-.hero-cta{
+        radial-gradient(
+          circle at 50% 20%,
+          rgba(74,130,255,.25),
+          transparent 35%
+        ),
 
-  display:inline-flex;
+        #071126;
 
-  align-items:center;
+      padding: 17px;
+    }
 
-  gap:9px;
+    .phone-top {
 
-  color:white;
+      display: flex;
 
-  text-decoration:none;
+      justify-content:
+        space-between;
 
-  background:
-    linear-gradient(
-      135deg,
-      #2879ff,
-      #168edc
-    );
+      align-items: center;
 
-  padding:
-    14px 22px;
+      font-size: 9px;
 
-  border-radius:13px;
+      color: #9eb1d9;
 
-  font-size:14px;
+      margin-bottom: 25px;
+    }
 
-  font-weight:900;
+    .phone-brand {
 
-  box-shadow:
-    0 12px 35px rgba(34,118,255,.25);
+      display: flex;
 
-  transition:.25s;
+      align-items: center;
 
-}
+      gap: 6px;
 
-.hero-cta:hover{
+      color: white;
 
-  transform:translateY(-3px);
+      font-size: 11px;
 
-  box-shadow:
-    0 17px 40px rgba(34,118,255,.35);
+      font-weight: 900;
+    }
 
-}
+    .phone-logo {
 
-.hero-features{
+      width: 24px;
 
-  display:flex;
+      height: 24px;
 
-  gap:20px;
+      border-radius: 7px;
 
-  flex-wrap:wrap;
+      display: grid;
 
-  margin-top:25px;
+      place-items: center;
 
-}
+      background:
 
-.hero-feature{
+        linear-gradient(
+          135deg,
+          #268cff,
+          #6c5cff
+        );
 
-  color:#8fa0c0;
+      font-size: 12px;
 
-  font-size:11px;
+      font-weight: 900;
+    }
 
-  display:flex;
+    .phone-message {
 
-  align-items:center;
+      height: 245px;
 
-  gap:6px;
+      border-radius: 20px;
 
-}
+      padding: 25px 15px;
 
-.hero-feature::before{
+      display: flex;
 
-  content:"✓";
+      flex-direction: column;
 
-  color:#4ca0ff;
+      justify-content: center;
 
-  font-weight:900;
+      text-align: center;
 
-}
+      background:
 
-/* =========================================================
-   PHONE MOCKUP
-========================================================= */
+        linear-gradient(
+          145deg,
+          rgba(30,86,190,.45),
+          rgba(12,23,53,.9)
+        );
 
-.hero-visual{
+      border:
+        1px solid
+        rgba(91,140,255,.25);
+    }
 
-  position:relative;
+    .phone-message-icon {
 
-  min-height:510px;
+      font-size: 25px;
 
-  display:grid;
+      margin-bottom: 14px;
+    }
 
-  place-items:center;
+    .phone-message h3 {
 
-}
+      font-size: 24px;
 
-.glow{
+      line-height: 1.05;
 
-  position:absolute;
+      margin-bottom: 12px;
+    }
 
-  width:330px;
+    .phone-message p {
 
-  height:330px;
+      font-size: 9px;
 
-  border-radius:50%;
+      line-height: 1.6;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(35,126,255,.35),
-      transparent 68%
-    );
+      color: #9caed0;
+    }
 
-  filter:blur(25px);
+    .phone-share {
 
-}
+      margin-top: 20px;
 
-.phone{
+      width: 100%;
 
-  width:275px;
+      padding: 12px;
 
-  height:500px;
+      border-radius: 12px;
 
-  padding:9px;
+      background:
 
-  border-radius:36px;
+        linear-gradient(
+          135deg,
+          #268cff,
+          #5b63ff
+        );
 
-  background:
-    linear-gradient(
-      145deg,
-      #172541,
-      #050914
-    );
+      color: white;
 
-  border:
-    1px solid rgba(255,255,255,.18);
+      font-size: 11px;
 
-  box-shadow:
-    0 40px 90px rgba(0,0,0,.55),
-    0 0 55px rgba(42,130,255,.18);
+      font-weight: 800;
 
-  position:relative;
+      text-align: center;
+    }
 
-  z-index:3;
 
-}
+    /* floating cards */
 
-.phone-notch{
+    .hero-preview {
 
-  position:absolute;
+      position: absolute;
 
-  top:14px;
+      width: 135px;
 
-  left:50%;
+      padding: 15px;
 
-  transform:translateX(-50%);
+      border-radius: 17px;
 
-  width:85px;
+      background:
+        rgba(14,24,51,.82);
 
-  height:22px;
+      backdrop-filter:
+        blur(15px);
 
-  border-radius:20px;
+      border:
+        1px solid
+        rgba(255,255,255,.1);
 
-  background:#02050c;
+      box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.3);
 
-  z-index:5;
+      z-index: 5;
+    }
 
-}
+    .hero-preview strong {
 
-.phone-screen{
+      display: block;
 
-  width:100%;
+      font-size: 12px;
 
-  height:100%;
+      margin-top: 8px;
+    }
 
-  border-radius:28px;
+    .hero-preview small {
 
-  overflow:hidden;
+      color: #7485a8;
 
-  position:relative;
+      font-size: 8px;
+    }
 
-  background:
+    .hero-preview.one {
 
-    radial-gradient(
-      circle at 20% 10%,
-      rgba(63,140,255,.32),
-      transparent 35%
-    ),
+      left: 0;
 
-    linear-gradient(
-      160deg,
-      #071a3c,
-      #0a1024
-    );
+      top: 85px;
 
-  padding:60px 18px 20px;
+      transform:
+        rotate(-6deg);
+    }
 
-}
+    .hero-preview.two {
 
-.phone-brand{
+      right: 0;
 
-  font-size:10px;
+      bottom: 75px;
 
-  font-weight:900;
+      transform:
+        rotate(6deg);
+    }
 
-  letter-spacing:1px;
 
-  color:#7db9ff;
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
-  text-align:center;
+    .search-wrap {
 
-  margin-bottom:35px;
+      max-width: 700px;
 
-}
+      margin:
+        -10px auto 35px;
 
-.phone-message{
+      position: relative;
 
-  border:
-    1px solid rgba(255,255,255,.13);
+      z-index: 5;
+    }
 
-  border-radius:20px;
+    .search-box {
 
-  padding:28px 18px;
+      position: relative;
+    }
 
-  text-align:center;
+    .search-box input {
 
-  background:
-    rgba(255,255,255,.055);
+      width: 100%;
 
-  backdrop-filter:blur(15px);
+      height: 58px;
 
-  box-shadow:
-    0 20px 50px rgba(0,0,0,.25);
+      border:
+        1px solid
+        rgba(255,255,255,.11);
 
-}
+      outline: none;
 
-.phone-message .small{
+      border-radius: 17px;
 
-  color:#7daaff;
+      padding:
+        0 20px 0 53px;
 
-  font-size:9px;
+      background:
+        rgba(14,21,43,.8);
 
-  letter-spacing:2px;
+      color: white;
 
-  font-weight:900;
+      font-size: 15px;
 
-  margin-bottom:12px;
+      box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.22);
 
-}
+      transition: .25s;
+    }
 
-.phone-message h3{
+    .search-box input:focus {
 
-  font-size:30px;
+      border-color:
+        rgba(91,140,255,.6);
 
-  line-height:1;
+      box-shadow:
 
-  margin-bottom:16px;
+        0 0 0 4px
+        rgba(91,140,255,.08),
 
-}
+        0 20px 60px
+        rgba(0,0,0,.22);
+    }
 
-.phone-message p{
+    .search-icon {
 
-  color:#92a4c4;
+      position: absolute;
 
-  font-size:9px;
+      left: 19px;
 
-  line-height:1.7;
+      top: 50%;
 
-}
+      transform:
+        translateY(-50%);
 
-.phone-share{
+      color: #8293b9;
 
-  margin-top:20px;
+      font-size: 20px;
 
-  width:100%;
+      pointer-events: none;
+    }
 
-  padding:10px;
 
-  border:none;
+    /* =====================================================
+       ADS
+    ===================================================== */
 
-  border-radius:10px;
+    .ad {
 
-  background:#287dff;
+      width: 100%;
 
-  color:white;
+      min-height: 70px;
 
-  font-size:10px;
+      border:
+        1px dashed
+        rgba(126,154,255,.16);
 
-  font-weight:800;
+      border-radius: 15px;
 
-}
+      display: flex;
 
-.float-card{
+      align-items: center;
 
-  position:absolute;
+      justify-content: center;
 
-  z-index:4;
+      color: #566481;
 
-  min-width:135px;
+      margin: 25px 0;
 
-  padding:12px 14px;
+      background:
+        rgba(255,255,255,.015);
 
-  border-radius:15px;
+      font-size: 11px;
 
-  background:
-    rgba(12,23,48,.8);
+      letter-spacing: 1px;
 
-  border:
-    1px solid rgba(255,255,255,.1);
+      text-transform: uppercase;
 
-  backdrop-filter:blur(14px);
+      overflow: hidden;
+    }
 
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.35);
+    .ad.has-ad {
 
-}
+      min-height: 0;
 
-.float-card strong{
+      border: none;
 
-  display:block;
+      background: transparent;
 
-  font-size:12px;
+      margin: 20px 0;
 
-  margin-bottom:4px;
+      padding: 0;
 
-}
+      text-transform: none;
 
-.float-card span{
+      letter-spacing: normal;
+    }
 
-  color:#7889a9;
+    .ad.has-ad > * {
 
-  font-size:9px;
+      max-width: 100%;
+    }
 
-}
+    #socialBarAd {
 
-.float-one{
+      position: fixed;
 
-  left:0;
+      top: 0;
 
-  top:23%;
+      left: 0;
 
-  animation:floatCard 5s ease-in-out infinite;
+      width: 100%;
 
-}
+      z-index: 99999;
 
-.float-two{
+      display: none;
 
-  right:-5px;
+      pointer-events: none;
+    }
 
-  bottom:20%;
+    #socialBarAd.has-ad {
 
-  animation:
-    floatCard 5s 1.5s ease-in-out infinite;
+      display: block;
+    }
 
-}
+    #socialBarAd > * {
 
-@keyframes floatCard{
+      pointer-events: auto;
+    }
 
-  0%,100%{
-    transform:translateY(0);
-  }
 
-  50%{
-    transform:translateY(-13px);
-  }
+    /* =====================================================
+       SECTION HEAD
+    ===================================================== */
 
-}
+    .section-head {
 
-/* =========================================================
-   SEARCH
-========================================================= */
+      display: flex;
 
-.search-wrap{
+      align-items: end;
 
-  max-width:760px;
+      justify-content:
+        space-between;
 
-  margin:
-    5px auto 45px;
+      gap: 20px;
 
-  position:relative;
+      margin:
+        55px 0 20px;
+    }
 
-  z-index:10;
+    .section-head h2 {
 
-}
+      font-size: 30px;
 
-.search-box{
+      letter-spacing: -.8px;
+    }
 
-  position:relative;
+    .section-head p {
 
-}
+      color: #71809e;
 
-.search-box input{
+      font-size: 12px;
 
-  width:100%;
+      margin-top: 7px;
+    }
 
-  height:58px;
 
-  padding:
-    0 20px 0 52px;
+    /* =====================================================
+       CATEGORIES
+    ===================================================== */
 
-  border:
-    1px solid rgba(255,255,255,.1);
+    .categories {
 
-  border-radius:17px;
+      display: grid;
 
-  outline:none;
+      grid-template-columns:
+        repeat(5,minmax(0,1fr));
 
-  background:
-    rgba(10,19,40,.85);
+      gap: 13px;
+    }
 
-  color:white;
+    .category {
 
-  font-size:14px;
+      min-height: 125px;
 
-  box-shadow:
-    0 20px 55px rgba(0,0,0,.25);
+      position: relative;
 
-}
+      overflow: hidden;
 
-.search-box input:focus{
+      border:
+        1px solid
+        rgba(255,255,255,.09);
 
-  border-color:
-    rgba(61,130,255,.65);
+      background:
 
-  box-shadow:
-    0 0 0 4px rgba(61,130,255,.08),
-    0 20px 55px rgba(0,0,0,.25);
+        linear-gradient(
+          145deg,
+          rgba(20,32,65,.9),
+          rgba(8,16,35,.96)
+        );
 
-}
+      border-radius: 18px;
 
-.search-icon{
+      color: white;
 
-  position:absolute;
+      cursor: pointer;
 
-  left:19px;
+      text-align: left;
 
-  top:50%;
+      padding: 18px;
 
-  transform:translateY(-50%);
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+    }
 
-  color:#6e82a8;
+    .category:hover {
 
-  font-size:20px;
+      transform:
+        translateY(-5px);
 
-  pointer-events:none;
+      border-color:
+        rgba(91,140,255,.4);
 
-}
+      box-shadow:
+        0 18px 40px
+        rgba(0,0,0,.28);
+    }
 
-/* =========================================================
-   ADS
-========================================================= */
+    .category.active {
 
-.ad{
+      border-color:
+        rgba(91,140,255,.6);
 
-  width:100%;
+      background:
 
-  min-height:70px;
+        linear-gradient(
+          145deg,
+          rgba(38,61,120,.9),
+          rgba(10,19,42,.98)
+        );
+    }
 
-  margin:25px 0;
+    .category-icon {
 
-  display:flex;
+      font-size: 27px;
 
-  align-items:center;
+      display: block;
 
-  justify-content:center;
+      margin-bottom: 12px;
+    }
 
-  border:
-    1px dashed rgba(91,140,255,.15);
+    .category-name {
 
-  border-radius:15px;
+      display: block;
 
-  background:
-    rgba(255,255,255,.012);
+      font-size: 14px;
 
-  color:#53617c;
+      font-weight: 800;
+    }
 
-  font-size:10px;
+    .category-desc {
 
-  overflow:hidden;
+      display: block;
 
-}
+      color: #71809e;
 
-.ad.has-ad{
+      font-size: 10px;
 
-  min-height:0;
+      margin-top: 5px;
+    }
 
-  border:none;
 
-  background:transparent;
+    /* =====================================================
+       MESSAGE CARDS
+    ===================================================== */
 
-  margin:20px 0;
+    .grid {
 
-  padding:0;
+      display: grid;
 
-}
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
 
-.ad.has-ad > *{
+      gap: 18px;
+    }
 
-  max-width:100%;
+    .card {
 
-}
+      position: relative;
 
-/* SOCIAL BAR */
+      overflow: hidden;
 
-#socialBarAd{
+      border:
+        1px solid
+        rgba(255,255,255,.09);
 
-  position:fixed;
+      background:
 
-  top:0;
+        linear-gradient(
+          145deg,
+          rgba(18,29,58,.95),
+          rgba(7,14,30,.98)
+        );
 
-  left:0;
+      border-radius: 20px;
 
-  width:100%;
+      transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
 
-  z-index:99999;
+      animation:
+        cardIn .55s ease both;
+    }
 
-  display:none;
+    @keyframes cardIn {
 
-  pointer-events:none;
+      from {
 
-}
+        opacity: 0;
 
-#socialBarAd.has-ad{
+        transform:
+          translateY(18px);
+      }
 
-  display:block;
+      to {
 
-}
+        opacity: 1;
 
-#socialBarAd > *{
+        transform:
+          translateY(0);
+      }
+    }
 
-  pointer-events:auto;
+    .card:hover {
 
-}
+      transform:
+        translateY(-7px);
 
-/* =========================================================
-   SECTION HEAD
-========================================================= */
+      border-color:
+        rgba(91,140,255,.35);
 
-.section-head{
+      box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.3);
+    }
 
-  display:flex;
+    .thumbnail {
 
-  align-items:end;
+      height: 215px;
 
-  justify-content:space-between;
+      position: relative;
 
-  gap:20px;
+      overflow: hidden;
 
-  margin:
-    55px 0 22px;
+      display: flex;
 
-}
+      align-items: center;
 
-.section-kicker{
+      justify-content: center;
 
-  color:#4da1ff;
+      background:
 
-  font-size:10px;
+        radial-gradient(
+          circle at 30% 30%,
+          rgba(91,140,255,.25),
+          transparent 30%
+        ),
 
-  font-weight:900;
+        linear-gradient(
+          135deg,
+          #111b38,
+          #1a2450
+        );
+    }
 
-  letter-spacing:1.5px;
+    .thumbnail::after {
 
-  text-transform:uppercase;
+      content: "ANIMATED";
 
-  margin-bottom:8px;
+      position: absolute;
 
-}
+      top: 12px;
 
-.section-head h2{
+      right: 12px;
 
-  font-size:31px;
+      padding: 5px 8px;
 
-  letter-spacing:-1px;
+      border-radius: 999px;
 
-}
+      background:
+        rgba(0,0,0,.38);
 
-.section-head p{
+      border:
+        1px solid
+        rgba(255,255,255,.12);
 
-  color:#72819e;
+      font-size: 8px;
 
-  font-size:12px;
+      letter-spacing: 1px;
 
-  margin-top:7px;
+      color: #b8c9f1;
+    }
 
-  line-height:1.6;
+    .thumbnail img {
 
-}
+      width: 100%;
 
-.view-all{
+      height: 100%;
 
-  color:#65aaff;
+      object-fit: cover;
 
-  text-decoration:none;
+      transition:
+        transform .5s ease;
+    }
 
-  font-size:11px;
+    .card:hover
+    .thumbnail img {
 
-  font-weight:800;
+      transform:
+        scale(1.06);
+    }
 
-  white-space:nowrap;
+    .thumbnail-placeholder {
 
-}
+      position: relative;
 
-.view-all:hover{
+      text-align: center;
 
-  color:white;
+      color: #8ca0cc;
+    }
 
-}
+    .preview-orb {
 
-/* =========================================================
-   CATEGORIES
-========================================================= */
+      width: 65px;
 
-.categories{
+      height: 65px;
 
-  display:grid;
+      margin:
+        auto auto 10px;
 
-  grid-template-columns:
-    repeat(4,minmax(0,1fr));
+      border-radius: 50%;
 
-  gap:13px;
+      background:
 
-}
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
 
-.category{
+      display: grid;
 
-  min-height:125px;
+      place-items: center;
 
-  position:relative;
+      font-size: 25px;
 
-  overflow:hidden;
+      box-shadow:
+        0 0 35px
+        rgba(91,140,255,.35);
+    }
 
-  border:
-    1px solid rgba(255,255,255,.08);
+    .thumbnail-placeholder small {
 
-  border-radius:18px;
+      color: #7e8db0;
+    }
 
-  padding:18px;
+    .card-body {
 
-  text-align:left;
+      padding: 17px;
+    }
 
-  cursor:pointer;
+    .card h3 {
 
-  color:white;
+      font-size: 16px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(15,28,57,.92),
-      rgba(7,15,32,.96)
-    );
+      margin-bottom: 7px;
 
-  transition:.3s;
+      white-space: nowrap;
 
-}
+      overflow: hidden;
 
-.category::after{
+      text-overflow: ellipsis;
+    }
 
-  content:"→";
+    .card-category {
 
-  position:absolute;
+      display: inline-flex;
 
-  right:16px;
+      align-items: center;
 
-  bottom:15px;
+      gap: 5px;
 
-  color:#57739f;
+      color: #92a8d5;
 
-  font-size:15px;
+      font-size: 10px;
 
-  transition:.25s;
+      background:
+        rgba(255,255,255,.05);
 
-}
+      border:
+        1px solid
+        rgba(255,255,255,.06);
 
-.category::before{
+      padding: 5px 8px;
 
-  content:"";
+      border-radius: 999px;
+    }
 
-  position:absolute;
 
-  width:90px;
+    /* =====================================================
+       SMALL CARD STATS
+    ===================================================== */
 
-  height:90px;
+    .card-meta {
 
-  right:-40px;
+      display: flex;
 
-  top:-40px;
+      align-items: center;
 
-  border-radius:50%;
+      gap: 13px;
 
-  background:
-    var(--category-color);
+      margin-top: 12px;
 
-  opacity:.09;
+      color: #71809e;
 
-  filter:blur(8px);
+      font-size: 10px;
+    }
 
-}
+    .card-meta-item {
 
-.category:hover{
+      display: inline-flex;
 
-  transform:translateY(-5px);
+      align-items: center;
 
-  border-color:
-    rgba(76,150,255,.35);
+      gap: 4px;
 
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.28);
+      white-space: nowrap;
+    }
 
-}
+    .card-meta-item svg {
 
-.category:hover::after{
+      width: 14px;
 
-  color:#5da5ff;
+      height: 14px;
 
-  transform:translateX(4px);
+      fill: none;
 
-}
+      stroke: currentColor;
 
-.category-icon{
+      stroke-width: 1.8;
 
-  display:block;
+      stroke-linecap: round;
 
-  font-size:27px;
+      stroke-linejoin: round;
+    }
 
-  margin-bottom:12px;
+    .card-meta-item.share-icon {
 
-}
+      cursor: pointer;
 
-.category-name{
+      border: 0;
 
-  display:block;
+      background: transparent;
 
-  font-size:14px;
+      color: #71809e;
 
-  font-weight:900;
+      padding: 0;
 
-}
+      font: inherit;
 
-.category-desc{
+      transition: .2s;
+    }
 
-  display:block;
+    .card-meta-item.share-icon:hover {
 
-  margin-top:5px;
+      color: #5b8cff;
 
-  color:#687896;
+      transform:
+        translateY(-1px);
+    }
 
-  font-size:10px;
 
-}
+    /* =====================================================
+       OPEN BUTTON
+    ===================================================== */
 
-/* =========================================================
-   TEMPLATE GRID
-========================================================= */
+    .open-btn {
 
-.grid{
+      width: 100%;
 
-  display:grid;
+      margin-top: 15px;
 
-  grid-template-columns:
-    repeat(3,minmax(0,1fr));
+      padding: 12px;
 
-  gap:18px;
+      border: none;
 
-}
+      border-radius: 11px;
 
-.card{
+      background:
 
-  overflow:hidden;
+        linear-gradient(
+          135deg,
+          #4f82ff,
+          #7c5cff
+        );
 
-  position:relative;
+      color: white;
 
-  border:
-    1px solid rgba(255,255,255,.08);
+      font-weight: 800;
 
-  border-radius:20px;
+      cursor: pointer;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(15,28,57,.94),
-      rgba(7,14,30,.97)
-    );
+      transition: .25s;
 
-  box-shadow:
-    0 15px 45px rgba(0,0,0,.18);
+      box-shadow:
+        0 8px 22px
+        rgba(79,130,255,.16);
+    }
 
-  transition:.3s;
+    .open-btn:hover {
 
-}
+      transform:
+        translateY(-2px);
 
-.card:hover{
+      box-shadow:
+        0 12px 28px
+        rgba(79,130,255,.28);
+    }
 
-  transform:translateY(-7px);
+    .empty {
 
-  border-color:
-    rgba(70,145,255,.32);
+      grid-column: 1 / -1;
 
-  box-shadow:
-    0 25px 60px rgba(0,0,0,.32);
+      text-align: center;
 
-}
+      color: #71809d;
 
-/* =========================================================
-   THUMBNAIL
-========================================================= */
+      padding: 60px 10px;
 
-.thumbnail{
+      border:
+        1px dashed
+        rgba(255,255,255,.08);
 
-  height:210px;
+      border-radius: 18px;
+    }
 
-  position:relative;
 
-  overflow:hidden;
+    /* =====================================================
+       CONTACT
+    ===================================================== */
 
-  display:flex;
+    .contact {
 
-  align-items:center;
+      text-align: center;
 
-  justify-content:center;
+      padding:
+        85px 20px 65px;
 
-  background:
+      position: relative;
+    }
 
-    radial-gradient(
-      circle at 30% 25%,
-      rgba(56,137,255,.25),
-      transparent 30%
-    ),
+    .contact-box {
 
-    linear-gradient(
-      135deg,
-      #0d1d3c,
-      #111a3b
-    );
+      max-width: 680px;
 
-}
+      margin: auto;
 
-.thumbnail::after{
+      padding: 45px 25px;
 
-  content:"ANIMATED";
+      border:
+        1px solid
+        rgba(91,140,255,.15);
 
-  position:absolute;
+      background:
 
-  top:11px;
+        linear-gradient(
+          145deg,
+          rgba(21,34,70,.8),
+          rgba(8,17,36,.9)
+        );
 
-  right:11px;
+      border-radius: 25px;
 
-  padding:5px 8px;
+      box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.25);
+    }
 
-  border-radius:999px;
+    .contact h2 {
 
-  background:
-    rgba(0,0,0,.38);
+      font-size: 28px;
+    }
 
-  border:
-    1px solid rgba(255,255,255,.1);
+    .contact p {
 
-  color:#a6bce5;
+      margin-top: 9px;
 
-  font-size:7px;
+      color: #7f8eaa;
 
-  letter-spacing:1px;
+      font-size: 13px;
+    }
 
-}
+    .whatsapp {
 
-.thumbnail img{
+      display: inline-flex;
 
-  width:100%;
+      width: 66px;
 
-  height:100%;
+      height: 66px;
 
-  object-fit:cover;
+      border-radius: 50%;
 
-  transition:.5s;
+      align-items: center;
 
-}
+      justify-content: center;
 
-.card:hover .thumbnail img{
+      background:
+        #25d366;
 
-  transform:scale(1.06);
+      color: white;
 
-}
+      text-decoration: none;
 
-.thumbnail-placeholder{
+      margin-top: 22px;
 
-  text-align:center;
+      box-shadow:
 
-  color:#91a4c8;
+        0 0 0 8px
+        rgba(37,211,102,.07),
 
-}
+        0 12px 35px
+        rgba(37,211,102,.2);
 
-.preview-orb{
+      transition: .3s;
+    }
 
-  width:67px;
+    .whatsapp:hover {
 
-  height:67px;
+      transform:
+        scale(1.12)
+        rotate(-4deg);
+    }
 
-  margin:
-    0 auto 10px;
+    .whatsapp svg {
 
-  border-radius:50%;
+      width: 31px;
 
-  display:grid;
+      height: 31px;
 
-  place-items:center;
+      fill: currentColor;
+    }
 
-  font-size:25px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #267cff,
-      #29c8ff
-    );
+    /* =====================================================
+       FOOTER
+    ===================================================== */
 
-  box-shadow:
-    0 0 40px rgba(38,124,255,.35);
+    footer {
 
-}
+      border-top:
+        1px solid
+        rgba(255,255,255,.07);
 
-/* =========================================================
-   CARD BODY
-========================================================= */
+      padding: 25px 15px;
 
-.card-body{
+      text-align: center;
 
-  padding:16px;
+      color: #53617c;
 
-}
+      font-size: 11px;
+    }
 
-.card h3{
 
-  font-size:16px;
+    /* =====================================================
+       MOBILE
+    ===================================================== */
 
-  margin-bottom:8px;
+    @media (max-width: 850px) {
 
-  white-space:nowrap;
+      .hero {
 
-  overflow:hidden;
+        min-height: auto;
 
-  text-overflow:ellipsis;
+        padding:
+          55px 15px 35px;
 
-}
+        flex-direction: column;
 
-.card-category{
+        text-align: center;
 
-  display:inline-flex;
+        gap: 30px;
+      }
 
-  align-items:center;
+      .hero-content {
 
-  gap:5px;
+        max-width: 650px;
+      }
 
-  padding:5px 8px;
+      .hero p {
 
-  border-radius:999px;
+        margin: auto;
+      }
 
-  color:#91a7ce;
+      .hero-phone-wrap {
 
-  background:
-    rgba(255,255,255,.045);
+        width: 100%;
 
-  border:
-    1px solid rgba(255,255,255,.06);
+        min-width: 0;
 
-  font-size:9px;
+        height: 450px;
+      }
 
-}
+      .hero-preview.one {
 
-/* =========================================================
-   MINI ACTION BAR
-========================================================= */
+        left: 4%;
+      }
 
-.card-actions{
+      .hero-preview.two {
 
-  display:flex;
+        right: 4%;
+      }
 
-  align-items:center;
+      .categories {
 
-  gap:6px;
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+      }
 
-  margin-top:15px;
+      .grid {
 
-}
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+      }
+    }
 
-.mini-action{
 
-  flex:1;
+    @media (max-width: 600px) {
 
-  min-width:0;
+      header {
 
-  height:34px;
+        padding:
+          10px 12px;
+      }
 
-  display:flex;
+      .nav {
 
-  align-items:center;
+        gap: 8px;
+      }
 
-  justify-content:center;
+      .logo {
 
-  gap:5px;
+        font-size: 13px;
+      }
 
-  border:
-    1px solid rgba(255,255,255,.08);
+      .logo-mark {
 
-  border-radius:9px;
+        width: 32px;
 
-  background:
-    rgba(255,255,255,.035);
+        height: 32px;
 
-  color:#8496b7;
+        border-radius: 9px;
+      }
 
-  font-size:9px;
+      nav {
 
-  font-weight:800;
+        gap: 2px;
+      }
 
-  cursor:pointer;
+      nav a {
 
-  transition:.22s;
+        font-size: 10px;
 
-}
+        padding:
+          7px 6px;
+      }
 
-.mini-action:hover{
+      .hero h1 {
 
-  color:white;
+        font-size: 46px;
 
-  border-color:
-    rgba(76,145,255,.38);
+        letter-spacing: -2px;
+      }
 
-  background:
-    rgba(49,121,255,.10);
+      .hero p {
 
-  transform:translateY(-2px);
+        font-size: 13px;
+      }
 
-}
+      .hero-phone {
 
-.mini-action .icon{
+        width: 220px;
 
-  font-size:13px;
+        height: 415px;
+      }
 
-  line-height:1;
+      .hero-phone-wrap {
 
-}
+        height: 425px;
+      }
 
-.mini-action.open{
+      .hero-preview {
 
-  color:#6fb0ff;
+        width: 105px;
 
-  border-color:
-    rgba(69,137,255,.22);
+        padding: 12px;
+      }
 
-}
+      .hero-preview.one {
 
-/* =========================================================
-   EMPTY
-========================================================= */
+        left: 0;
+      }
 
-.empty{
+      .hero-preview.two {
 
-  grid-column:1 / -1;
+        right: 0;
+      }
 
-  padding:70px 15px;
+      .categories {
 
-  text-align:center;
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
 
-  color:#687895;
+        gap: 9px;
+      }
 
-  border:
-    1px dashed rgba(255,255,255,.08);
+      .category {
 
-  border-radius:18px;
+        min-height: 100px;
 
-}
+        padding: 14px;
+      }
 
-/* =========================================================
-   CONTACT
-========================================================= */
+      .category-icon {
 
-.contact{
+        font-size: 21px;
 
-  padding:
-    90px 0 50px;
+        margin-bottom: 7px;
+      }
 
-  text-align:center;
+      .category-name {
 
-}
+        font-size: 12px;
+      }
 
-.contact-box{
+      .category-desc {
 
-  max-width:650px;
+        font-size: 8px;
+      }
 
-  margin:auto;
+      .grid {
 
-  padding:
-    42px 25px;
+        grid-template-columns: 1fr;
+      }
 
-  border:
-    1px solid rgba(255,255,255,.08);
+      .thumbnail {
 
-  border-radius:25px;
+        height: 190px;
+      }
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(16,31,64,.8),
-      rgba(7,15,31,.88)
-    );
+      .card-meta {
 
-  box-shadow:
-    var(--shadow);
+        gap: 11px;
+      }
 
-}
+      .section-head h2 {
 
-.contact h2{
+        font-size: 22px;
+      }
 
-  font-size:28px;
+      .contact {
 
-}
+        padding-top: 55px;
+      }
+    }
 
-.contact p{
-
-  margin-top:8px;
-
-  color:#7889a8;
-
-  font-size:13px;
-
-}
-
-.whatsapp{
-
-  width:60px;
-
-  height:60px;
-
-  margin-top:22px;
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:#25d366;
-
-  color:white;
-
-  text-decoration:none;
-
-  box-shadow:
-    0 0 0 8px rgba(37,211,102,.07),
-    0 12px 35px rgba(37,211,102,.2);
-
-  transition:.25s;
-
-}
-
-.whatsapp:hover{
-
-  transform:scale(1.1);
-
-}
-
-.whatsapp svg{
-
-  width:29px;
-
-  height:29px;
-
-  fill:currentColor;
-
-}
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-footer{
-
-  border-top:
-    1px solid rgba(255,255,255,.07);
-
-  padding:
-    25px 18px;
-
-  text-align:center;
-
-  color:#52617e;
-
-  font-size:10px;
-
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast{
-
-  position:fixed;
-
-  left:50%;
-
-  bottom:25px;
-
-  transform:
-    translate(-50%,20px);
-
-  opacity:0;
-
-  pointer-events:none;
-
-  z-index:200000;
-
-  padding:
-    10px 15px;
-
-  border:
-    1px solid rgba(255,255,255,.1);
-
-  border-radius:10px;
-
-  background:
-    rgba(7,15,31,.94);
-
-  color:white;
-
-  font-size:11px;
-
-  box-shadow:
-    0 15px 45px rgba(0,0,0,.4);
-
-  transition:.25s;
-
-}
-
-.toast.show{
-
-  opacity:1;
-
-  transform:
-    translate(-50%,0);
-
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:950px){
-
-  .hero{
-
-    grid-template-columns:1fr;
-
-    text-align:center;
-
-    gap:20px;
-
-  }
-
-  .hero-content{
-
-    max-width:760px;
-
-    margin:auto;
-
-  }
-
-  .hero-description{
-
-    margin-left:auto;
-
-    margin-right:auto;
-
-  }
-
-  .hero-actions{
-
-    justify-content:center;
-
-  }
-
-  .hero-features{
-
-    justify-content:center;
-
-  }
-
-  .hero-visual{
-
-    min-height:480px;
-
-  }
-
-  .categories{
-
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-
-  }
-
-  .grid{
-
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-
-  }
-
-}
-
-@media(max-width:700px){
-
-  .nav{
-
-    min-height:62px;
-
-    padding:0 10px;
-
-  }
-
-  .logo-text{
-
-    font-size:12px;
-
-  }
-
-  .logo-mark{
-
-    width:33px;
-
-    height:33px;
-
-    border-radius:9px;
-
-  }
-
-  nav a{
-
-    font-size:10px;
-
-    padding:7px 5px;
-
-  }
-
-  nav a:nth-child(3){
-
-    display:none;
-
-  }
-
-  .create-btn{
-
-    padding:
-      8px 9px !important;
-
-  }
-
-  .create-btn span{
-
-    display:none;
-
-  }
-
-  main{
-
-    padding:
-      0 12px 45px;
-
-  }
-
-  .hero{
-
-    min-height:auto;
-
-    padding:
-      55px 5px 30px;
-
-  }
-
-  .hero h1{
-
-    font-size:46px;
-
-    letter-spacing:-2.5px;
-
-  }
-
-  .hero-description{
-
-    font-size:13px;
-
-  }
-
-  .hero-visual{
-
-    min-height:430px;
-
-  }
-
-  .phone{
-
-    width:235px;
-
-    height:425px;
-
-  }
-
-  .phone-message h3{
-
-    font-size:25px;
-
-  }
-
-  .float-one{
-
-    left:0;
-
-  }
-
-  .float-two{
-
-    right:0;
-
-  }
-
-  .categories{
-
-    gap:9px;
-
-  }
-
-  .category{
-
-    min-height:105px;
-
-    padding:14px;
-
-  }
-
-  .category-icon{
-
-    font-size:22px;
-
-  }
-
-  .category-name{
-
-    font-size:12px;
-
-  }
-
-  .category-desc{
-
-    font-size:8px;
-
-  }
-
-  .grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .thumbnail{
-
-    height:200px;
-
-  }
-
-  .section-head h2{
-
-    font-size:23px;
-
-  }
-
-}
-
-@media(max-width:430px){
-
-  nav a{
-
-    display:none;
-
-  }
-
-  nav a:first-child{
-
-    display:block;
-
-  }
-
-  .hero h1{
-
-    font-size:41px;
-
-  }
-
-  .hero-features{
-
-    gap:10px;
-
-  }
-
-  .hero-feature{
-
-    font-size:9px;
-
-  }
-
-  .float-card{
-
-    min-width:110px;
-
-    padding:9px;
-
-  }
-
-  .float-card strong{
-
-    font-size:10px;
-
-  }
-
-  .float-card span{
-
-    font-size:8px;
-
-  }
-
-  .card-actions{
-
-    gap:5px;
-
-  }
-
-  .mini-action{
-
-    height:32px;
-
-    font-size:8px;
-
-  }
-
-}
-
-</style>
+  </style>
 
 </head>
 
+
 <body>
 
-<!-- =========================================================
+
+<!-- =====================================================
      SOCIAL BAR AD
-========================================================= -->
+===================================================== -->
 
 <div id="socialBarAd"></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      HEADER
-========================================================= -->
+===================================================== -->
 
 <header>
 
@@ -2124,7 +1832,10 @@ footer{
 
     <a
       href="/"
-      class="logo-link"
+      style="
+        text-decoration:none;
+        color:white;
+      "
     >
 
       <div class="logo">
@@ -2133,9 +1844,9 @@ footer{
           M
         </div>
 
-        <div class="logo-text">
-          <span>MAKYAMA MESSAGES</span>
-        </div>
+        <span>
+          MAKYAMA MESSAGES
+        </span>
 
       </div>
 
@@ -2144,15 +1855,8 @@ footer{
 
     <nav>
 
-      <a
-        href="/"
-        class="active"
-      >
+      <a href="/">
         Home
-      </a>
-
-      <a href="#categories">
-        Templates
       </a>
 
       <a href="#categories">
@@ -2160,17 +1864,14 @@ footer{
       </a>
 
       <a href="#contact">
-        About
+        Contact
       </a>
 
       <a
         href="/admin"
-        class="create-btn"
+        class="admin-link"
       >
-        ✎
-        <span>
-          Create Message
-        </span>
+        🔐 Admin
       </a>
 
     </nav>
@@ -2180,149 +1881,140 @@ footer{
 </header>
 
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
 <main>
 
 
-<!-- =========================================================
+<!-- =====================================================
      HERO
-========================================================= -->
+===================================================== -->
 
 <section class="hero">
 
+
   <div class="hero-content">
 
-    <div class="hero-label">
-      SMALL MESSAGES ✦ BIG EMOTIONS
+    <div class="hero-badge">
+
+      <span class="badge-dot"></span>
+
+      Animated Swahili Messages
+
     </div>
+
 
     <h1>
 
-      Create Beautiful
+      Make Your Message
+
       <br>
 
-      Messages in
-      <br>
-
-      <span class="blue">
-        Seconds.
+      <span class="gradient">
+        Come Alive.
       </span>
 
     </h1>
 
-    <p class="hero-description">
 
-      MAKYAMA MESSAGES helps you express your
-      feelings with beautiful, animated messages.
-      Choose a template, customize it, and share it
-      with the people you care about.
+    <p>
+
+      Create and share beautiful animated Swahili
+      messages for love, birthdays, celebrations,
+      appreciation and every special moment.
 
     </p>
-
-    <div class="hero-actions">
-
-      <a
-        href="#templates"
-        class="hero-cta"
-      >
-        Create Message
-        →
-      </a>
-
-    </div>
-
-    <div class="hero-features">
-
-      <div class="hero-feature">
-        Fast & Easy
-      </div>
-
-      <div class="hero-feature">
-        Beautiful Templates
-      </div>
-
-      <div class="hero-feature">
-        Share Anywhere
-      </div>
-
-    </div>
 
   </div>
 
 
-  <!-- PHONE -->
+  <div class="hero-phone-wrap">
 
-  <div class="hero-visual">
+    <div class="hero-phone-glow"></div>
 
-    <div class="glow"></div>
 
-    <div class="phone">
+    <div class="hero-preview one">
 
-      <div class="phone-notch"></div>
+      ❤️
 
-      <div class="phone-screen">
+      <strong>
+        Love
+      </strong>
 
-        <div class="phone-brand">
-          MAKYAMA MESSAGES
+      <small>
+        Express your heart
+      </small>
+
+    </div>
+
+
+    <div class="hero-preview two">
+
+      🎂
+
+      <strong>
+        Birthday
+      </strong>
+
+      <small>
+        Celebrate their day
+      </small>
+
+    </div>
+
+
+    <div class="hero-phone">
+
+      <div class="hero-phone-screen">
+
+
+        <div class="phone-top">
+
+          <div class="phone-brand">
+
+            <div class="phone-logo">
+              M
+            </div>
+
+            MAKYAMA
+
+          </div>
+
+          <span>
+            •••
+          </span>
+
         </div>
+
 
         <div class="phone-message">
 
-          <div class="small">
-            A SPECIAL MESSAGE
+          <div class="phone-message-icon">
+            💙
           </div>
 
           <h3>
-            You are
+
+            You Are
             <br>
             Special
-            <br>
-            ♡
+
           </h3>
 
           <p>
+
             Never forget how amazing you are.
             The world is brighter because you exist.
-          </p>
 
-          <button
-            class="phone-share"
-          >
-            Share
-          </button>
+          </p>
 
         </div>
 
+
+        <div class="phone-share">
+          ↗ Share
+        </div>
+
+
       </div>
-
-    </div>
-
-
-    <div class="float-card float-one">
-
-      <strong>
-        ☀️ Good Morning
-      </strong>
-
-      <span>
-        Start someone's day beautifully
-      </span>
-
-    </div>
-
-
-    <div class="float-card float-two">
-
-      <strong>
-        💙 Keep Going
-      </strong>
-
-      <span>
-        Better days are coming
-      </span>
 
     </div>
 
@@ -2331,9 +2023,9 @@ footer{
 </section>
 
 
-<!-- =========================================================
+<!-- =====================================================
      SEARCH
-========================================================= -->
+===================================================== -->
 
 <div class="search-wrap">
 
@@ -2355,9 +2047,9 @@ footer{
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      TOP AD
-========================================================= -->
+===================================================== -->
 
 <div
   id="topAd"
@@ -2366,37 +2058,26 @@ footer{
 ></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      CATEGORIES
-========================================================= -->
+===================================================== -->
 
 <section id="categories">
+
 
   <div class="section-head">
 
     <div>
 
-      <div class="section-kicker">
-        Explore Categories
-      </div>
-
       <h2>
-        Find the Perfect Message
+        Explore Categories
       </h2>
 
       <p>
-        Choose from a variety of categories and
-        make every moment special.
+        Find the perfect message for your moment.
       </p>
 
     </div>
-
-    <a
-      href="#categories"
-      class="view-all"
-    >
-      View All Categories →
-    </a>
 
   </div>
 
@@ -2405,7 +2086,7 @@ footer{
 
 
     <button
-      class="category"
+      class="category active"
       data-category="All"
       style="--category-color:#5b8cff;"
     >
@@ -2440,7 +2121,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Express your heart
+        Messages from the heart
       </span>
 
     </button>
@@ -2461,7 +2142,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Celebrate life
+        Celebrate their day
       </span>
 
     </button>
@@ -2482,7 +2163,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Mark special moments
+        Moments worth celebrating
       </span>
 
     </button>
@@ -2524,7 +2205,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Spread happiness
+        Make someone smile
       </span>
 
     </button>
@@ -2545,7 +2226,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Words of wisdom
+        Words that inspire
       </span>
 
     </button>
@@ -2566,7 +2247,7 @@ footer{
       </span>
 
       <span class="category-desc">
-        Say thank you
+        Say thank you beautifully
       </span>
 
     </button>
@@ -2598,9 +2279,9 @@ footer{
 </section>
 
 
-<!-- =========================================================
+<!-- =====================================================
      MIDDLE AD
-========================================================= -->
+===================================================== -->
 
 <div
   id="middleAd"
@@ -2609,27 +2290,23 @@ footer{
 ></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      TEMPLATES
-========================================================= -->
+===================================================== -->
 
-<section id="templates-section">
+<section>
+
 
   <div class="section-head">
 
     <div>
 
-      <div class="section-kicker">
-        Popular Templates
-      </div>
-
       <h2>
-        Most Loved Messages
+        Animated Messages
       </h2>
 
       <p>
-        Discover beautiful animated templates
-        ready to share.
+        Choose a message and bring it to life.
       </p>
 
     </div>
@@ -2643,38 +2320,37 @@ footer{
   >
 
     <div class="empty">
-
       Loading animated messages...
-
     </div>
 
   </section>
 
+
 </section>
 
 
-<!-- =========================================================
+<!-- =====================================================
      CONTACT
-========================================================= -->
+===================================================== -->
 
 <section
   id="contact"
   class="contact"
 >
 
+
   <div class="contact-box">
 
-    <div class="section-kicker">
-      Need Help?
-    </div>
 
     <h2>
-      We're Here For You
+      Need Help?
     </h2>
+
 
     <p>
       Contact us directly through WhatsApp.
     </p>
+
 
     <a
       class="whatsapp"
@@ -2700,33 +2376,29 @@ footer{
 
 </section>
 
+
 </main>
 
 
-<!-- =========================================================
+<!-- =====================================================
      FOOTER
-========================================================= -->
+===================================================== -->
 
 <footer>
 
   ©
   <span id="year"></span>
-  MAKYAMA MESSAGES · Messages that connect hearts. 💙
+  MAKYAMA MESSAGES · Animated Swahili Messages
 
 </footer>
 
 
-<div
-  id="toast"
-  class="toast"
-></div>
-
-
 <script>
 
-/* =========================================================
+
+/* =====================================================
    ELEMENTS
-========================================================= */
+===================================================== */
 
 const templatesContainer =
   document.getElementById("templates");
@@ -2746,56 +2418,24 @@ const middleAd =
 const socialBarAd =
   document.getElementById("socialBarAd");
 
-const toast =
-  document.getElementById("toast");
-
 
 let templates = [];
 
 let selectedCategory = "All";
 
 
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(message){
-
-  toast.textContent = message;
-
-  toast.classList.add("show");
-
-  clearTimeout(
-    window.makyamaToastTimer
-  );
-
-  window.makyamaToastTimer =
-    setTimeout(
-      () => {
-
-        toast.classList.remove("show");
-
-      },
-      1800
-    );
-
-}
-
-
-/* =========================================================
+/* =====================================================
    LOAD TEMPLATES
-========================================================= */
+===================================================== */
 
-async function loadTemplates(){
+async function loadTemplates() {
 
-  try{
+  try {
 
     const response =
-      await fetch(
-        "/api/templates"
-      );
+      await fetch("/api/templates");
 
-    if(!response.ok){
+    if (!response.ok) {
 
       throw new Error(
         "Unable to load templates."
@@ -2806,7 +2446,7 @@ async function loadTemplates(){
     templates =
       await response.json();
 
-    if(!Array.isArray(templates)){
+    if (!Array.isArray(templates)) {
 
       templates = [];
 
@@ -2814,7 +2454,9 @@ async function loadTemplates(){
 
     renderTemplates();
 
-  }catch(error){
+  }
+
+  catch (error) {
 
     templatesContainer.innerHTML = `
 
@@ -2822,7 +2464,7 @@ async function loadTemplates(){
 
         <div
           style="
-            font-size:38px;
+            font-size:35px;
             margin-bottom:12px;
           "
         >
@@ -2831,7 +2473,7 @@ async function loadTemplates(){
 
         <div
           style="
-            font-weight:800;
+            font-weight:700;
             color:#9aa8c3;
           "
         >
@@ -2858,20 +2500,18 @@ async function loadTemplates(){
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD ADS
-========================================================= */
+===================================================== */
 
-async function loadAds(){
+async function loadAds() {
 
-  try{
+  try {
 
     const response =
-      await fetch(
-        "/api/ads"
-      );
+      await fetch("/api/ads");
 
-    if(!response.ok){
+    if (!response.ok) {
 
       throw new Error(
         "Unable to load advertisements."
@@ -2882,10 +2522,8 @@ async function loadAds(){
     const ads =
       await response.json();
 
-    if(!Array.isArray(ads)){
-
+    if (!Array.isArray(ads)) {
       return;
-
     }
 
     renderAd(
@@ -2906,7 +2544,9 @@ async function loadAds(){
       socialBarAd
     );
 
-  }catch(error){
+  }
+
+  catch (error) {
 
     console.warn(
       "Ads unavailable:",
@@ -2924,15 +2564,15 @@ async function loadAds(){
 }
 
 
-/* =========================================================
-   RENDER AD
-========================================================= */
+/* =====================================================
+   RENDER ADS
+===================================================== */
 
 function renderAd(
   ads,
   position,
   container
-){
+) {
 
   const ad =
     ads.find(
@@ -2945,7 +2585,7 @@ function renderAd(
         ).trim()
     );
 
-  if(!ad){
+  if (!ad) {
 
     container.innerHTML = "";
 
@@ -2957,15 +2597,12 @@ function renderAd(
       "none";
 
     return;
-
   }
 
   container.innerHTML = "";
 
   const wrapper =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   wrapper.style.width =
     "100%";
@@ -2977,14 +2614,14 @@ function renderAd(
     "center";
 
   wrapper.innerHTML =
-    String(
-      ad.code || ""
-    );
+    String(ad.code || "");
+
 
   const scripts =
     wrapper.querySelectorAll(
       "script"
     );
+
 
   scripts.forEach(
     oldScript => {
@@ -2994,10 +2631,10 @@ function renderAd(
           "script"
         );
 
-      for(
+      for (
         const attr
         of oldScript.attributes
-      ){
+      ) {
 
         newScript.setAttribute(
           attr.name,
@@ -3009,13 +2646,15 @@ function renderAd(
       newScript.textContent =
         oldScript.textContent || "";
 
-      oldScript.parentNode.replaceChild(
-        newScript,
-        oldScript
-      );
+      oldScript.parentNode
+        .replaceChild(
+          newScript,
+          oldScript
+        );
 
     }
   );
+
 
   container.appendChild(
     wrapper
@@ -3029,15 +2668,14 @@ function renderAd(
     position === "social"
       ? "block"
       : "flex";
-
 }
 
 
-/* =========================================================
+/* =====================================================
    HIDE AD
-========================================================= */
+===================================================== */
 
-function hideAd(container){
+function hideAd(container) {
 
   container.innerHTML = "";
 
@@ -3047,15 +2685,14 @@ function hideAd(container){
 
   container.style.display =
     "none";
-
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDER TEMPLATES
-========================================================= */
+===================================================== */
 
-function renderTemplates(){
+function renderTemplates() {
 
   const search =
     searchInput.value
@@ -3072,6 +2709,7 @@ function renderTemplates(){
             template.title || ""
           ).toLowerCase();
 
+
         const category =
           String(
             template.category || ""
@@ -3082,8 +2720,7 @@ function renderTemplates(){
           selectedCategory === "All" ||
           String(
             template.category || ""
-          ).toLowerCase() ===
-            selectedCategory.toLowerCase();
+          ) === selectedCategory;
 
 
         const searchMatch =
@@ -3101,7 +2738,7 @@ function renderTemplates(){
     );
 
 
-  if(!filtered.length){
+  if (!filtered.length) {
 
     templatesContainer.innerHTML = `
 
@@ -3118,7 +2755,7 @@ function renderTemplates(){
 
         <div
           style="
-            font-weight:800;
+            font-weight:700;
             color:#9aa8c3;
           "
         >
@@ -3144,20 +2781,18 @@ function renderTemplates(){
 
 
   templatesContainer.innerHTML =
+
     filtered
       .map(
         (template,index) => {
 
-          const id =
-            String(
-              template.id || ""
-            );
 
           const title =
             escapeHtml(
               template.title ||
               "Untitled Message"
             );
+
 
           const category =
             escapeHtml(
@@ -3166,18 +2801,27 @@ function renderTemplates(){
             );
 
 
+          /*
+             These read optional API fields.
+
+             If your API already sends:
+             views
+             downloads
+
+             they will appear.
+
+             If not, they simply show 0.
+          */
+
           const views =
             Number(
-              template.views ||
-              template.viewCount ||
-              0
+              template.views || 0
             );
+
 
           const downloads =
             Number(
-              template.downloads ||
-              template.downloadCount ||
-              0
+              template.downloads || 0
             );
 
 
@@ -3187,7 +2831,9 @@ function renderTemplates(){
               class="thumbnail-placeholder"
             >
 
-              <div class="preview-orb">
+              <div
+                class="preview-orb"
+              >
                 ✨
               </div>
 
@@ -3200,7 +2846,7 @@ function renderTemplates(){
           `;
 
 
-          if(template.thumbnail){
+          if (template.thumbnail) {
 
             thumbnail = `
 
@@ -3222,9 +2868,10 @@ function renderTemplates(){
             <article
               class="card"
               style="
-                animation-delay:${index * 60}ms
+                animation-delay:${index * 70}ms
               "
             >
+
 
               <div class="thumbnail">
 
@@ -3234,6 +2881,7 @@ function renderTemplates(){
 
 
               <div class="card-body">
+
 
                 <h3>
                   ${title}
@@ -3247,129 +2895,153 @@ function renderTemplates(){
                 </span>
 
 
-                <div
-                  class="card-actions"
-                >
+                <div class="card-meta">
 
 
-                  <!-- OPEN -->
+                  <!-- VIEWS -->
 
-                  <button
-                    class="mini-action open"
-                    type="button"
-                    onclick="
-                      openTemplate(
-                        '${escapeJs(id)}'
-                      )
-                    "
-                    title="Open message"
+                  <span
+                    class="card-meta-item"
+                    title="Views"
                   >
 
-                    <span class="icon">
-                      ▶
-                    </span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
 
-                    Open
+                      <path
+                        d="
+                          M2 12s3.5-6 10-6
+                          10 6 10 6
+                          -3.5 6-10 6
+                          -10-6-10-6Z
+                        "
+                      />
 
-                  </button>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="2.5"
+                      />
+
+                    </svg>
+
+                    ${formatNumber(views)}
+
+                  </span>
 
 
                   <!-- SHARE -->
 
                   <button
-                    class="mini-action"
                     type="button"
+                    class="card-meta-item share-icon"
+                    title="Share"
+                    aria-label="Share ${title}"
                     onclick="
                       shareTemplate(
-                        '${escapeJs(id)}',
+                        '${escapeJs(
+                          template.id
+                        )}',
                         '${escapeJs(
                           template.title ||
-                          "MAKYAMA Message"
+                          "Animated Message"
                         )}'
                       )
                     "
-                    title="Share"
                   >
 
-                    <span class="icon">
-                      ↗
-                    </span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
 
-                    Share
+                      <path
+                        d="
+                          M12 16V3
+                        "
+                      />
+
+                      <path
+                        d="
+                          M7 8l5-5 5 5
+                        "
+                      />
+
+                      <path
+                        d="
+                          M5 13v6
+                          a2 2 0 0 0 2 2
+                          h10
+                          a2 2 0 0 0 2-2
+                          v-6
+                        "
+                      />
+
+                    </svg>
 
                   </button>
 
 
                   <!-- DOWNLOAD -->
 
-                  <button
-                    class="mini-action"
-                    type="button"
-                    onclick="
-                      openTemplate(
-                        '${escapeJs(id)}'
-                      )
-                    "
-                    title="Open and download"
+                  <span
+                    class="card-meta-item"
+                    title="Downloads"
                   >
 
-                    <span class="icon">
-                      ↓
-                    </span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
 
-                    Download
+                      <path
+                        d="
+                          M12 3v12
+                        "
+                      />
 
-                  </button>
+                      <path
+                        d="
+                          M7 10l5 5 5-5
+                        "
+                      />
 
+                      <path
+                        d="
+                          M5 21h14
+                        "
+                      />
 
-                  <!-- LINK -->
+                    </svg>
 
-                  <button
-                    class="mini-action"
-                    type="button"
-                    onclick="
-                      copyTemplateLink(
-                        '${escapeJs(id)}'
-                      )
-                    "
-                    title="Copy link"
-                  >
+                    ${formatNumber(downloads)}
 
-                    <span class="icon">
-                      🔗
-                    </span>
-
-                    Link
-
-                  </button>
-
-
-                  <!-- VIEWS -->
-
-                  <button
-                    class="mini-action"
-                    type="button"
-                    disabled
-                    title="Views"
-                    style="
-                      cursor:default;
-                      opacity:.8;
-                    "
-                  >
-
-                    <span class="icon">
-                      👁
-                    </span>
-
-                    ${views}
-
-                  </button>
+                  </span>
 
 
                 </div>
 
 
+                <button
+                  class="open-btn"
+                  onclick="
+                    openTemplate(
+                      '${escapeJs(
+                        template.id
+                      )}'
+                    )
+                  "
+                >
+
+                  ✨ Open Animated Message
+
+                </button>
+
+
               </div>
+
 
             </article>
 
@@ -3382,14 +3054,49 @@ function renderTemplates(){
 }
 
 
-/* =========================================================
+/* =====================================================
+   FORMAT NUMBERS
+===================================================== */
+
+function formatNumber(number) {
+
+  number =
+    Number(number) || 0;
+
+  if (number >= 1000000) {
+
+    return (
+      (number / 1000000)
+        .toFixed(1)
+        .replace(".0","")
+      + "M"
+    );
+
+  }
+
+  if (number >= 1000) {
+
+    return (
+      (number / 1000)
+        .toFixed(1)
+        .replace(".0","")
+      + "K"
+    );
+
+  }
+
+  return String(number);
+}
+
+
+/* =====================================================
    SHARE TEMPLATE
-========================================================= */
+===================================================== */
 
 async function shareTemplate(
   id,
   title
-){
+) {
 
   const url =
     window.location.origin +
@@ -3397,58 +3104,57 @@ async function shareTemplate(
     encodeURIComponent(id);
 
 
-  if(
+  if (
     navigator.share
-  ){
+  ) {
 
-    try{
+    try {
 
       await navigator.share({
 
         title:
-          title ||
-          "MAKYAMA Message",
+          "MAKYAMA MESSAGES",
 
         text:
-          "Check out this animated message on MAKYAMA MESSAGES.",
+          title,
 
-        url
+        url:
+          url
 
       });
 
-      return;
+    }
 
-    }catch(error){
+    catch (error) {
 
-      if(
-        error &&
-        error.name ===
-          "AbortError"
-      ){
-
-        return;
-
-      }
+      /*
+        User cancelled share.
+        Do nothing.
+      */
 
     }
 
+    return;
+
   }
 
 
-  try{
+  try {
 
-    await navigator.clipboard.writeText(
-      url
-    );
+    await navigator.clipboard
+      .writeText(url);
 
-    showToast(
+    alert(
       "Message link copied!"
     );
 
-  }catch(error){
+  }
 
-    showToast(
-      "Unable to share this message."
+  catch (error) {
+
+    prompt(
+      "Copy this message link:",
+      url
     );
 
   }
@@ -3456,44 +3162,11 @@ async function shareTemplate(
 }
 
 
-/* =========================================================
-   COPY TEMPLATE LINK
-========================================================= */
-
-async function copyTemplateLink(id){
-
-  const url =
-    window.location.origin +
-    "/template?id=" +
-    encodeURIComponent(id);
-
-
-  try{
-
-    await navigator.clipboard.writeText(
-      url
-    );
-
-    showToast(
-      "Message link copied!"
-    );
-
-  }catch(error){
-
-    showToast(
-      "Unable to copy link."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
+/* =====================================================
    SECURITY
-========================================================= */
+===================================================== */
 
-function escapeHtml(value){
+function escapeHtml(value) {
 
   return String(value)
 
@@ -3525,7 +3198,7 @@ function escapeHtml(value){
 }
 
 
-function escapeJs(value){
+function escapeJs(value) {
 
   return String(value)
 
@@ -3552,11 +3225,11 @@ function escapeJs(value){
 }
 
 
-/* =========================================================
+/* =====================================================
    OPEN TEMPLATE
-========================================================= */
+===================================================== */
 
-function openTemplate(id){
+function openTemplate(id) {
 
   window.location.href =
     "/template?id=" +
@@ -3565,9 +3238,9 @@ function openTemplate(id){
 }
 
 
-/* =========================================================
+/* =====================================================
    SEARCH
-========================================================= */
+===================================================== */
 
 searchInput.addEventListener(
   "input",
@@ -3575,9 +3248,9 @@ searchInput.addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    CATEGORIES
-========================================================= */
+===================================================== */
 
 categoryButtons.forEach(
   button => {
@@ -3592,7 +3265,9 @@ categoryButtons.forEach(
 
         /* ALL */
 
-        if(category === "All"){
+        if (
+          category === "All"
+        ) {
 
           categoryButtons.forEach(
             btn => {
@@ -3604,21 +3279,25 @@ categoryButtons.forEach(
             }
           );
 
+
           button.classList.add(
             "active"
           );
 
+
           selectedCategory =
             "All";
 
+
           renderTemplates();
+
 
           return;
 
         }
 
 
-        /* OTHER CATEGORIES */
+        /* CATEGORY PAGE */
 
         window.location.href =
           "/category.html?category=" +
@@ -3633,26 +3312,26 @@ categoryButtons.forEach(
 );
 
 
-/* =========================================================
+/* =====================================================
    YEAR
-========================================================= */
+===================================================== */
 
 document.getElementById(
   "year"
 ).textContent =
-  new Date().getFullYear();
+new Date().getFullYear();
 
 
-/* =========================================================
+/* =====================================================
    START
-========================================================= */
+===================================================== */
 
 loadTemplates();
 
 loadAds();
 
+
 </script>
 
 </body>
-
-      </html>
+  </html>
