@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="MAKYAMA MESSAGES — Animated Swahili Messages"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
+  >
+
+  <title>Category — MAKYAMA MESSAGES</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #050816;
+      --card: rgba(16,24,48,.72);
+      --line: rgba(255,255,255,.10);
+      --text: #ffffff;
+      --muted: #9ba8c7;
+      --blue: #5b8cff;
+      --purple: #a66cff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(91,140,255,.18),
+          transparent 30%
+        ),
+
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(166,108,255,.15),
+          transparent 28%
+        ),
+
+        radial-gradient(
+          circle at 50% 90%,
+          rgba(57,217,255,.08),
+          transparent 30%
+        ),
+
+        var(--bg);
+
+      color: var(--text);
+
+      min-height: 100vh;
+
+      overflow-x: hidden;
+    }
+
+    body::before {
+
+      content: "";
+
+      position: fixed;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      background-image:
+        radial-gradient(
+          rgba(255,255,255,.6) 1px,
+          transparent 1px
+        );
+
+      background-size: 55px 55px;
+
+      opacity: .035;
+
+      z-index: -1;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      padding: 14px 18px;
+
+      background:
+        rgba(5,8,22,.78);
+
+      backdrop-filter:
+        blur(18px);
+
+      border-bottom:
+        1px solid var(--line);
+    }
+
+    .nav {
+
+      max-width: 1180px;
+
+      margin: auto;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .logo {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      text-decoration: none;
+
+      color: white;
+
+      font-size: 18px;
+
+      font-weight: 900;
+
+      letter-spacing: .5px;
+
+      white-space: nowrap;
+    }
+
+    .logo-mark {
+
+      width: 38px;
+
+      height: 38px;
+
+      border-radius: 12px;
+
+      display: grid;
+
+      place-items: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
+
+      box-shadow:
+        0 0 25px
+        rgba(91,140,255,.35);
+    }
+
+    .logo span {
+
+      background:
+        linear-gradient(
+          90deg,
+          #fff,
+          #7bdfff
+        );
+
+      -webkit-background-clip: text;
+
+      background-clip: text;
+
+      color: transparent;
+    }
+
+    nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 7px;
+    }
+
+    nav a {
+
+      color: #d9e2f7;
+
+      text-decoration: none;
+
+      font-size: 13px;
+
+      padding: 9px 12px;
+
+      border-radius: 10px;
+
+      transition: .25s ease;
+    }
+
+    nav a:hover {
+
+      background:
+        rgba(255,255,255,.07);
+
+      color: white;
+    }
+
+    /* ================= MAIN ================= */
+
+    main {
+
+      max-width: 1180px;
+
+      margin: auto;
+
+      padding:
+        55px 18px 70px;
+    }
+
+    /* ================= CATEGORY HEADER ================= */
+
+    .category-header {
+
+      text-align: center;
+
+      padding:
+        35px 10px 45px;
+    }
+
+    .back {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 7px;
+
+      color: #9db2dd;
+
+      text-decoration: none;
+
+      font-size: 13px;
+
+      padding:
+        9px 14px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      background:
+        rgba(255,255,255,.035);
+
+      border-radius: 999px;
+
+      transition: .25s;
+    }
+
+    .back:hover {
+
+      background:
+        rgba(255,255,255,.08);
+
+      transform:
+        translateY(-2px);
+    }
+
+    .category-icon {
+
+      font-size: 55px;
+
+      margin-top: 25px;
+
+      animation:
+        floatIcon 3s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes floatIcon {
+
+      0%,100% {
+        transform:
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          translateY(-8px);
+      }
+
+    }
+
+    .category-header h1 {
+
+      margin-top: 10px;
+
+      font-size:
+        clamp(36px, 7vw, 65px);
+
+      line-height: 1;
+
+      letter-spacing: -2px;
+
+      font-weight: 950;
+
+      background:
+
+        linear-gradient(
+          90deg,
+          #fff,
+          #66dfff,
+          #9c7cff,
+          #ff70ad,
+          #fff
+        );
+
+      background-size:
+        300% auto;
+
+      -webkit-background-clip: text;
+
+      background-clip: text;
+
+      color: transparent;
+
+      animation:
+        gradientMove 5s
+        linear infinite;
+    }
+
+    @keyframes gradientMove {
+
+      to {
+        background-position:
+          300% center;
+      }
+
+    }
+
+    .category-header p {
+
+      margin-top: 15px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+    /* ================= GRID ================= */
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+      gap: 17px;
+    }
+
+    /* ================= CARD ================= */
+
+    .card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(18,27,54,.9),
+          rgba(9,14,29,.94)
+        );
+
+      border-radius: 20px;
+
+      transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+      animation:
+        cardIn .55s ease both;
+    }
+
+    @keyframes cardIn {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          translateY(18px);
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          translateY(0);
+      }
+
+    }
+
+    .card:hover {
+
+      transform:
+        translateY(-7px);
+
+      border-color:
+        rgba(91,140,255,.35);
+
+      box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.3);
+    }
+
+    /* ================= THUMBNAIL ================= */
+
+    .thumbnail {
+
+      height: 205px;
+
+      position: relative;
+
+      overflow: hidden;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+
+        radial-gradient(
+          circle at 30% 30%,
+          rgba(91,140,255,.25),
+          transparent 30%
+        ),
+
+        linear-gradient(
+          135deg,
+          #111b38,
+          #1a2450
+        );
+    }
+
+    .thumbnail::after {
+
+      content:
+        "ANIMATED";
+
+      position: absolute;
+
+      top: 12px;
+
+      right: 12px;
+
+      padding:
+        5px 8px;
+
+      border-radius:
+        999px;
+
+      background:
+        rgba(0,0,0,.38);
+
+      border:
+        1px solid
+        rgba(255,255,255,.12);
+
+      font-size: 8px;
+
+      letter-spacing: 1px;
+
+      color: #b8c9f1;
+    }
+
+    .thumbnail img {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+      transition:
+        transform .5s ease;
+    }
+
+    .card:hover
+    .thumbnail img {
+
+      transform:
+        scale(1.06);
+    }
+
+    .thumbnail-placeholder {
+
+      text-align: center;
+
+      color: #8ca0cc;
+    }
+
+    .preview-orb {
+
+      width: 65px;
+
+      height: 65px;
+
+      margin:
+        auto auto 10px;
+
+      border-radius: 50%;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 25px;
+
+      box-shadow:
+        0 0 35px
+        rgba(91,140,255,.35);
+
+      animation:
+        orb 3s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes orb {
+
+      0%,100% {
+
+        transform:
+          scale(1);
+      }
+
+      50% {
+
+        transform:
+          scale(1.08);
+      }
+
+    }
+
+    .thumbnail-placeholder small {
+
+      color: #7e8db0;
+    }
+
+    /* ================= CARD BODY ================= */
+
+    .card-body {
+
+      padding: 17px;
+    }
+
+    .card h3 {
+
+      font-size: 16px;
+
+      margin-bottom: 7px;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+    }
+
+    .card-category {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 5px;
+
+      color: #92a8d5;
+
+      font-size: 10px;
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
+      padding:
+        5px 8px;
+
+      border-radius:
+        999px;
+    }
+
+    .open-btn {
+
+      width: 100%;
+
+      margin-top: 15px;
+
+      padding: 12px;
+
+      border: none;
+
+      border-radius: 11px;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          #4f82ff,
+          #7c5cff
+        );
+
+      color: white;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition: .25s;
+
+      box-shadow:
+        0 8px 22px
+        rgba(79,130,255,.16);
+    }
+
+    .open-btn:hover {
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 12px 28px
+        rgba(79,130,255,.28);
+    }
+
+    /* ================= EMPTY ================= */
+
+    .empty {
+
+      grid-column:
+        1 / -1;
+
+      text-align: center;
+
+      color: #71809d;
+
+      padding: 70px 10px;
+
+      border:
+        1px dashed
+        rgba(255,255,255,.08);
+
+      border-radius: 18px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+      padding: 25px 15px;
+
+      text-align: center;
+
+      color: #53617c;
+
+      font-size: 11px;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 850px) {
+
+      .grid {
+
+        grid-template-columns:
+          repeat(2, minmax(0,1fr));
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      header {
+
+        padding:
+          10px 12px;
+      }
+
+      .logo {
+
+        font-size: 13px;
+      }
+
+      .logo-mark {
+
+        width: 32px;
+
+        height: 32px;
+
+        border-radius: 9px;
+      }
+
+      nav {
+
+        gap: 2px;
+      }
+
+      nav a {
+
+        font-size: 10px;
+
+        padding:
+          7px 6px;
+      }
+
+      main {
+
+        padding:
+          35px 12px 55px;
+      }
+
+      .category-header {
+
+        padding:
+          25px 5px 35px;
+      }
+
+      .category-icon {
+
+        font-size: 45px;
+      }
+
+      .grid {
+
+        grid-template-columns: 1fr;
+      }
+
+      .thumbnail {
+
+        height: 190px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav">
+
+    <a
+      href="/"
+      class="logo"
+    >
+
+      <div class="logo-mark">
+        M
+      </div>
+
+      <span>
+        MAKYAMA MESSAGES
+      </span>
+
+    </a>
+
+    <nav>
+
+      <a href="/">
+        Home
+      </a>
+
+      <a href="/#categories">
+        Categories
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+
+<main>
+
+  <section class="category-header">
+
+    <a
+      href="/"
+      class="back"
+    >
+      ← Back to Home
+    </a>
+
+    <div
+      id="categoryIcon"
+      class="category-icon"
+    >
+      ✨
+    </div>
+
+    <h1 id="categoryTitle">
+      CATEGORY
+    </h1>
+
+    <p id="categoryDescription">
+      Animated Swahili Messages
+    </p>
+
+  </section>
+
+
+  <section
+    id="templates"
+    class="grid"
+  >
+
+    <div class="empty">
+
+      Loading animated messages...
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  ©
+  <span id="year"></span>
+  MAKYAMA MESSAGES · Animated Swahili Messages
+
+</footer>
+
+
+<script>
+
+  const templatesContainer =
+    document.getElementById("templates");
+
+  const categoryTitle =
+    document.getElementById("categoryTitle");
+
+  const categoryIcon =
+    document.getElementById("categoryIcon");
+
+  const categoryDescription =
+    document.getElementById(
+      "categoryDescription"
+    );
+
+
+  /* ================= CATEGORY DATA ================= */
+
+  const categoryInfo = {
+
+    Love: {
+      icon: "❤️",
+      description:
+        "Messages from the heart."
+    },
+
+    Birthday: {
+      icon: "🎂",
+      description:
+        "Beautiful messages for birthdays."
+    },
+
+    Celebration: {
+      icon: "🎉",
+      description:
+        "Messages for special moments worth celebrating."
+    },
+
+    Sad: {
+      icon: "💔",
+      description:
+        "Messages for expressing your feelings."
+    },
+
+    Funny: {
+      icon: "😂",
+      description:
+        "Funny messages to make someone smile."
+    },
+
+    Quotes: {
+      icon: "💎",
+      description:
+        "Words that inspire and motivate."
+    },
+
+    Appreciation: {
+      icon: "👏",
+      description:
+        "Beautiful ways to say thank you."
+    },
+
+    Other: {
+      icon: "🌟",
+      description:
+        "More special animated messages."
+    }
+
+  };
+
+
+  /* ================= GET CATEGORY ================= */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const requestedCategory =
+    params.get("category") || "Other";
+
+
+  const category =
+    Object.keys(categoryInfo)
+      .find(
+        item =>
+          item.toLowerCase() ===
+          requestedCategory.toLowerCase()
+      );
+
+
+  /* ================= SET CATEGORY ================= */
+
+  if (category) {
+
+    categoryTitle.textContent =
+      category.toUpperCase();
+
+    categoryIcon.textContent =
+      categoryInfo[category].icon;
+
+    categoryDescription.textContent =
+      categoryInfo[category].description;
+
+    document.title =
+      category.toUpperCase() +
+      " — MAKYAMA MESSAGES";
+
+  } else {
+
+    categoryTitle.textContent =
+      "CATEGORY";
+
+    categoryIcon.textContent =
+      "✨";
+
+    categoryDescription.textContent =
+      "Animated Swahili Messages";
+
+  }
+
+
+  /* ================= LOAD TEMPLATES ================= */
+
+  async function loadTemplates() {
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/templates"
+        );
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Unable to load templates."
+        );
+
+      }
+
+      let templates =
+        await response.json();
+
+      if (!Array.isArray(templates)) {
+
+        templates = [];
+
+      }
+
+
+      /* ================= FILTER CATEGORY ================= */
+
+      const filtered =
+        templates.filter(
+          template => {
+
+            const templateCategory =
+              String(
+                template.category || ""
+              ).trim().toLowerCase();
+
+            return (
+              category &&
+              templateCategory ===
+              category.toLowerCase()
+            );
+
+          }
+        );
+
+
+      renderTemplates(filtered);
+
+    } catch (error) {
+
+      templatesContainer.innerHTML = `
+
+        <div class="empty">
+
+          <div
+            style="
+              font-size:38px;
+              margin-bottom:12px;
+            "
+          >
+            📭
+          </div>
+
+          <div
+            style="
+              font-weight:700;
+              color:#9aa8c3;
+            "
+          >
+            Messages are currently unavailable.
+          </div>
+
+          <div
+            style="
+              font-size:11px;
+              margin-top:7px;
+            "
+          >
+            Please try again later.
+          </div>
+
+        </div>
+
+      `;
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /* ================= RENDER TEMPLATES ================= */
+
+  function renderTemplates(filtered) {
+
+    if (!filtered.length) {
+
+      templatesContainer.innerHTML = `
+
+        <div class="empty">
+
+          <div
+            style="
+              font-size:38px;
+              margin-bottom:12px;
+            "
+          >
+            📭
+          </div>
+
+          <div
+            style="
+              font-weight:700;
+              color:#9aa8c3;
+            "
+          >
+            No messages in this category yet.
+          </div>
+
+          <div
+            style="
+              font-size:11px;
+              margin-top:7px;
+            "
+          >
+            Check back later for new animated messages.
+          </div>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    templatesContainer.innerHTML =
+      filtered
+        .map(
+          (template, index) => {
+
+            const title =
+              escapeHtml(
+                template.title ||
+                "Untitled Message"
+              );
+
+
+            const templateCategory =
+              escapeHtml(
+                template.category ||
+                "Other"
+              );
+
+
+            let thumbnail = `
+
+              <div
+                class="thumbnail-placeholder"
+              >
+
+                <div
+                  class="preview-orb"
+                >
+                  ✨
+                </div>
+
+                <small>
+                  Animated Message
+                </small>
+
+              </div>
+
+            `;
+
+
+            if (template.thumbnail) {
+
+              thumbnail = `
+
+                <img
+                  src="${escapeHtml(
+                    template.thumbnail
+                  )}"
+                  alt="${title}"
+                  loading="lazy"
+                >
+
+              `;
+
+            }
+
+
+            return `
+
+              <article
+                class="card"
+                style="
+                  animation-delay:
+                  ${index * 70}ms
+                "
+              >
+
+                <div class="thumbnail">
+
+                  ${thumbnail}
+
+                </div>
+
+
+                <div class="card-body">
+
+                  <h3>
+                    ${title}
+                  </h3>
+
+
+                  <span
+                    class="card-category"
+                  >
+                    ✦ ${templateCategory}
+                  </span>
+
+
+                  <button
+                    class="open-btn"
+                    onclick="
+                      openTemplate(
+                        '${escapeJs(
+                          template.id
+                        )}'
+                      )
+                    "
+                  >
+                    ✨ Open Animated Message
+                  </button>
+
+                </div>
+
+              </article>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  }
+
+
+  /* ================= SECURITY ================= */
+
+  function escapeHtml(value) {
+
+    return String(value)
+
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+
+  }
+
+
+  function escapeJs(value) {
+
+    return String(value)
+
+      .replaceAll(
+        "\\",
+        "\\\\"
+      )
+
+      .replaceAll(
+        "'",
+        "\\'"
+      )
+
+      .replaceAll(
+        "\n",
+        "\\n"
+      )
+
+      .replaceAll(
+        "\r",
+        "\\r"
+      );
+
+  }
+
+
+  /* ================= OPEN TEMPLATE ================= */
+
+  function openTemplate(id) {
+
+    window.location.href =
+      "/template?id=" +
+      encodeURIComponent(id);
+
+  }
+
+
+  /* ================= YEAR ================= */
+
+  document.getElementById("year")
+    .textContent =
+    new Date().getFullYear();
+
+
+  /* ================= START ================= */
+
+  loadTemplates();
+
+</script>
+
+</body>
+
+</html>
