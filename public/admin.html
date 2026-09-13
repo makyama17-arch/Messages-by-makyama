@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
+«»
 
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>MAKYAMA Messages — Admin Dashboard</title>
-
-  <style>
+  <title>MAKYAMA Messages — Admin Dashboard</title>  <style>
 
     * {
       box-sizing: border-box;
@@ -55,8 +47,6 @@
         Helvetica,
         sans-serif;
     }
-
-    /* ================= HEADER ================= */
 
     header {
       position: sticky;
@@ -113,15 +103,11 @@
       font-weight: 500;
     }
 
-    /* ================= MAIN ================= */
-
     main {
       max-width: 1250px;
       margin: auto;
       padding: 25px 18px 60px;
     }
-
-    /* ================= LOGIN ================= */
 
     .login {
       width: min(430px, 100%);
@@ -195,8 +181,6 @@
       font-size: 12px;
       margin-bottom: 25px;
     }
-
-    /* ================= FORM ================= */
 
     label {
       display: block;
@@ -280,8 +264,6 @@
       display: none !important;
     }
 
-    /* ================= MESSAGE ================= */
-
     .message {
       padding: 11px 13px;
       margin-bottom: 14px;
@@ -291,8 +273,6 @@
       color: #9dc0ff;
       font-size: 12px;
     }
-
-    /* ================= DASHBOARD HEADER ================= */
 
     .dashboard-heading {
       display: flex;
@@ -318,8 +298,6 @@
         rgba(255,255,255,.05);
       border: 1px solid rgba(255,255,255,.08);
     }
-
-    /* ================= STATS ================= */
 
     .stats {
       display: grid;
@@ -365,8 +343,6 @@
       font-size: 30px;
     }
 
-    /* ================= PANELS ================= */
-
     .panel {
       padding: 21px;
       margin-bottom: 20px;
@@ -398,16 +374,12 @@
       margin-top: 4px;
     }
 
-    /* ================= ROW ================= */
-
     .row {
       display: grid;
       grid-template-columns:
         repeat(2, 1fr);
       gap: 13px;
     }
-
-    /* ================= CHECK ================= */
 
     .check {
       display: flex;
@@ -426,16 +398,12 @@
       accent-color: var(--blue);
     }
 
-    /* ================= ACTIONS ================= */
-
     .item-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 11px;
     }
-
-    /* ================= ITEMS ================= */
 
     .template-item,
     .ad-item {
@@ -484,8 +452,6 @@
       background: rgba(255,95,109,.08);
     }
 
-    /* ================= GRID LIST ================= */
-
     .insight-grid {
       display: grid;
       grid-template-columns:
@@ -493,15 +459,11 @@
       gap: 18px;
     }
 
-    /* ================= DIVIDER ================= */
-
     hr {
       border: 0;
       border-top: 1px solid rgba(255,255,255,.07);
       margin: 22px 0;
     }
-
-    /* ================= RESPONSIVE ================= */
 
     @media(max-width:900px) {
 
@@ -577,466 +539,436 @@
 
     }
 
-  </style>
+  </style></head><body><header>  <div class="header-inner"><div class="logo">
 
-</head>
+  <div class="logo-mark">
+    M
+  </div>
 
-<body>
+  <div class="logo-text">
+    MAKYAMA MESSAGES
+    <span>ADMIN CONTROL CENTER</span>
+  </div>
 
-<header>
+</div>
 
-  <div class="header-inner">
+<button
+  id="logoutBtn"
+  class="logout hidden"
+>
+  Logout
+</button>
 
-    <div class="logo">
+  </div></header><main>  <!-- ================= LOGIN ================= -->  <section
+    id="loginSection"
+    class="login"
+  ><div class="login-logo">
+  M
+</div>
 
-      <div class="logo-mark">
-        M
-      </div>
+<h1>
+  Admin Login
+</h1>
 
-      <div class="logo-text">
-        MAKYAMA MESSAGES
-        <span>ADMIN CONTROL CENTER</span>
-      </div>
+<p class="login-subtitle">
+  Manage MAKYAMA animated messages
+</p>
 
-    </div>
+<div id="loginMessage"></div>
 
-    <button
-      id="logoutBtn"
-      class="logout hidden"
-    >
-      Logout
-    </button>
+<label for="username">
+  Username
+</label>
+
+<input
+  id="username"
+  type="text"
+  placeholder="Enter username"
+  autocomplete="username"
+>
+
+<label for="password">
+  Password
+</label>
+
+<input
+  id="password"
+  type="password"
+  placeholder="Enter password"
+  autocomplete="current-password"
+>
+
+<button id="loginBtn">
+  🔐 Login to Dashboard
+</button>
+
+  </section>  <!-- ================= DASHBOARD ================= -->  <section
+    id="dashboard"
+    class="hidden"
+  ><div class="dashboard-heading">
+
+  <div>
+
+    <h1>
+      Dashboard
+    </h1>
+
+    <p>
+      Control your animated message platform.
+    </p>
 
   </div>
 
-</header>
+</div>
 
-<main>
+<!-- ================= STATS ================= -->
 
-  <!-- ================= LOGIN ================= -->
+<div class="stats">
 
-  <section
-    id="loginSection"
-    class="login"
+  <div class="stat">
+    <span>🟢 Live Users</span>
+    <strong id="onlineUsers">0</strong>
+  </div>
+
+  <div class="stat">
+    <span>👁 Total Views</span>
+    <strong id="totalViews">0</strong>
+  </div>
+
+  <div class="stat">
+    <span>⬇ Total Downloads</span>
+    <strong id="totalDownloads">0</strong>
+  </div>
+
+  <div class="stat">
+    <span>✨ Templates</span>
+    <strong id="templatesCount">0</strong>
+  </div>
+
+</div>
+
+<!-- ================= TEMPLATE FORM ================= -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <h2>
+        ✨ Add / Edit Animated Message
+      </h2>
+
+      <div class="panel-subtitle">
+        Create the Swahili message that users will see.
+      </div>
+
+    </div>
+
+  </div>
+
+  <input
+    type="hidden"
+    id="templateId"
   >
 
-    <div class="login-logo">
-      M
-    </div>
+  <div class="row">
 
-    <h1>
-      Admin Login
-    </h1>
+    <div>
 
-    <p class="login-subtitle">
-      Manage MAKYAMA animated messages
-    </p>
+      <label for="templateTitle">
+        Message Title
+      </label>
 
-    <div id="loginMessage"></div>
-
-    <label for="username">
-      Username
-    </label>
-
-    <input
-      id="username"
-      type="text"
-      placeholder="Enter username"
-      autocomplete="username"
-    >
-
-    <label for="password">
-      Password
-    </label>
-
-    <input
-      id="password"
-      type="password"
-      placeholder="Enter password"
-      autocomplete="current-password"
-    >
-
-    <button id="loginBtn">
-      🔐 Login to Dashboard
-    </button>
-
-  </section>
-
-  <!-- ================= DASHBOARD ================= -->
-
-  <section
-    id="dashboard"
-    class="hidden"
-  >
-
-    <div class="dashboard-heading">
-
-      <div>
-
-        <h1>
-          Dashboard
-        </h1>
-
-        <p>
-          Control your animated message platform.
-        </p>
-
-      </div>
+      <input
+        id="templateTitle"
+        placeholder="Example: Birthday Message"
+      >
 
     </div>
 
-    <!-- ================= STATS ================= -->
+    <div>
 
-    <div class="stats">
-
-      <div class="stat">
-        <span>🟢 Live Users</span>
-        <strong id="onlineUsers">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>👁 Total Views</span>
-        <strong id="totalViews">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>⬇ Total Downloads</span>
-        <strong id="totalDownloads">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>✨ Templates</span>
-        <strong id="templatesCount">0</strong>
-      </div>
-
-    </div>
-
-    <!-- ================= TEMPLATE FORM ================= -->
-
-    <section class="panel">
-
-      <div class="panel-header">
-
-        <div>
-
-          <h2>
-            ✨ Add / Edit Animated Message
-          </h2>
-
-          <div class="panel-subtitle">
-            Create the Swahili message that users will see.
-          </div>
-
-        </div>
-
-      </div>
-
-      <input
-        type="hidden"
-        id="templateId"
-      >
-
-      <div class="row">
-
-        <div>
-
-          <label for="templateTitle">
-            Message Title
-          </label>
-
-          <input
-            id="templateTitle"
-            placeholder="Example: Birthday Message"
-          >
-
-        </div>
-
-        <div>
-
-          <label for="templateCategory">
-            Category
-          </label>
-
-          <select id="templateCategory">
-
-            <option value="Love">
-              ❤️ Love
-            </option>
-
-            <option value="Birthday">
-              🎂 Birthday
-            </option>
-
-            <option value="Celebration">
-              🎉 Celebration
-            </option>
-
-            <option value="Sad">
-              💔 Sad
-            </option>
-
-            <option value="Funny">
-              😂 Funny
-            </option>
-
-            <option value="Quotes">
-              💎 Quotes
-            </option>
-
-            <option value="Appreciation">
-              👏 Appreciation
-            </option>
-
-            <option value="Other">
-              ✨ Other
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-      <label for="templateThumbnail">
-        Thumbnail URL — optional
+      <label for="templateCategory">
+        Category
       </label>
 
-      <input
-        id="templateThumbnail"
-        placeholder="https://example.com/image.jpg"
-      >
+      <select id="templateCategory">
 
-      <label for="templateHtml">
-        Animation HTML
-      </label>
-
-      <textarea
-        id="templateHtml"
-        placeholder="Paste your animated HTML here..."
-      ></textarea>
-
-      <label class="check">
-
-        <input
-          id="nameRequired"
-          type="checkbox"
-        >
-
-        User must enter a name
-
-      </label>
-
-      <label class="check">
-
-        <input
-          id="published"
-          type="checkbox"
-          checked
-        >
-
-        Publish this message
-
-      </label>
-
-      <div class="item-actions">
-
-        <button id="saveTemplateBtn">
-          ✓ Save Template
-        </button>
-
-        <button
-          id="clearTemplateBtn"
-          class="gray"
-        >
-          Clear
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- ================= TEMPLATES ================= -->
-
-    <section class="panel">
-
-      <div class="panel-header">
-
-        <div>
-
-          <h2>
-            💌 Message Templates
-          </h2>
-
-          <div class="panel-subtitle">
-            Manage all published and unpublished messages.
-          </div>
-
-        </div>
-
-      </div>
-
-      <div id="templateList">
-        Loading...
-      </div>
-
-    </section>
-
-    <!-- ================= ADS ================= -->
-
-    <section class="panel">
-
-      <div class="panel-header">
-
-        <div>
-
-          <h2>
-            📢 Advertisements
-          </h2>
-
-          <div class="panel-subtitle">
-            Control where advertisements appear.
-          </div>
-
-        </div>
-
-      </div>
-
-      <input
-        type="hidden"
-        id="adId"
-      >
-
-      <label for="adTitle">
-        Advertisement Title
-      </label>
-
-      <input
-        id="adTitle"
-        placeholder="Advertisement"
-      >
-
-      <label for="adPosition">
-        Position
-      </label>
-
-      <select id="adPosition">
-
-        <option value="top">
-          Top
+        <option value="Love">
+          ❤️ Love
         </option>
 
-        <option value="middle">
-          Middle
+        <option value="Birthday">
+          🎂 Birthday
         </option>
 
-        <option value="download">
-          Download
+        <option value="Celebration">
+          🎉 Celebration
+        </option>
+
+        <option value="Sad">
+          💔 Sad
+        </option>
+
+        <option value="Funny">
+          😂 Funny
+        </option>
+
+        <option value="Quotes">
+          💎 Quotes
+        </option>
+
+        <option value="Appreciation">
+          👏 Appreciation
+        </option>
+
+        <option value="Other">
+          ✨ Other
         </option>
 
       </select>
 
-      <label for="adCode">
-        Advertisement Code
-      </label>
+    </div>
 
-      <textarea
-        id="adCode"
-        placeholder="Paste your ad code here..."
-      ></textarea>
+  </div>
 
-      <label class="check">
+  <label for="templateThumbnail">
+    Thumbnail URL — optional
+  </label>
 
-        <input
-          id="adEnabled"
-          type="checkbox"
-        >
+  <input
+    id="templateThumbnail"
+    placeholder="https://example.com/image.jpg"
+  >
 
-        Enable this advertisement
+  <label for="templateHtml">
+    Animation HTML
+  </label>
 
-      </label>
+  <textarea
+    id="templateHtml"
+    placeholder="Paste your animated HTML here..."
+  ></textarea>
 
-      <div class="item-actions">
+  <label class="check">
 
-        <button id="saveAdBtn">
-          ✓ Save Advertisement
-        </button>
+    <input
+      id="nameRequired"
+      type="checkbox"
+    >
 
-        <button
-          id="clearAdBtn"
-          class="gray"
-        >
-          Clear
-        </button>
+    User must enter a name
+
+  </label>
+
+  <label class="check">
+
+    <input
+      id="published"
+      type="checkbox"
+      checked
+    >
+
+    Publish this message
+
+  </label>
+
+  <div class="item-actions">
+
+    <button id="saveTemplateBtn">
+      ✓ Save Template
+    </button>
+
+    <button
+      id="clearTemplateBtn"
+      class="gray"
+    >
+      Clear
+    </button>
+
+  </div>
+
+</section>
+
+<!-- ================= TEMPLATES ================= -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <h2>
+        💌 Message Templates
+      </h2>
+
+      <div class="panel-subtitle">
+        Manage all published and unpublished messages.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="templateList">
+    Loading...
+  </div>
+
+</section>
+
+<!-- ================= ADS ================= -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <h2>
+        📢 Advertisements
+      </h2>
+
+      <div class="panel-subtitle">
+        Control where advertisements appear.
+      </div>
+
+    </div>
+
+  </div>
+
+  <input
+    type="hidden"
+    id="adId"
+  >
+
+  <label for="adTitle">
+    Advertisement Title
+  </label>
+
+  <input
+    id="adTitle"
+    placeholder="Advertisement"
+  >
+
+  <label for="adPosition">
+    Position
+  </label>
+
+  <select id="adPosition">
+
+    <option value="top">
+      Top
+    </option>
+
+    <option value="middle">
+      Middle
+    </option>
+
+    <option value="download">
+      Download
+    </option>
+
+  </select>
+
+  <label for="adCode">
+    Advertisement Code
+  </label>
+
+  <textarea
+    id="adCode"
+    placeholder="Paste your ad code here..."
+  ></textarea>
+
+  <label class="check">
+
+    <input
+      id="adEnabled"
+      type="checkbox"
+    >
+
+    Enable this advertisement
+
+  </label>
+
+  <div class="item-actions">
+
+    <button id="saveAdBtn">
+      ✓ Save Advertisement
+    </button>
+
+    <button
+      id="clearAdBtn"
+      class="gray"
+    >
+      Clear
+    </button>
+
+  </div>
+
+  <hr>
+
+  <div id="adList">
+    Loading...
+  </div>
+
+</section>
+
+<!-- ================= INSIGHTS ================= -->
+
+<div class="insight-grid">
+
+  <section class="panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <h2>
+          🔥 Trending Templates
+        </h2>
+
+        <div class="panel-subtitle">
+          Most viewed messages.
+        </div>
 
       </div>
 
-      <hr>
+    </div>
 
-      <div id="adList">
-        Loading...
-      </div>
-
-    </section>
-
-    <!-- ================= INSIGHTS ================= -->
-
-    <div class="insight-grid">
-
-      <section class="panel">
-
-        <div class="panel-header">
-
-          <div>
-
-            <h2>
-              🔥 Trending Templates
-            </h2>
-
-            <div class="panel-subtitle">
-              Most viewed messages.
-            </div>
-
-          </div>
-
-        </div>
-
-        <div id="trending">
-          Loading...
-        </div>
-
-      </section>
-
-      <section class="panel">
-
-        <div class="panel-header">
-
-          <div>
-
-            <h2>
-              🏆 Most Downloaded
-            </h2>
-
-            <div class="panel-subtitle">
-              Messages users download most.
-            </div>
-
-          </div>
-
-        </div>
-
-        <div id="mostDownloaded">
-          Loading...
-        </div>
-
-      </section>
-
+    <div id="trending">
+      Loading...
     </div>
 
   </section>
 
-</main>
+  <section class="panel">
 
-<script>
+    <div class="panel-header">
+
+      <div>
+
+        <h2>
+          🏆 Most Downloaded
+        </h2>
+
+        <div class="panel-subtitle">
+          Messages users download most.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="mostDownloaded">
+      Loading...
+    </div>
+
+  </section>
+
+</div>
+
+  </section></main><script>
 
   /* ================= API ================= */
 
@@ -1069,6 +1001,7 @@
 
   }
 
+
   /* ================= ELEMENTS ================= */
 
   const loginSection =
@@ -1086,9 +1019,79 @@
       "logoutBtn"
     );
 
+
+  /* =====================================================
+     REFRESH LOCK
+     ===================================================== */
+
+  async function handleRefreshLock() {
+
+    const navigation =
+      performance.getEntriesByType(
+        "navigation"
+      )[0];
+
+    const isReload =
+      navigation &&
+      navigation.type === "reload";
+
+
+    if (!isReload) {
+      return false;
+    }
+
+
+    /*
+      Close the existing server session.
+      keepalive allows the request to continue
+      even while the page is being refreshed.
+    */
+
+    try {
+
+      await fetch(
+        "/api/admin/logout",
+        {
+          method: "POST",
+          credentials: "include",
+          keepalive: true
+        }
+      );
+
+    } catch (error) {
+
+      console.warn(
+        "Refresh logout request failed:",
+        error
+      );
+
+    }
+
+
+    showLogin();
+
+    return true;
+
+  }
+
+
   /* ================= LOGIN ================= */
 
   async function checkLogin() {
+
+    /*
+      IMPORTANT:
+      If this page was reached by Refresh,
+      never restore the dashboard.
+    */
+
+    const lockedByRefresh =
+      await handleRefreshLock();
+
+    if (lockedByRefresh) {
+      return;
+    }
+
 
     try {
 
@@ -1106,6 +1109,7 @@
 
   }
 
+
   function showLogin() {
 
     loginSection.classList.remove(
@@ -1120,7 +1124,22 @@
       "hidden"
     );
 
+
+    /*
+      Clear previous credentials from
+      the visible login form.
+    */
+
+    document.getElementById(
+      "username"
+    ).value = "";
+
+    document.getElementById(
+      "password"
+    ).value = "";
+
   }
+
 
   function showDashboard() {
 
@@ -1140,12 +1159,14 @@
 
   }
 
+
   document
     .getElementById("loginBtn")
     .addEventListener(
       "click",
       login
     );
+
 
   document
     .getElementById("password")
@@ -1156,11 +1177,14 @@
         if (
           event.key === "Enter"
         ) {
+
           login();
+
         }
 
       }
     );
+
 
   async function login() {
 
@@ -1179,6 +1203,7 @@
         "loginMessage"
       );
 
+
     if (!username || !password) {
 
       message.innerHTML = `
@@ -1191,6 +1216,7 @@
 
     }
 
+
     const button =
       document.getElementById(
         "loginBtn"
@@ -1200,6 +1226,7 @@
 
     button.textContent =
       "Checking...";
+
 
     try {
 
@@ -1221,9 +1248,11 @@
         }
       );
 
+
       message.innerHTML = "";
 
       showDashboard();
+
 
     } catch (error) {
 
@@ -1232,6 +1261,7 @@
           ❌ ${escapeHtml(error.message)}
         </div>
       `;
+
 
     } finally {
 
@@ -1243,6 +1273,7 @@
     }
 
   }
+
 
   /* ================= LOGOUT ================= */
 
@@ -1270,6 +1301,7 @@
     }
   );
 
+
   /* ================= DASHBOARD ================= */
 
   async function loadDashboard() {
@@ -1282,6 +1314,7 @@
 
   }
 
+
   /* ================= STATS ================= */
 
   async function loadStats() {
@@ -1293,12 +1326,14 @@
           "/api/admin/stats"
         );
 
+
       document.getElementById(
         "onlineUsers"
       ).textContent =
         formatNumber(
           data.onlineUsers
         );
+
 
       document.getElementById(
         "totalViews"
@@ -1307,6 +1342,7 @@
           data.totalViews
         );
 
+
       document.getElementById(
         "totalDownloads"
       ).textContent =
@@ -1314,12 +1350,14 @@
           data.totalDownloads
         );
 
+
       document.getElementById(
         "templatesCount"
       ).textContent =
         formatNumber(
           data.templatesCount
         );
+
 
       document.getElementById(
         "trending"
@@ -1329,6 +1367,7 @@
           "views"
         );
 
+
       document.getElementById(
         "mostDownloaded"
       ).innerHTML =
@@ -1336,6 +1375,7 @@
           data.mostDownloaded || [],
           "downloads"
         );
+
 
     } catch (error) {
 
@@ -1345,6 +1385,7 @@
 
   }
 
+
   function formatNumber(value) {
 
     return Number(
@@ -1352,6 +1393,7 @@
     ).toLocaleString();
 
   }
+
 
   function renderStatsList(
     items,
@@ -1367,6 +1409,7 @@
       `;
 
     }
+
 
     return items
       .map(item => `
@@ -1394,6 +1437,7 @@
 
   }
 
+
   /* ================= TEMPLATES ================= */
 
   async function loadTemplates() {
@@ -1403,12 +1447,14 @@
         "templateList"
       );
 
+
     try {
 
       const templates =
         await api(
           "/api/admin/templates"
         );
+
 
       if (!templates.length) {
 
@@ -1421,6 +1467,7 @@
         return;
 
       }
+
 
       list.innerHTML =
         templates
@@ -1506,6 +1553,7 @@
           )
           .join("");
 
+
     } catch (error) {
 
       list.innerHTML = `
@@ -1518,6 +1566,7 @@
 
   }
 
+
   /* ================= EDIT TEMPLATE ================= */
 
   async function editTemplate(id) {
@@ -1529,12 +1578,14 @@
           "/api/admin/templates"
         );
 
+
       const template =
         templates.find(
           item =>
             String(item.id) ===
             String(id)
         );
+
 
       if (!template) {
 
@@ -1546,15 +1597,18 @@
 
       }
 
+
       document.getElementById(
         "templateId"
       ).value =
         template.id || "";
 
+
       document.getElementById(
         "templateTitle"
       ).value =
         template.title || "";
+
 
       document.getElementById(
         "templateCategory"
@@ -1562,15 +1616,18 @@
         template.category ||
         "Other";
 
+
       document.getElementById(
         "templateThumbnail"
       ).value =
         template.thumbnail || "";
 
+
       document.getElementById(
         "templateHtml"
       ).value =
         template.html || "";
+
 
       document.getElementById(
         "nameRequired"
@@ -1579,6 +1636,7 @@
           template.nameRequired
         );
 
+
       document.getElementById(
         "published"
       ).checked =
@@ -1586,10 +1644,12 @@
           template.published
         );
 
+
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
+
 
     } catch (error) {
 
@@ -1600,6 +1660,7 @@
     }
 
   }
+
 
   /* ================= PREVIEW ================= */
 
@@ -1612,6 +1673,7 @@
     );
 
   }
+
 
   /* ================= DELETE TEMPLATE ================= */
 
@@ -1627,6 +1689,7 @@
 
     }
 
+
     try {
 
       await api(
@@ -1637,7 +1700,9 @@
         }
       );
 
+
       await loadDashboard();
+
 
     } catch (error) {
 
@@ -1648,6 +1713,7 @@
     }
 
   }
+
 
   /* ================= SAVE TEMPLATE ================= */
 
@@ -1660,12 +1726,14 @@
       saveTemplate
     );
 
+
   async function saveTemplate() {
 
     const id =
       document.getElementById(
         "templateId"
       ).value;
+
 
     const payload = {
 
@@ -1701,6 +1769,7 @@
 
     };
 
+
     if (
       !payload.title ||
       !payload.html
@@ -1713,6 +1782,7 @@
       return;
 
     }
+
 
     try {
 
@@ -1740,13 +1810,16 @@
         }
       );
 
+
       clearTemplateForm();
 
       await loadDashboard();
 
+
       alert(
         "✓ Template saved successfully."
       );
+
 
     } catch (error) {
 
@@ -1757,6 +1830,7 @@
     }
 
   }
+
 
   /* ================= CLEAR TEMPLATE ================= */
 
@@ -1792,6 +1866,7 @@
 
   }
 
+
   document
     .getElementById(
       "clearTemplateBtn"
@@ -1800,6 +1875,7 @@
       "click",
       clearTemplateForm
     );
+
 
   /* ================= ADS ================= */
 
@@ -1810,12 +1886,14 @@
         "adList"
       );
 
+
     try {
 
       const ads =
         await api(
           "/api/admin/ads"
         );
+
 
       if (!ads.length) {
 
@@ -1828,6 +1906,7 @@
         return;
 
       }
+
 
       list.innerHTML =
         ads
@@ -1892,6 +1971,7 @@
           )
           .join("");
 
+
     } catch (error) {
 
       list.innerHTML = `
@@ -1904,6 +1984,7 @@
 
   }
 
+
   /* ================= EDIT AD ================= */
 
   async function editAd(id) {
@@ -1915,6 +1996,7 @@
           "/api/admin/ads"
         );
 
+
       const ad =
         ads.find(
           item =>
@@ -1922,17 +2004,21 @@
             String(id)
         );
 
+
       if (!ad) return;
+
 
       document.getElementById(
         "adId"
       ).value =
         ad.id || "";
 
+
       document.getElementById(
         "adTitle"
       ).value =
         ad.title || "";
+
 
       document.getElementById(
         "adPosition"
@@ -1940,10 +2026,12 @@
         ad.position ||
         "middle";
 
+
       document.getElementById(
         "adCode"
       ).value =
         ad.code || "";
+
 
       document.getElementById(
         "adEnabled"
@@ -1951,6 +2039,7 @@
         Boolean(
           ad.enabled
         );
+
 
     } catch (error) {
 
@@ -1961,6 +2050,7 @@
     }
 
   }
+
 
   /* ================= DELETE AD ================= */
 
@@ -1976,6 +2066,7 @@
 
     }
 
+
     try {
 
       await api(
@@ -1986,7 +2077,9 @@
         }
       );
 
+
       await loadAds();
+
 
     } catch (error) {
 
@@ -1997,6 +2090,7 @@
     }
 
   }
+
 
   /* ================= SAVE AD ================= */
 
@@ -2009,12 +2103,14 @@
       saveAd
     );
 
+
   async function saveAd() {
 
     const id =
       document.getElementById(
         "adId"
       ).value;
+
 
     const payload = {
 
@@ -2040,6 +2136,7 @@
 
     };
 
+
     if (
       !payload.title
     ) {
@@ -2051,6 +2148,7 @@
       return;
 
     }
+
 
     try {
 
@@ -2078,13 +2176,16 @@
         }
       );
 
+
       clearAdForm();
 
       await loadAds();
 
+
       alert(
         "✓ Advertisement saved."
       );
+
 
     } catch (error) {
 
@@ -2095,6 +2196,7 @@
     }
 
   }
+
 
   /* ================= CLEAR AD ================= */
 
@@ -2122,6 +2224,7 @@
 
   }
 
+
   document
     .getElementById(
       "clearAdBtn"
@@ -2130,6 +2233,7 @@
       "click",
       clearAdForm
     );
+
 
   /* ================= ESCAPE ================= */
 
@@ -2144,6 +2248,7 @@
 
   }
 
+
   function escapeJs(value) {
 
     return String(value)
@@ -2154,12 +2259,9 @@
 
   }
 
+
   /* ================= START ================= */
 
   checkLogin();
 
-</script>
-
-</body>
-
-          </html>
+</script></body></html>
