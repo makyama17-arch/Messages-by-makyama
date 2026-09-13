@@ -975,12 +975,59 @@ main{
 
 /* ================= FOOTER ================= */
 
-footer{
+.site-footer{
   border-top:1px solid rgba(255,255,255,.07);
-  padding:25px 15px;
+  padding:30px 15px 22px;
+  margin-top:35px;
   text-align:center;
+}
+
+.footer-socials{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.footer-socials a{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  color:#9ba8c7;
+  text-decoration:none;
+  transition:.25s ease;
+}
+
+.footer-socials a:hover{
+  color:#fff;
+  background:rgba(59,130,246,.16);
+  border-color:rgba(59,130,246,.45);
+  transform:translateY(-3px);
+}
+
+.footer-socials svg{
+  width:18px;
+  height:18px;
+  fill:currentColor;
+  stroke:currentColor;
+  stroke-width:1.5;
+}
+
+.footer-socials .youtube-play{
+  fill:#050816;
+  stroke:none;
+}
+
+.footer-copyright{
   color:#53617c;
   font-size:11px;
+  line-height:1.6;
 }
 
 /* ================= MOBILE ================= */
@@ -1145,257 +1192,455 @@ footer{
   .contact{
     padding-top:55px;
   }
+
+  .footer-socials{
+    gap:8px;
+  }
+
+  .footer-socials a{
+    width:34px;
+    height:34px;
+  }
+
 }
-</style></head><body><!-- SOCIAL BAR --><div id="socialBarAd"></div><!-- HEADER --><header>
-  <div class="nav"><a href="/" style="text-decoration:none;color:white;">
-  <div class="logo">
-    <div class="logo-mark">M</div>
-    <span>MAKYAMA MESSAGES</span>
+</style></head><body>
+
+<!-- SOCIAL BAR -->
+<div id="socialBarAd"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="nav">
+
+    <a href="/" style="text-decoration:none;color:white;">
+      <div class="logo">
+        <div class="logo-mark">M</div>
+        <span>MAKYAMA MESSAGES</span>
+      </div>
+    </a>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="#templates-section">Templates</a>
+      <a href="#categories">Categories</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="/admin" class="admin-link">🔐 Admin</a>
+    </nav>
+
   </div>
-</a>
+</header>
 
-<nav>
-  <a href="/">Home</a>
-  <a href="#templates-section">Templates</a>
-  <a href="#categories">Categories</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
-  <a href="/admin" class="admin-link">🔐 Admin</a>
-</nav>
+<main>
 
-  </div>
-</header><main><!-- HERO --><section class="hero">  <div class="hero-content"><div class="hero-badge">
-  <span class="badge-dot"></span>
-  Animated Swahili Messages
-</div>
+<!-- HERO -->
+<section class="hero">
 
-<h1>
-  Make Your Message
-  <br>
-  <span class="gradient">Come Alive.</span>
-</h1>
+  <div class="hero-content">
 
-<p>
-  Create and share beautiful animated Swahili
-  messages for love, birthdays, celebrations,
-  appreciation and every special moment.
-</p>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Animated Swahili Messages
+    </div>
 
-<a href="#templates-section" class="hero-cta">
-  Create Message →
-</a>
+    <h1>
+      Make Your Message
+      <br>
+      <span class="gradient">Come Alive.</span>
+    </h1>
 
-<div class="hero-features">
-  <div class="hero-feature">
-    <span>✓</span> Fast & Easy
-  </div>
+    <p>
+      Create and share beautiful animated Swahili
+      messages for love, birthdays, celebrations,
+      appreciation and every special moment.
+    </p>
 
-  <div class="hero-feature">
-    <span>✓</span> Beautiful Templates
-  </div>
+    <a href="#templates-section" class="hero-cta">
+      Create Message →
+    </a>
 
-  <div class="hero-feature">
-    <span>✓</span> Share Anywhere
-  </div>
-</div>
+    <div class="hero-features">
 
-  </div>  <div class="hero-phone-wrap"><div class="hero-phone-glow"></div>
-
-<div class="hero-preview one">
-  ❤️
-  <strong>Love</strong>
-  <small>Express your heart</small>
-</div>
-
-<div class="hero-preview two">
-  🎂
-  <strong>Birthday</strong>
-  <small>Celebrate their day</small>
-</div>
-
-<div class="hero-phone">
-
-  <div class="hero-phone-screen">
-
-    <div class="phone-top">
-
-      <div class="phone-brand">
-        <div class="phone-logo">M</div>
-        MAKYAMA
+      <div class="hero-feature">
+        <span>✓</span> Fast & Easy
       </div>
 
-      <span>•••</span>
+      <div class="hero-feature">
+        <span>✓</span> Beautiful Templates
+      </div>
+
+      <div class="hero-feature">
+        <span>✓</span> Share Anywhere
+      </div>
 
     </div>
 
-    <div class="phone-message">
+  </div>
 
-      <div class="phone-message-icon">💙</div>
+  <div class="hero-phone-wrap">
 
-      <h3>
-        You Are
-        <br>
-        Special
-      </h3>
+    <div class="hero-phone-glow"></div>
 
-      <p>
-        Never forget how amazing you are.
-        The world is brighter because you exist.
-      </p>
+    <div class="hero-preview one">
+      ❤️
+      <strong>Love</strong>
+      <small>Express your heart</small>
+    </div>
+
+    <div class="hero-preview two">
+      🎂
+      <strong>Birthday</strong>
+      <small>Celebrate their day</small>
+    </div>
+
+    <div class="hero-phone">
+
+      <div class="hero-phone-screen">
+
+        <div class="phone-top">
+
+          <div class="phone-brand">
+            <div class="phone-logo">M</div>
+            MAKYAMA
+          </div>
+
+          <span>•••</span>
+
+        </div>
+
+        <div class="phone-message">
+
+          <div class="phone-message-icon">💙</div>
+
+          <h3>
+            You Are
+            <br>
+            Special
+          </h3>
+
+          <p>
+            Never forget how amazing you are.
+            The world is brighter because you exist.
+          </p>
+
+        </div>
+
+        <div class="phone-share">
+          ↗ Share
+        </div>
+
+      </div>
 
     </div>
 
-    <div class="phone-share">
-      ↗ Share
-    </div>
+  </div>
+
+</section>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+
+  <div class="search-box">
+
+    <span class="search-icon">⌕</span>
+
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search animated messages..."
+      autocomplete="off"
+    >
 
   </div>
 
 </div>
 
-  </div></section><!-- SEARCH --><div class="search-wrap">  <div class="search-box"><span class="search-icon">⌕</span>
+<!-- TOP AD -->
+<div id="topAd" class="ad" style="display:none;"></div>
 
-<input
-  type="search"
-  id="searchInput"
-  placeholder="Search animated messages..."
-  autocomplete="off"
->
+<!-- CATEGORIES -->
+<section id="categories">
 
-  </div></div><!-- TOP AD --><div id="topAd" class="ad" style="display:none;"></div><!-- CATEGORIES --><section id="categories">  <div class="section-head"><div>
-  <h2>Explore Categories</h2>
-  <p>Find the perfect message for your moment.</p>
-</div>
+  <div class="section-head">
 
-  </div>  <div class="categories"><button class="category active" data-category="All">
-  <span class="category-icon">✨</span>
-  <span class="category-name">All Messages</span>
-  <span class="category-desc">Explore everything</span>
-</button>
+    <div>
+      <h2>Explore Categories</h2>
+      <p>Find the perfect message for your moment.</p>
+    </div>
 
-<button class="category" data-category="Love">
-  <span class="category-icon">❤️</span>
-  <span class="category-name">Love</span>
-  <span class="category-desc">Messages from the heart</span>
-</button>
+  </div>
 
-<button class="category" data-category="Birthday">
-  <span class="category-icon">🎂</span>
-  <span class="category-name">Birthday</span>
-  <span class="category-desc">Celebrate their day</span>
-</button>
+  <div class="categories">
 
-<button class="category" data-category="Celebration">
-  <span class="category-icon">🎉</span>
-  <span class="category-name">Celebration</span>
-  <span class="category-desc">Moments worth celebrating</span>
-</button>
+    <button class="category active" data-category="All">
+      <span class="category-icon">✨</span>
+      <span class="category-name">All Messages</span>
+      <span class="category-desc">Explore everything</span>
+    </button>
 
-<button class="category" data-category="Sad">
-  <span class="category-icon">💔</span>
-  <span class="category-name">Sad</span>
-  <span class="category-desc">Express your feelings</span>
-</button>
+    <button class="category" data-category="Love">
+      <span class="category-icon">❤️</span>
+      <span class="category-name">Love</span>
+      <span class="category-desc">Messages from the heart</span>
+    </button>
 
-<button class="category" data-category="Funny">
-  <span class="category-icon">😂</span>
-  <span class="category-name">Funny</span>
-  <span class="category-desc">Make someone smile</span>
-</button>
+    <button class="category" data-category="Birthday">
+      <span class="category-icon">🎂</span>
+      <span class="category-name">Birthday</span>
+      <span class="category-desc">Celebrate their day</span>
+    </button>
 
-<button class="category" data-category="Quotes">
-  <span class="category-icon">💎</span>
-  <span class="category-name">Quotes</span>
-  <span class="category-desc">Words that inspire</span>
-</button>
+    <button class="category" data-category="Celebration">
+      <span class="category-icon">🎉</span>
+      <span class="category-name">Celebration</span>
+      <span class="category-desc">Moments worth celebrating</span>
+    </button>
 
-<button class="category" data-category="Appreciation">
-  <span class="category-icon">👏</span>
-  <span class="category-name">Appreciation</span>
-  <span class="category-desc">Say thank you beautifully</span>
-</button>
+    <button class="category" data-category="Sad">
+      <span class="category-icon">💔</span>
+      <span class="category-name">Sad</span>
+      <span class="category-desc">Express your feelings</span>
+    </button>
 
-<button class="category" data-category="Other">
-  <span class="category-icon">🌟</span>
-  <span class="category-name">Other</span>
-  <span class="category-desc">More special messages</span>
-</button>
+    <button class="category" data-category="Funny">
+      <span class="category-icon">😂</span>
+      <span class="category-name">Funny</span>
+      <span class="category-desc">Make someone smile</span>
+    </button>
 
-  </div></section><!-- TRENDING --><section id="trending-section">  <div class="section-head"><div>
-  <h2>🔥 Trending Now</h2>
-  <p>The messages people are viewing and downloading most.</p>
-</div>
+    <button class="category" data-category="Quotes">
+      <span class="category-icon">💎</span>
+      <span class="category-name">Quotes</span>
+      <span class="category-desc">Words that inspire</span>
+    </button>
 
-  </div>  <section id="trendingTemplates" class="grid"><div class="empty">
-  Loading trending messages...
-</div>
+    <button class="category" data-category="Appreciation">
+      <span class="category-icon">👏</span>
+      <span class="category-name">Appreciation</span>
+      <span class="category-desc">Say thank you beautifully</span>
+    </button>
 
-  </section></section><!-- MIDDLE AD --><div id="middleAd" class="ad" style="display:none;"></div><!-- ALL TEMPLATES --><section id="templates-section">  <div class="section-head"><div>
-  <h2>Animated Messages</h2>
-  <p>Choose a message and bring it to life.</p>
-</div>
+    <button class="category" data-category="Other">
+      <span class="category-icon">🌟</span>
+      <span class="category-name">Other</span>
+      <span class="category-desc">More special messages</span>
+    </button>
 
-  </div>  <section id="templates" class="grid"><div class="empty">
-  Loading animated messages...
-</div>
+  </div>
 
-  </section></section><!-- ABOUT --><section id="about" class="about-box">  <div class="about-label">
+</section>
+
+<!-- TRENDING -->
+<section id="trending-section">
+
+  <div class="section-head">
+
+    <div>
+      <h2>🔥 Trending Now</h2>
+      <p>The messages people are viewing and downloading most.</p>
+    </div>
+
+  </div>
+
+  <section id="trendingTemplates" class="grid">
+
+    <div class="empty">
+      Loading trending messages...
+    </div>
+
+  </section>
+
+</section>
+
+<!-- MIDDLE AD -->
+<div id="middleAd" class="ad" style="display:none;"></div>
+
+<!-- ALL TEMPLATES -->
+<section id="templates-section">
+
+  <div class="section-head">
+
+    <div>
+      <h2>Animated Messages</h2>
+      <p>Choose a message and bring it to life.</p>
+    </div>
+
+  </div>
+
+  <section id="templates" class="grid">
+
+    <div class="empty">
+      Loading animated messages...
+    </div>
+
+  </section>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-box">
+
+  <div class="about-label">
     WHY CHOOSE MAKYAMA MESSAGES?
-  </div>  <h2>
+  </div>
+
+  <h2>
     Simple. Fast. Beautiful.
-  </h2>  <p>
+  </h2>
+
+  <p>
     MAKYAMA MESSAGES makes it easy to create beautiful
     animated messages and share special moments with
     the people you care about.
-  </p>  <div class="about-features"><div class="about-feature">
-  <div class="about-feature-icon">✨</div>
-  <strong>100+ Templates</strong>
-  <small>Beautiful message designs for different occasions.</small>
-</div>
+  </p>
 
-<div class="about-feature">
-  <div class="about-feature-icon">📱</div>
-  <strong>Mobile Friendly</strong>
-  <small>Designed to work smoothly on phones and computers.</small>
-</div>
+  <div class="about-features">
 
-<div class="about-feature">
-  <div class="about-feature-icon">🔗</div>
-  <strong>Easy Sharing</strong>
-  <small>Share your favorite messages with a simple link.</small>
-</div>
+    <div class="about-feature">
+      <div class="about-feature-icon">✨</div>
+      <strong>100+ Templates</strong>
+      <small>Beautiful message designs for different occasions.</small>
+    </div>
 
-<div class="about-feature">
-  <div class="about-feature-icon">🆓</div>
-  <strong>Free to Use</strong>
-  <small>Create and share messages without complicated steps.</small>
-</div>
+    <div class="about-feature">
+      <div class="about-feature-icon">📱</div>
+      <strong>Mobile Friendly</strong>
+      <small>Designed to work smoothly on phones and computers.</small>
+    </div>
 
-  </div></section><!-- CONTACT --><section id="contact" class="contact">  <div class="contact-box"><h2>Need Help?</h2>
+    <div class="about-feature">
+      <div class="about-feature-icon">🔗</div>
+      <strong>Easy Sharing</strong>
+      <small>Share your favorite messages with a simple link.</small>
+    </div>
 
-<p>
-  Contact us directly through WhatsApp.
-</p>
+    <div class="about-feature">
+      <div class="about-feature-icon">🆓</div>
+      <strong>Free to Use</strong>
+      <small>Create and share messages without complicated steps.</small>
+    </div>
 
-<a
-  class="whatsapp"
-  href="https://wa.me/255671952054"
-  target="_blank"
-  rel="noopener"
-  aria-label="Contact us on WhatsApp"
-  title="Contact us on WhatsApp"
->
+  </div>
 
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 .0 .16 5.34 .16 11.91c0 2.1 .55 4.15 1.6 5.96L.06 24l6.27-1.64a11.9 11.9 0 0 0 5.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.91 0-3.18-1.24-6.17-3.45-8.43ZM12.07 21.8h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.72.97.99-3.63-.23-.37a9.86 9.86 0 0 1-1.51-5.27C2.2 6.44 6.63 2 12.06 2a9.83 9.83 0 0 1 7 2.9 9.91 9.91 0 0 1 2.9 7.02c0 5.43-4.42 9.88-9.89 9.88Zm5.42-7.4c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.46-.88-.78-1.47-1.74-1.64-2.04-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.1 4.49.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
-  </svg>
+</section>
 
-</a>
+<!-- CONTACT -->
+<section id="contact" class="contact">
 
-  </div></section></main><footer>
-  © <span id="year"></span>
-  MAKYAMA MESSAGES · Animated Swahili Messages
-</footer><script>
+  <div class="contact-box">
+
+    <h2>Need Help?</h2>
+
+    <p>
+      Contact us directly through WhatsApp.
+    </p>
+
+    <a
+      class="whatsapp"
+      href="https://wa.me/255671952054"
+      target="_blank"
+      rel="noopener"
+      aria-label="Contact us on WhatsApp"
+      title="Contact us on WhatsApp"
+    >
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 .0 .16 5.34 .16 11.91c0 2.1 .55 4.15 1.6 5.96L.06 24l6.27-1.64a11.9 11.9 0 0 0 5.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.91 0-3.18-1.24-6.17-3.45-8.43ZM12.07 21.8h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.72.97.99-3.63-.23-.37a9.86 9.86 0 0 1-1.51-5.27C2.2 6.44 6.63 2 12.06 2a9.83 9.83 0 0 1 7 2.9 9.91 9.91 0 0 1 2.9 7.02c0 5.43-4.42 9.88-9.89 9.88Zm5.42-7.4c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.46-.88-.78-1.47-1.74-1.64-2.04-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.1 4.49.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
+
+      </svg>
+
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+  <div class="footer-socials">
+
+    <!-- Facebook -->
+    <a
+      href="https://www.facebook.com/Makyama17"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+      title="Facebook"
+    >
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/>
+      </svg>
+
+    </a>
+
+    <!-- TikTok -->
+    <a
+      href="https://www.tiktok.com/@makyama_media"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="TikTok"
+      title="TikTok"
+    >
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15.5 3c.4 2.4 1.8 4 4.5 4.2v3.3c-1.6-.1-3-.6-4.5-1.6v6.5c0 4-2.6 6.6-6.4 6.6C5.6 22 3 19.5 3 16c0-3.7 2.8-6.3 6.5-6.3.4 0 .8 0 1.2.1v3.5c-.4-.1-.8-.2-1.2-.2-1.6 0-2.9 1.1-2.9 2.9 0 1.6 1.2 2.8 2.8 2.8 1.8 0 2.8-1.1 2.8-3.1V3h3.3z"/>
+      </svg>
+
+    </a>
+
+    <!-- Instagram -->
+    <a
+      href="https://www.instagram.com/makyama_17"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      title="Instagram"
+    >
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1"/>
+      </svg>
+
+    </a>
+
+    <!-- YouTube -->
+    <a
+      href="https://youtube.com/@makyamamedia"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="YouTube"
+      title="YouTube"
+    >
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+
+        <path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.5a2.8 2.8 0 0 0-2 2C2 9 2 12 2 12s0 3 .4 4.8a2.8 2.8 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.8 2.8 0 0 0 2-2C22 15 22 12 22 12s0-3-.4-4.8z"/>
+
+        <polygon
+          points="10,9 16,12 10,15"
+          class="youtube-play"
+        />
+
+      </svg>
+
+    </a>
+
+  </div>
+
+  <div class="footer-copyright">
+    © <span id="year"></span> MAKYAMA MESSAGES · All rights reserved.
+  </div>
+
+</footer>
+
+<script>
 
 const templatesContainer =
   document.getElementById("templates");
