@@ -1,2102 +1,2293 @@
-<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8"><meta
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
 
 «»
 
-  <title>MAKYAMA Message</title>  <style>
+<title>MAKYAMA Message</title><style>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    :root {
-      --bg: #050816;
-      --panel: rgba(15, 23, 47, .78);
-      --line: rgba(255,255,255,.10);
-      --text: #ffffff;
-      --muted: #8d9bb9;
-      --blue: #5b8cff;
-      --purple: #8b5cff;
-      --cyan: #39d9ff;
-      --green: #25d366;
-    }
+:root {
+  --bg: #050816;
+  --panel: rgba(15, 23, 47, .78);
+  --line: rgba(255,255,255,.10);
+  --text: #ffffff;
+  --muted: #8d9bb9;
+  --blue: #5b8cff;
+  --purple: #8b5cff;
+  --cyan: #39d9ff;
+  --green: #25d366;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+html {
+  scroll-behavior: smooth;
+}
 
-    body {
-      min-height: 100vh;
+body {
 
-      background:
-        radial-gradient(
-          circle at 15% 10%,
-          rgba(91,140,255,.15),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 85% 20%,
-          rgba(139,92,255,.13),
-          transparent 30%
-        ),
-        var(--bg);
+  min-height: 100vh;
 
-      color: var(--text);
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(91,140,255,.15),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(139,92,255,.13),
+      transparent 30%
+    ),
+    var(--bg);
 
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
+  color: var(--text);
 
-      overflow-x: hidden;
-    }
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    /* ================= HEADER ================= */
+  overflow-x: hidden;
+}
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
 
-      padding: 14px 18px;
+/* ================= HEADER ================= */
 
-      background:
-        rgba(5,8,22,.78);
+header {
 
-      backdrop-filter:
-        blur(18px);
+  position: sticky;
 
-      border-bottom:
-        1px solid var(--line);
-    }
+  top: 0;
 
-    .header-inner {
-      max-width: 1000px;
-      margin: auto;
+  z-index: 1000;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  padding: 14px 18px;
 
-      gap: 15px;
-    }
+  background:
+    rgba(5,8,22,.78);
 
-    .back {
-      display: inline-flex;
-      align-items: center;
+  backdrop-filter:
+    blur(18px);
 
-      gap: 8px;
+  border-bottom:
+    1px solid var(--line);
+}
 
-      color: #d8e2f7;
+.header-inner {
 
-      text-decoration: none;
+  max-width: 1000px;
 
-      font-size: 13px;
+  margin: auto;
 
-      padding: 9px 12px;
+  display: flex;
 
-      border-radius: 10px;
+  align-items: center;
 
-      transition: .25s;
-    }
+  justify-content: space-between;
 
-    .back:hover {
-      background:
-        rgba(255,255,255,.07);
+  gap: 15px;
+}
 
-      color: white;
+.back {
 
-      transform:
-        translateX(-3px);
-    }
+  display: inline-flex;
 
-    .brand {
-      font-size: 13px;
+  align-items: center;
 
-      font-weight: 900;
+  gap: 8px;
 
-      letter-spacing: .7px;
+  color: #d8e2f7;
 
-      color: #9eb5e8;
-    }
+  text-decoration: none;
 
-    /* ================= PAGE ================= */
+  font-size: 13px;
 
-    .page {
-      max-width: 1000px;
+  padding: 9px 12px;
 
-      margin: auto;
+  border-radius: 10px;
 
-      padding:
-        25px 18px 60px;
-    }
+  transition: .25s;
+}
 
-    .title-area {
-      text-align: center;
+.back:hover {
 
-      padding:
-        15px 0 25px;
-    }
+  background:
+    rgba(255,255,255,.07);
 
-    .eyebrow {
-      display: inline-flex;
+  color: white;
 
-      align-items: center;
+  transform:
+    translateX(-3px);
+}
 
-      gap: 7px;
+.brand {
 
-      color: #9bb5ed;
+  font-size: 13px;
 
-      font-size: 10px;
+  font-weight: 900;
 
-      letter-spacing: 1.5px;
+  letter-spacing: .7px;
 
-      text-transform:
-        uppercase;
+  color: #9eb5e8;
+}
 
-      margin-bottom: 11px;
-    }
 
-    .eyebrow-dot {
-      width: 6px;
-      height: 6px;
+/* ================= PAGE ================= */
 
-      border-radius: 50%;
+.page {
 
-      background: #55e9a3;
+  max-width: 1000px;
 
-      box-shadow:
-        0 0 12px #55e9a3;
+  margin: auto;
 
-      animation:
-        pulse 1.5s infinite;
-    }
+  padding:
+    25px 18px 60px;
+}
 
-    @keyframes pulse {
+.title-area {
 
-      0%,100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+  text-align: center;
 
-      50% {
-        transform: scale(.65);
-        opacity: .5;
-      }
+  padding:
+    15px 0 25px;
+}
 
-    }
+.eyebrow {
 
-    .title {
-      font-size:
-        clamp(28px, 6vw, 48px);
+  display: inline-flex;
 
-      line-height: 1.1;
+  align-items: center;
 
-      font-weight: 900;
+  gap: 7px;
 
-      letter-spacing:
-        -1.5px;
+  color: #9bb5ed;
 
-      background:
-        linear-gradient(
-          90deg,
-          #fff,
-          #74dcff,
-          #9e80ff,
-          #fff
-        );
+  font-size: 10px;
 
-      background-size:
-        250% auto;
+  letter-spacing: 1.5px;
 
-      -webkit-background-clip:
-        text;
+  text-transform: uppercase;
 
-      background-clip:
-        text;
+  margin-bottom: 11px;
+}
 
-      color: transparent;
+.eyebrow-dot {
 
-      animation:
-        titleGradient 5s linear infinite;
-    }
+  width: 6px;
 
-    @keyframes titleGradient {
+  height: 6px;
 
-      to {
-        background-position:
-          250% center;
-      }
+  border-radius: 50%;
 
-    }
+  background: #55e9a3;
 
-    /* ================= NAME ================= */
+  box-shadow:
+    0 0 12px #55e9a3;
 
-    .name-box {
-      display: none;
+  animation:
+    pulse 1.5s infinite;
+}
 
-      margin:
-        0 auto 17px;
+@keyframes pulse {
 
-      max-width: 620px;
-    }
+  0%,100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 
-    .name-label {
-      display: block;
+  50% {
+    transform: scale(.65);
+    opacity: .5;
+  }
 
-      color: #91a0bd;
+}
 
-      font-size: 11px;
+.title {
 
-      margin:
-        0 0 7px 4px;
-    }
+  font-size:
+    clamp(28px, 6vw, 48px);
 
-    .name-input-wrap {
-      position: relative;
-    }
+  line-height: 1.1;
 
-    .name-input-icon {
-      position: absolute;
+  font-weight: 900;
 
-      left: 15px;
+  letter-spacing: -1.5px;
 
-      top: 50%;
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #74dcff,
+      #9e80ff,
+      #fff
+    );
 
-      transform:
-        translateY(-50%);
+  background-size:
+    250% auto;
 
-      font-size: 17px;
+  -webkit-background-clip:
+    text;
 
-      opacity: .7;
-    }
+  background-clip:
+    text;
 
-    .name-box input {
-      width: 100%;
+  color: transparent;
 
-      height: 52px;
+  animation:
+    titleGradient 5s linear infinite;
+}
 
-      padding:
-        0 15px 0 45px;
+@keyframes titleGradient {
 
-      border-radius: 13px;
+  to {
+    background-position:
+      250% center;
+  }
 
-      border:
-        1px solid rgba(255,255,255,.10);
+}
 
-      outline: none;
 
-      background:
-        rgba(13,20,42,.85);
+/* ================= NAME ================= */
 
-      color: white;
+.name-box {
 
-      font-size: 15px;
+  display: none;
 
-      transition: .25s;
-    }
+  margin:
+    0 auto 17px;
 
-    .name-box input::placeholder {
-      color: #586682;
-    }
+  max-width: 620px;
+}
 
-    .name-box input:focus {
-      border-color:
-        rgba(91,140,255,.6);
+.name-label {
 
-      box-shadow:
-        0 0 0 4px
-        rgba(91,140,255,.08);
-    }
+  display: block;
 
-    /* ================= MESSAGE ================= */
+  color: #91a0bd;
 
-    .message-shell {
-      position: relative;
+  font-size: 11px;
 
-      max-width: 900px;
+  margin:
+    0 0 7px 4px;
+}
 
-      margin: auto;
+.name-input-wrap {
 
-      padding: 1px;
+  position: relative;
+}
 
-      border-radius: 25px;
+.name-input-icon {
 
-      background:
-        linear-gradient(
-          135deg,
-          rgba(91,140,255,.35),
-          rgba(139,92,255,.22),
-          rgba(57,217,255,.15)
-        );
+  position: absolute;
 
-      box-shadow:
-        0 30px 90px
-        rgba(0,0,0,.32);
-    }
+  left: 15px;
 
-    .message-box {
-      min-height: 520px;
+  top: 50%;
 
-      position: relative;
+  transform:
+    translateY(-50%);
 
-      overflow: hidden;
+  font-size: 17px;
 
-      border-radius: 24px;
+  opacity: .7;
+}
 
-      background:
-        radial-gradient(
-          circle at 50% 0%,
-          rgba(91,140,255,.09),
-          transparent 35%
-        ),
-        #07101f;
-    }
+.name-box input {
 
-    .message-box::before {
-      content: "";
+  width: 100%;
 
-      position: absolute;
+  height: 52px;
 
-      width: 250px;
-      height: 250px;
+  padding:
+    0 15px 0 45px;
 
-      border-radius: 50%;
+  border-radius: 13px;
 
-      left: -130px;
-      top: -120px;
+  border:
+    1px solid
+    rgba(255,255,255,.10);
 
-      background:
-        rgba(91,140,255,.08);
+  outline: none;
 
-      filter:
-        blur(30px);
+  background:
+    rgba(13,20,42,.85);
 
-      pointer-events: none;
-    }
+  color: white;
 
-    .message-box::after {
-      content: "";
+  font-size: 15px;
 
-      position: absolute;
+  transition: .25s;
+}
 
-      width: 250px;
-      height: 250px;
+.name-box input::placeholder {
+  color: #586682;
+}
 
-      border-radius: 50%;
+.name-box input:focus {
 
-      right: -130px;
-      bottom: -120px;
+  border-color:
+    rgba(91,140,255,.6);
 
-      background:
-        rgba(139,92,255,.08);
+  box-shadow:
+    0 0 0 4px
+    rgba(91,140,255,.08);
+}
 
-      filter:
-        blur(30px);
 
-      pointer-events: none;
-    }
+/* ================= MESSAGE ================= */
 
-    .loading {
-      min-height: 520px;
+.message-shell {
 
-      display: flex;
+  position: relative;
 
-      flex-direction: column;
+  max-width: 900px;
 
-      align-items: center;
+  margin: auto;
 
-      justify-content: center;
+  padding: 1px;
 
-      gap: 13px;
+  border-radius: 25px;
 
-      color: #8190ad;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(91,140,255,.35),
+      rgba(139,92,255,.22),
+      rgba(57,217,255,.15)
+    );
 
-      font-size: 12px;
-    }
+  box-shadow:
+    0 30px 90px
+    rgba(0,0,0,.32);
+}
 
-    .loader {
-      width: 42px;
-      height: 42px;
+.message-box {
 
-      border-radius: 50%;
+  min-height: 520px;
 
-      border:
-        3px solid
-        rgba(255,255,255,.08);
+  position: relative;
 
-      border-top-color:
-        var(--blue);
+  overflow: hidden;
 
-      border-right-color:
-        var(--purple);
+  border-radius: 24px;
 
-      animation:
-        spin .8s linear infinite;
-    }
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(91,140,255,.09),
+      transparent 35%
+    ),
+    #07101f;
+}
 
-    @keyframes spin {
+.message-box::before {
 
-      to {
-        transform: rotate(360deg);
-      }
+  content: "";
 
-    }
+  position: absolute;
 
-    /* ================= CONTROLS ================= */
+  width: 250px;
 
-    .controls {
-      max-width: 900px;
+  height: 250px;
 
-      margin:
-        17px auto 0;
+  border-radius: 50%;
 
-      display: grid;
+  left: -130px;
 
-      grid-template-columns:
-        repeat(3, 1fr);
+  top: -120px;
 
-      gap: 10px;
-    }
+  background:
+    rgba(91,140,255,.08);
 
-    button {
-      min-height: 50px;
+  filter:
+    blur(30px);
 
-      border:
-        1px solid
-        rgba(255,255,255,.08);
+  pointer-events: none;
+}
 
-      border-radius: 13px;
+.message-box::after {
 
-      cursor: pointer;
+  content: "";
 
-      color: white;
+  position: absolute;
 
-      font-size: 13px;
+  width: 250px;
 
-      font-weight: 800;
+  height: 250px;
 
-      background:
-        rgba(19,29,57,.9);
+  border-radius: 50%;
 
-      transition:
-        transform .25s,
-        box-shadow .25s,
-        border-color .25s;
-    }
+  right: -130px;
 
-    button:hover {
-      transform:
-        translateY(-3px);
+  bottom: -120px;
 
-      border-color:
-        rgba(255,255,255,.18);
+  background:
+    rgba(139,92,255,.08);
 
-      box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.22);
-    }
+  filter:
+    blur(30px);
 
-    button:disabled {
-      opacity: .55;
+  pointer-events: none;
+}
 
-      cursor:
-        not-allowed;
+.loading {
 
-      transform: none;
-    }
+  min-height: 520px;
 
-    #playBtn {
-      background:
-        linear-gradient(
-          135deg,
-          #4f82ff,
-          #795cff
-        );
+  display: flex;
 
-      border-color:
-        transparent;
+  flex-direction: column;
 
-      box-shadow:
-        0 8px 25px
-        rgba(79,130,255,.18);
-    }
+  align-items: center;
 
-    #shareBtn {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(32,50,86,.95),
-          rgba(25,36,66,.95)
-        );
-    }
+  justify-content: center;
 
-    #downloadBtn {
-      background:
-        linear-gradient(
-          135deg,
-          #087fca,
-          #0b9fd8
-        );
+  gap: 13px;
 
-      border-color:
-        transparent;
+  color: #8190ad;
 
-      box-shadow:
-        0 8px 25px
-        rgba(11,159,216,.14);
-    }
+  font-size: 12px;
+}
 
-    /* ================= AD ================= */
+.loader {
 
-    .ad {
-      max-width: 900px;
+  width: 42px;
 
-      min-height: 70px;
+  height: 42px;
 
-      margin:
-        20px auto 0;
+  border-radius: 50%;
 
-      border:
-        1px dashed
-        rgba(126,154,255,.15);
+  border:
+    3px solid
+    rgba(255,255,255,.08);
 
-      border-radius: 14px;
+  border-top-color:
+    var(--blue);
 
-      display: flex;
+  border-right-color:
+    var(--purple);
 
-      align-items: center;
+  animation:
+    spin .8s linear infinite;
+}
 
-      justify-content: center;
+@keyframes spin {
 
-      color: #52617c;
+  to {
+    transform: rotate(360deg);
+  }
 
-      background:
-        rgba(255,255,255,.012);
+}
 
-      font-size: 10px;
 
-      letter-spacing: 1px;
+/* ================= CONTROLS ================= */
 
-      text-transform:
-        uppercase;
-    }
+.controls {
 
-    .ad.has-ad {
-      border:
-        1px solid
-        rgba(126,154,255,.12);
+  max-width: 900px;
 
-      text-transform:
-        none;
+  margin:
+    17px auto 0;
 
-      letter-spacing:
-        normal;
-    }
+  display: grid;
 
-    /* ================= DOWNLOAD AD OVERLAY ================= */
+  grid-template-columns:
+    repeat(3, 1fr);
 
-    .download-ad-overlay {
-      position: fixed;
+  gap: 10px;
+}
 
-      inset: 0;
+button {
 
-      z-index: 99999;
+  min-height: 50px;
 
-      display: none;
+  border:
+    1px solid
+    rgba(255,255,255,.08);
 
-      align-items: center;
+  border-radius: 13px;
 
-      justify-content: center;
+  cursor: pointer;
 
-      padding: 20px;
+  color: white;
 
-      background:
-        rgba(0,0,0,.72);
+  font-size: 13px;
 
-      backdrop-filter:
-        blur(8px);
-    }
+  font-weight: 800;
 
-    .download-ad-overlay.show {
-      display: flex;
-    }
+  background:
+    rgba(19,29,57,.9);
 
-    .download-ad-box {
-      width: 100%;
+  transition:
+    transform .25s,
+    box-shadow .25s,
+    border-color .25s;
+}
 
-      max-width: 520px;
+button:hover {
 
-      min-height: 180px;
+  transform:
+    translateY(-3px);
 
-      padding: 20px;
+  border-color:
+    rgba(255,255,255,.18);
 
-      border-radius: 20px;
+  box-shadow:
+    0 12px 30px
+    rgba(0,0,0,.22);
+}
 
-      border:
-        1px solid
-        rgba(255,255,255,.10);
+button:disabled {
 
-      background:
-        rgba(11,18,38,.96);
+  opacity: .55;
 
-      box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.55);
+  cursor:
+    not-allowed;
 
-      text-align: center;
-    }
+  transform: none;
+}
 
-    .download-ad-title {
-      color: #8fa4cc;
+#playBtn {
 
-      font-size: 11px;
+  background:
+    linear-gradient(
+      135deg,
+      #4f82ff,
+      #795cff
+    );
 
-      text-transform:
-        uppercase;
+  border-color:
+    transparent;
 
-      letter-spacing: 1.3px;
+  box-shadow:
+    0 8px 25px
+    rgba(79,130,255,.18);
+}
 
-      margin-bottom: 12px;
-    }
+#shareBtn {
 
-    #downloadAdContent {
-      width: 100%;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32,50,86,.95),
+      rgba(25,36,66,.95)
+    );
+}
 
-      min-height: 100px;
+#downloadBtn {
 
-      display: flex;
+  background:
+    linear-gradient(
+      135deg,
+      #087fca,
+      #0b9fd8
+    );
 
-      align-items: center;
+  border-color:
+    transparent;
 
-      justify-content: center;
+  box-shadow:
+    0 8px 25px
+    rgba(11,159,216,.14);
+}
 
-      overflow: hidden;
-    }
 
-    .ad-loading {
-      color: #7e8da9;
+/* ================= AD ================= */
 
-      font-size: 12px;
-    }
+.ad {
 
-    /* ================= INFO ================= */
+  max-width: 900px;
 
-    .info {
-      max-width: 900px;
+  min-height: 70px;
 
-      margin:
-        18px auto 0;
+  margin:
+    20px auto 0;
 
-      display: flex;
+  border:
+    1px dashed
+    rgba(126,154,255,.15);
 
-      justify-content: center;
+  border-radius: 14px;
 
-      gap: 8px;
+  display: flex;
 
-      flex-wrap: wrap;
-    }
+  align-items: center;
 
-    .info-pill {
-      padding:
-        7px 10px;
+  justify-content: center;
 
-      border-radius: 999px;
+  color: #52617c;
 
-      background:
-        rgba(255,255,255,.035);
+  background:
+    rgba(255,255,255,.012);
 
-      border:
-        1px solid
-        rgba(255,255,255,.06);
+  font-size: 10px;
 
-      color: #667594;
+  letter-spacing: 1px;
 
-      font-size: 9px;
-    }
+  text-transform: uppercase;
+}
 
-    /* ================= MOBILE ================= */
+.ad.has-ad {
 
-    @media (max-width: 600px) {
+  border:
+    1px solid
+    rgba(126,154,255,.12);
 
-      header {
-        padding:
-          11px 12px;
-      }
+  text-transform: none;
 
-      .page {
-        padding:
-          20px 12px 45px;
-      }
+  letter-spacing: normal;
+}
 
-      .brand {
-        font-size: 10px;
-      }
 
-      .back {
-        font-size: 11px;
+/* ================= DOWNLOAD AD ================= */
 
-        padding:
-          7px 8px;
-      }
+.download-ad-overlay {
 
-      .title-area {
-        padding-top: 8px;
-      }
+  position: fixed;
 
-      .title {
-        font-size: 31px;
-      }
+  inset: 0;
 
-      .message-shell {
-        border-radius: 19px;
-      }
+  z-index: 99999;
 
-      .message-box {
-        min-height: 460px;
+  display: none;
 
-        border-radius: 18px;
-      }
+  align-items: center;
 
-      .loading {
-        min-height: 460px;
-      }
+  justify-content: center;
 
-      .controls {
-        grid-template-columns: 1fr;
-      }
+  padding: 20px;
 
-      button {
-        min-height: 48px;
-      }
+  background:
+    rgba(0,0,0,.72);
 
-    }
+  backdrop-filter:
+    blur(8px);
+}
 
-  </style></head><body>  <!-- ================= HEADER ================= -->  <header><div class="header-inner">
+.download-ad-overlay.show {
 
-  <a
-    class="back"
-    href="/"
-  >
-    ← Back to Messages
-  </a>
+  display: flex;
+}
 
-  <div class="brand">
-    MAKYAMA MESSAGES
-  </div>
+.download-ad-box {
+
+  width: 100%;
+
+  max-width: 520px;
+
+  min-height: 180px;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  background:
+    rgba(11,18,38,.96);
+
+  box-shadow:
+    0 30px 100px
+    rgba(0,0,0,.55);
+
+  text-align: center;
+}
+
+.download-ad-title {
+
+  color: #8fa4cc;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.3px;
+
+  margin-bottom: 12px;
+}
+
+#downloadAdContent {
+
+  width: 100%;
+
+  min-height: 100px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.ad-loading {
+
+  color: #7e8da9;
+
+  font-size: 12px;
+}
+
+
+/* ================= INFO ================= */
+
+.info {
+
+  max-width: 900px;
+
+  margin:
+    18px auto 0;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.info-pill {
+
+  padding:
+    7px 10px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid
+    rgba(255,255,255,.06);
+
+  color: #667594;
+
+  font-size: 9px;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width:600px) {
+
+  header {
+
+    padding:
+      11px 12px;
+  }
+
+  .page {
+
+    padding:
+      20px 12px 45px;
+  }
+
+  .brand {
+
+    font-size: 10px;
+  }
+
+  .back {
+
+    font-size: 11px;
+
+    padding:
+      7px 8px;
+  }
+
+  .title-area {
+
+    padding-top: 8px;
+  }
+
+  .title {
+
+    font-size: 31px;
+  }
+
+  .message-shell {
+
+    border-radius: 19px;
+  }
+
+  .message-box {
+
+    min-height: 460px;
+
+    border-radius: 18px;
+  }
+
+  .loading {
+
+    min-height: 460px;
+  }
+
+  .controls {
+
+    grid-template-columns: 1fr;
+  }
+
+  button {
+
+    min-height: 48px;
+  }
+
+}
+
+</style></head><body><header>  <div class="header-inner"><a
+  class="back"
+  href="/"
+>
+  ← Back to Messages
+</a>
+
+<div class="brand">
+  MAKYAMA MESSAGES
+</div>
+
+  </div></header><main class="page">  <section class="title-area"><div class="eyebrow">
+
+  <span class="eyebrow-dot"></span>
+
+  Animated Message
 
 </div>
 
-  </header>  <!-- ================= MAIN ================= -->  <main class="page"><!-- TITLE -->
+<h1
+  id="title"
+  class="title"
+>
+  Loading...
+</h1>
 
-<section class="title-area">
+  </section>  <div
+    id="nameBox"
+    class="name-box"
+  ><label
+  class="name-label"
+  for="nameInput"
+>
+  Personalize this message
+</label>
 
-  <div class="eyebrow">
+<div class="name-input-wrap">
 
-    <span class="eyebrow-dot"></span>
+  <span class="name-input-icon">
+    👤
+  </span>
 
-    Animated Message
-
-  </div>
-
-
-  <h1
-    id="title"
-    class="title"
+  <input
+    id="nameInput"
+    type="text"
+    maxlength="80"
+    placeholder="Enter name..."
+    autocomplete="off"
   >
-    Loading...
-  </h1>
 
-</section>
+</div>
 
-
-<!-- NAME -->
-
-<div
-  id="nameBox"
-  class="name-box"
+  </div>  <div class="message-shell"><div
+  id="messageBox"
+  class="message-box"
 >
 
-  <label
-    class="name-label"
-    for="nameInput"
-  >
-    Personalize this message
-  </label>
+  <div class="loading">
 
+    <div class="loader"></div>
 
-  <div class="name-input-wrap">
-
-    <span class="name-input-icon">
-      👤
+    <span>
+      Loading animated message...
     </span>
 
-
-    <input
-      id="nameInput"
-      type="text"
-      maxlength="80"
-      placeholder="Enter name..."
-      autocomplete="off"
-    >
-
   </div>
 
 </div>
 
+  </div>  <div class="controls"><button id="playBtn">
+  ▶ Play Animation
+</button>
 
-<!-- MESSAGE -->
+<button id="shareBtn">
+  ↗ Share
+</button>
 
-<div class="message-shell">
+<button id="downloadBtn">
+  🎥 Download MP4
+</button>
 
-  <div
-    id="messageBox"
-    class="message-box"
+  </div>  <div class="info"><span class="info-pill">
+  ✨ Animated
+</span>
+
+<span class="info-pill">
+  💬 Swahili Message
+</span>
+
+<span class="info-pill">
+  📱 Shareable
+</span>
+
+<span class="info-pill">
+  🎥 MP4 Video
+</span>
+
+  </div>  <div
+    id="downloadAd"
+    class="ad"
   >
-
-    <div class="loading">
-
-      <div class="loader"></div>
-
-      <span>
-        Loading animated message...
-      </span>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- CONTROLS -->
-
-<div class="controls">
-
-  <button id="playBtn">
-    ▶ Play Animation
-  </button>
-
-
-  <button id="shareBtn">
-    ↗ Share
-  </button>
-
-
-  <button id="downloadBtn">
-    🎥 Download MP4
-  </button>
-
-</div>
-
-
-<!-- INFO -->
-
-<div class="info">
-
-  <span class="info-pill">
-    ✨ Animated
-  </span>
-
-  <span class="info-pill">
-    💬 Swahili Message
-  </span>
-
-  <span class="info-pill">
-    📱 Shareable
-  </span>
-
-  <span class="info-pill">
-    🎥 MP4 Video
-  </span>
-
-</div>
-
-
-<!-- DOWNLOAD AD FALLBACK AREA -->
-
-<div
-  id="downloadAd"
-  class="ad"
->
+    Advertisement
+  </div></main><div
+  id="downloadAdOverlay"
+  class="download-ad-overlay"
+>  <div class="download-ad-box"><div class="download-ad-title">
   Advertisement
 </div>
 
-  </main>  <!-- ================= DOWNLOAD AD OVERLAY ================= -->  <div
-    id="downloadAdOverlay"
-    class="download-ad-overlay"
-  ><div class="download-ad-box">
+<div id="downloadAdContent">
 
-  <div class="download-ad-title">
-    Advertisement
-  </div>
-
-
-  <div id="downloadAdContent">
-
-    <div class="ad-loading">
-      Preparing advertisement...
-    </div>
-
+  <div class="ad-loading">
+    Preparing advertisement...
   </div>
 
 </div>
 
-  </div>  <script>
+  </div></div><script>
 
-    /* =====================================================
-       URL
-    ===================================================== */
+/* =====================================================
+   URL
+===================================================== */
 
-    const params =
-      new URLSearchParams(
-        window.location.search
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const id =
+  params.get("id");
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const title =
+  document.getElementById(
+    "title"
+  );
+
+const messageBox =
+  document.getElementById(
+    "messageBox"
+  );
+
+const nameBox =
+  document.getElementById(
+    "nameBox"
+  );
+
+const nameInput =
+  document.getElementById(
+    "nameInput"
+  );
+
+const playBtn =
+  document.getElementById(
+    "playBtn"
+  );
+
+const shareBtn =
+  document.getElementById(
+    "shareBtn"
+  );
+
+const downloadBtn =
+  document.getElementById(
+    "downloadBtn"
+  );
+
+const downloadAd =
+  document.getElementById(
+    "downloadAd"
+  );
+
+const downloadAdOverlay =
+  document.getElementById(
+    "downloadAdOverlay"
+  );
+
+const downloadAdContent =
+  document.getElementById(
+    "downloadAdContent"
+  );
+
+
+/* =====================================================
+   DATA
+===================================================== */
+
+let template = null;
+
+let ads = [];
+
+let downloadAdData = null;
+
+
+/* =====================================================
+   LOAD TEMPLATE
+===================================================== */
+
+async function loadTemplate() {
+
+  if (!id) {
+
+    showError(
+      "Message ID is missing."
+    );
+
+    return;
+
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/templates/" +
+        encodeURIComponent(id)
       );
 
+    if (!response.ok) {
 
-    const id =
-      params.get("id");
-
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const title =
-      document.getElementById(
-        "title"
-      );
-
-
-    const messageBox =
-      document.getElementById(
-        "messageBox"
-      );
-
-
-    const nameBox =
-      document.getElementById(
-        "nameBox"
-      );
-
-
-    const nameInput =
-      document.getElementById(
-        "nameInput"
-      );
-
-
-    const playBtn =
-      document.getElementById(
-        "playBtn"
-      );
-
-
-    const shareBtn =
-      document.getElementById(
-        "shareBtn"
-      );
-
-
-    const downloadBtn =
-      document.getElementById(
-        "downloadBtn"
-      );
-
-
-    const downloadAd =
-      document.getElementById(
-        "downloadAd"
-      );
-
-
-    const downloadAdOverlay =
-      document.getElementById(
-        "downloadAdOverlay"
-      );
-
-
-    const downloadAdContent =
-      document.getElementById(
-        "downloadAdContent"
-      );
-
-
-    /* =====================================================
-       DATA
-    ===================================================== */
-
-    let template = null;
-
-    let ads = [];
-
-    let downloadAdData = null;
-
-
-    /* =====================================================
-       LOAD TEMPLATE
-    ===================================================== */
-
-    async function loadTemplate() {
-
-      if (!id) {
-
-        showError(
-          "Message ID is missing."
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-            "/api/templates/" +
-            encodeURIComponent(id)
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Template not found."
-          );
-
-        }
-
-
-        template =
-          await response.json();
-
-
-        title.textContent =
-          template.title ||
-          "MAKYAMA Message";
-
-
-        if (
-          template.nameRequired
-        ) {
-
-          nameBox.style.display =
-            "block";
-
-        }
-
-
-        const sharedName =
-          params.get("name");
-
-
-        if (sharedName) {
-
-          nameInput.value =
-            sharedName;
-
-        }
-
-
-        renderMessage();
-
-
-        await loadAds();
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        showError(
-          "Message could not be loaded."
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       ERROR
-    ===================================================== */
-
-    function showError(message) {
-
-      messageBox.innerHTML = `
-
-        <div class="loading">
-
-          <div style="
-            font-size:42px;
-            margin-bottom:5px;
-          ">
-            📭
-          </div>
-
-          <div style="
-            color:#a1aec6;
-            font-weight:700;
-          ">
-            ${escapeHtml(message)}
-          </div>
-
-          <a
-            href="/"
-            style="
-              margin-top:7px;
-              color:#72a5ff;
-              text-decoration:none;
-              font-size:11px;
-            "
-          >
-            ← Return to messages
-          </a>
-
-        </div>
-
-      `;
-
-    }
-
-
-    /* =====================================================
-       RENDER MESSAGE
-    ===================================================== */
-
-    function renderMessage() {
-
-      if (!template) return;
-
-
-      let html =
-        template.html || "";
-
-
-      const name =
-        nameInput.value.trim() ||
-        "Rafiki";
-
-
-      html =
-        html.replaceAll(
-          "{name}",
-          escapeHtml(name)
-        );
-
-
-      messageBox.innerHTML =
-        html;
-
-
-      runAnimations();
-
-    }
-
-
-    /* =====================================================
-       RUN ANIMATIONS
-    ===================================================== */
-
-    function runAnimations() {
-
-      const elements =
-        messageBox.querySelectorAll(
-          "[data-animation]"
-        );
-
-
-      elements.forEach(
-        element => {
-
-          const animation =
-            element.dataset.animation;
-
-
-          if (!animation) return;
-
-
-          element.style.animation =
-            "none";
-
-
-          void element.offsetWidth;
-
-
-          element.style.animation =
-            animation;
-
-        }
+      throw new Error(
+        "Template not found."
       );
 
     }
 
+    template =
+      await response.json();
 
-    /* =====================================================
-       ESCAPE
-    ===================================================== */
-
-    function escapeHtml(value) {
-
-      const div =
-        document.createElement(
-          "div"
-        );
+    title.textContent =
+      template.title ||
+      "MAKYAMA Message";
 
 
-      div.textContent =
-        value;
+    if (
+      template.nameRequired
+    ) {
 
-
-      return div.innerHTML;
+      nameBox.style.display =
+        "block";
 
     }
 
 
-    /* =====================================================
-       NAME
-    ===================================================== */
+    const sharedName =
+      params.get("name");
 
-    nameInput.addEventListener(
-      "input",
-      () => {
+    if (sharedName) {
 
-        renderMessage();
+      nameInput.value =
+        sharedName;
 
-      }
+    }
+
+
+    renderMessage();
+
+    await loadAds();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showError(
+      "Message could not be loaded."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(message) {
+
+  messageBox.innerHTML = `
+
+    <div class="loading">
+
+      <div style="
+        font-size:42px;
+        margin-bottom:5px;
+      ">
+        📭
+      </div>
+
+      <div style="
+        color:#a1aec6;
+        font-weight:700;
+      ">
+        ${escapeHtml(message)}
+      </div>
+
+      <a
+        href="/"
+        style="
+          margin-top:7px;
+          color:#72a5ff;
+          text-decoration:none;
+          font-size:11px;
+        "
+      >
+        ← Return to messages
+      </a>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   RENDER MESSAGE
+===================================================== */
+
+function renderMessage() {
+
+  if (!template) return;
+
+
+  let html =
+    template.html || "";
+
+
+  const name =
+    nameInput.value.trim() ||
+    "Rafiki";
+
+
+  html =
+    html.replaceAll(
+      "{name}",
+      escapeHtml(name)
     );
 
 
-    /* =====================================================
-       PLAY
-    ===================================================== */
+  messageBox.innerHTML =
+    html;
 
-    playBtn.addEventListener(
-      "click",
+
+  runAnimations();
+
+  setupTemplateClicks();
+
+}
+
+
+/* =====================================================
+   RUN CSS ANIMATIONS
+===================================================== */
+
+function runAnimations() {
+
+  const elements =
+    messageBox.querySelectorAll(
+      "[data-animation]"
+    );
+
+
+  elements.forEach(
+    element => {
+
+      const animation =
+        element.dataset.animation;
+
+
+      if (!animation) return;
+
+
+      element.style.animation =
+        "none";
+
+
+      void element.offsetWidth;
+
+
+      element.style.animation =
+        animation;
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   IMPORTANT:
+   HANDLE CLICKS INSIDE TEMPLATE
+===================================================== */
+
+function setupTemplateClicks() {
+
+  const clickable =
+    messageBox.querySelectorAll(
+      "[onclick]"
+    );
+
+
+  clickable.forEach(
+    element => {
+
+      const code =
+        element.getAttribute(
+          "onclick"
+        ) || "";
+
+
+      /*
+        Remove inline onclick.
+        We handle it ourselves.
+      */
+
+      element.removeAttribute(
+        "onclick"
+      );
+
+
+      element.addEventListener(
+        "click",
+        function(event) {
+
+          /*
+            OPEN LOVE LETTER
+          */
+
+          if (
+            code.includes(
+              "openLoveLetter"
+            ) ||
+            code.includes(
+              "mkOpenLetter"
+            ) ||
+            code.includes(
+              "openLetterPage"
+            )
+          ) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            openTemplateLetter();
+
+            return;
+
+          }
+
+
+          /*
+            CLOSE LOVE LETTER
+          */
+
+          if (
+            code.includes(
+              "closeLoveLetter"
+            ) ||
+            code.includes(
+              "mkCloseLetter"
+            ) ||
+            code.includes(
+              "closeLetterPage"
+            )
+          ) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            closeTemplateLetter(event);
+
+            return;
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   OPEN TEMPLATE LETTER
+===================================================== */
+
+function openTemplateLetter() {
+
+  const scene =
+    messageBox.querySelector(
+      "#loveScene, .love-scene, .mk-love-scene"
+    );
+
+
+  const overlay =
+    messageBox.querySelector(
+      "#letterOverlay, #mkLetterOverlay, .letter-overlay, .mk-letter-overlay"
+    );
+
+
+  if (!scene || !overlay) {
+
+    console.log(
+      "Letter elements not found."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Freeze animation.
+  */
+
+  scene.classList.add(
+    "letter-open"
+  );
+
+  scene.classList.add(
+    "mk-letter-is-open"
+  );
+
+
+  /*
+    Open letter.
+  */
+
+  overlay.classList.add(
+    "show"
+  );
+
+  overlay.classList.add(
+    "mk-show-letter"
+  );
+
+}
+
+
+/* =====================================================
+   CLOSE TEMPLATE LETTER
+===================================================== */
+
+function closeTemplateLetter(event) {
+
+  if (event) {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+  }
+
+
+  const scene =
+    messageBox.querySelector(
+      "#loveScene, .love-scene, .mk-love-scene"
+    );
+
+
+  const overlay =
+    messageBox.querySelector(
+      "#letterOverlay, #mkLetterOverlay, .letter-overlay, .mk-letter-overlay"
+    );
+
+
+  if (!scene || !overlay) {
+
+    return;
+
+  }
+
+
+  /*
+    Close letter.
+  */
+
+  overlay.classList.remove(
+    "show"
+  );
+
+  overlay.classList.remove(
+    "mk-show-letter"
+  );
+
+
+  /*
+    Resume animation.
+  */
+
+  setTimeout(
+    function() {
+
+      scene.classList.remove(
+        "letter-open"
+      );
+
+      scene.classList.remove(
+        "mk-letter-is-open"
+      );
+
+    },
+    600
+  );
+
+}
+
+
+/* =====================================================
+   ESC KEY FOR LETTER
+===================================================== */
+
+messageBox.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeTemplateLetter(
+        event
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    value;
+
+  return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+nameInput.addEventListener(
+  "input",
+  () => {
+
+    renderMessage();
+
+  }
+);
+
+
+/* =====================================================
+   PLAY
+===================================================== */
+
+playBtn.addEventListener(
+  "click",
+  () => {
+
+    if (!template) return;
+
+
+    renderMessage();
+
+
+    playBtn.textContent =
+      "↻ Replay Animation";
+
+
+    setTimeout(
       () => {
-
-        if (!template) return;
-
-
-        renderMessage();
-
 
         playBtn.textContent =
-          "↻ Replay Animation";
+          "▶ Play Animation";
 
-
-        setTimeout(
-          () => {
-
-            playBtn.textContent =
-              "▶ Play Animation";
-
-          },
-          1500
-        );
-
-      }
+      },
+      1500
     );
 
+  }
+);
 
-    /* =====================================================
-       SHARE
-    ===================================================== */
 
-    shareBtn.addEventListener(
-      "click",
-      async () => {
+/* =====================================================
+   SHARE
+===================================================== */
 
-        if (!template) return;
+shareBtn.addEventListener(
+  "click",
+  async () => {
 
+    if (!template) return;
 
-        const url =
-          new URL(
-            window.location.href
-          );
 
-
-        const name =
-          nameInput.value.trim();
-
-
-        if (name) {
-
-          url.searchParams.set(
-            "name",
-            name
-          );
-
-        }
-
-
-        const shareUrl =
-          url.toString();
-
-
-        try {
-
-          if (
-            navigator.share
-          ) {
-
-            await navigator.share({
-
-              title:
-                template.title ||
-                "MAKYAMA Message",
-
-              text:
-                "Check out this animated message on MAKYAMA MESSAGES.",
-
-              url:
-                shareUrl
-
-            });
-
-          } else {
-
-            await navigator.clipboard
-              .writeText(
-                shareUrl
-              );
-
-
-            showTemporaryMessage(
-              "✓ Message link copied"
-            );
-
-          }
-
-        } catch (error) {
-
-          console.log(
-            error
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       TEMPORARY MESSAGE
-    ===================================================== */
-
-    function showTemporaryMessage(
-      message
-    ) {
-
-      const old =
-        document.getElementById(
-          "temporaryMessage"
-        );
-
-
-      if (old) {
-
-        old.remove();
-
-      }
-
-
-      const box =
-        document.createElement(
-          "div"
-        );
-
-
-      box.id =
-        "temporaryMessage";
-
-
-      box.textContent =
-        message;
-
-
-      box.style.position =
-        "fixed";
-
-
-      box.style.left =
-        "50%";
-
-
-      box.style.bottom =
-        "25px";
-
-
-      box.style.transform =
-        "translateX(-50%)";
-
-
-      box.style.padding =
-        "11px 16px";
-
-
-      box.style.borderRadius =
-        "999px";
-
-
-      box.style.background =
-        "rgba(25,35,65,.95)";
-
-
-      box.style.border =
-        "1px solid rgba(255,255,255,.1)";
-
-
-      box.style.color =
-        "white";
-
-
-      box.style.fontSize =
-        "12px";
-
-
-      box.style.fontWeight =
-        "700";
-
-
-      box.style.zIndex =
-        "999999";
-
-
-      document.body.appendChild(
-        box
+    const url =
+      new URL(
+        window.location.href
       );
 
 
-      setTimeout(
-        () => {
+    const name =
+      nameInput.value.trim();
 
-          box.remove();
 
-        },
-        2500
+    if (name) {
+
+      url.searchParams.set(
+        "name",
+        name
       );
 
     }
 
 
-    /* =====================================================
-       LOAD ADS
-    ===================================================== */
+    const shareUrl =
+      url.toString();
 
-    async function loadAds() {
+
+    try {
+
+      if (
+        navigator.share
+      ) {
+
+        await navigator.share({
+
+          title:
+            template.title ||
+            "MAKYAMA Message",
+
+          text:
+            "Check out this animated message on MAKYAMA MESSAGES.",
+
+          url:
+            shareUrl
+
+        });
+
+      } else {
+
+        await navigator.clipboard
+          .writeText(
+            shareUrl
+          );
+
+
+        showTemporaryMessage(
+          "✓ Message link copied"
+        );
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        error
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   TEMPORARY MESSAGE
+===================================================== */
+
+function showTemporaryMessage(
+  message
+) {
+
+  const old =
+    document.getElementById(
+      "temporaryMessage"
+    );
+
+
+  if (old) {
+
+    old.remove();
+
+  }
+
+
+  const box =
+    document.createElement(
+      "div"
+    );
+
+
+  box.id =
+    "temporaryMessage";
+
+
+  box.textContent =
+    message;
+
+
+  box.style.position =
+    "fixed";
+
+
+  box.style.left =
+    "50%";
+
+
+  box.style.bottom =
+    "25px";
+
+
+  box.style.transform =
+    "translateX(-50%)";
+
+
+  box.style.padding =
+    "11px 16px";
+
+
+  box.style.borderRadius =
+    "999px";
+
+
+  box.style.background =
+    "rgba(25,35,65,.95)";
+
+
+  box.style.border =
+    "1px solid rgba(255,255,255,.1)";
+
+
+  box.style.color =
+    "white";
+
+
+  box.style.fontSize =
+    "12px";
+
+
+  box.style.fontWeight =
+    "700";
+
+
+  box.style.zIndex =
+    "999999";
+
+
+  document.body.appendChild(
+    box
+  );
+
+
+  setTimeout(
+    () => {
+
+      box.remove();
+
+    },
+    2500
+  );
+
+}
+
+
+/* =====================================================
+   LOAD ADS
+===================================================== */
+
+async function loadAds() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/ads"
+      );
+
+
+    if (!response.ok) {
+
+      return;
+
+    }
+
+
+    ads =
+      await response.json();
+
+
+    const downloadAds =
+      ads.filter(
+        ad =>
+          ad &&
+          ad.enabled === true &&
+          ad.position ===
+            "download"
+      );
+
+
+    if (
+      downloadAds.length > 0
+    ) {
+
+      downloadAdData =
+        downloadAds[0];
+
+
+      renderNormalAd(
+        downloadAdData,
+        downloadAd
+      );
+
+    } else {
+
+      downloadAd.style.display =
+        "none";
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Ad loading error:",
+      error
+    );
+
+
+    downloadAd.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =====================================================
+   RENDER NORMAL AD
+===================================================== */
+
+function renderNormalAd(
+  ad,
+  container
+) {
+
+  if (!ad) return;
+
+
+  if (!ad.code) {
+
+    container.textContent =
+      ad.title ||
+      "Advertisement";
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  executeAdCode(
+    ad.code,
+    container
+  );
+
+
+  container.classList.add(
+    "has-ad"
+  );
+
+}
+
+
+/* =====================================================
+   EXECUTE AD CODE
+===================================================== */
+
+function executeAdCode(
+  code,
+  container
+) {
+
+  const parser =
+    new DOMParser();
+
+
+  const parsed =
+    parser.parseFromString(
+      String(code),
+      "text/html"
+    );
+
+
+  const nodes =
+    Array.from(
+      parsed.body.childNodes
+    );
+
+
+  nodes.forEach(
+    node => {
+
+      if (
+        node.nodeName.toLowerCase()
+        === "script"
+      ) {
+
+        const script =
+          document.createElement(
+            "script"
+          );
+
+
+        Array.from(
+          node.attributes
+        ).forEach(
+          attribute => {
+
+            script.setAttribute(
+              attribute.name,
+              attribute.value
+            );
+
+          }
+        );
+
+
+        script.textContent =
+          node.textContent;
+
+
+        container.appendChild(
+          script
+        );
+
+      } else {
+
+        container.appendChild(
+          document.importNode(
+            node,
+            true
+          )
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD AD
+===================================================== */
+
+async function triggerDownloadAd() {
+
+  if (
+    !downloadAdData ||
+    !downloadAdData.code
+  ) {
+
+    return;
+
+  }
+
+
+  downloadAdOverlay.classList.add(
+    "show"
+  );
+
+
+  downloadAdContent.innerHTML =
+    "";
+
+
+  executeAdCode(
+    downloadAdData.code,
+    downloadAdContent
+  );
+
+
+  await wait(1800);
+
+
+  downloadAdOverlay.classList.remove(
+    "show"
+  );
+
+
+  downloadAdContent.innerHTML =
+    "";
+
+}
+
+
+/* =====================================================
+   WAIT
+===================================================== */
+
+function wait(ms) {
+
+  return new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
+  );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD MP4
+===================================================== */
+
+downloadBtn.addEventListener(
+  "click",
+  async () => {
+
+    if (!template) return;
+
+
+    downloadBtn.disabled =
+      true;
+
+    playBtn.disabled =
+      true;
+
+    shareBtn.disabled =
+      true;
+
+
+    const oldText =
+      downloadBtn.textContent;
+
+
+    try {
 
       try {
 
-        const response =
-          await fetch(
-            "/api/ads"
-          );
+        await fetch(
+          "/api/analytics/download",
+          {
 
+            method: "POST",
 
-        if (!response.ok) {
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-          return;
-
-        }
-
-
-        ads =
-          await response.json();
-
-
-        /*
-          DOWNLOAD AD
-        */
-
-        const downloadAds =
-          ads.filter(
-            ad =>
-              ad &&
-              ad.enabled === true &&
-              ad.position ===
-                "download"
-          );
-
-
-        if (
-          downloadAds.length > 0
-        ) {
-
-          downloadAdData =
-            downloadAds[0];
-
-
-          renderNormalAd(
-            downloadAdData,
-            downloadAd
-          );
-
-        } else {
-
-          downloadAd.style.display =
-            "none";
-
-        }
-
-      } catch (error) {
-
-        console.log(
-          "Ad loading error:",
-          error
-        );
-
-
-        downloadAd.style.display =
-          "none";
-
-      }
-
-    }
-
-
-    /* =====================================================
-       RENDER NORMAL AD
-    ===================================================== */
-
-    function renderNormalAd(
-      ad,
-      container
-    ) {
-
-      if (!ad) return;
-
-
-      if (!ad.code) {
-
-        container.textContent =
-          ad.title ||
-          "Advertisement";
-
-        return;
-
-      }
-
-
-      container.innerHTML = "";
-
-
-      executeAdCode(
-        ad.code,
-        container
-      );
-
-
-      container.classList.add(
-        "has-ad"
-      );
-
-    }
-
-
-    /* =====================================================
-       EXECUTE AD CODE
-    ===================================================== */
-
-    function executeAdCode(
-      code,
-      container
-    ) {
-
-      /*
-        Parse HTML first.
-      */
-
-      const parser =
-        new DOMParser();
-
-
-      const documentFragment =
-        parser.parseFromString(
-          String(code),
-          "text/html"
-        );
-
-
-      const nodes =
-        Array.from(
-          documentFragment.body.childNodes
-        );
-
-
-      nodes.forEach(
-        node => {
-
-          if (
-            node.nodeName
-              .toLowerCase() ===
-            "script"
-          ) {
-
-            const script =
-              document.createElement(
-                "script"
-              );
-
-
-            Array.from(
-              node.attributes
-            ).forEach(
-              attribute => {
-
-                script.setAttribute(
-                  attribute.name,
-                  attribute.value
-                );
-
-              }
-            );
-
-
-            script.textContent =
-              node.textContent;
-
-
-            container.appendChild(
-              script
-            );
-
-          } else {
-
-            container.appendChild(
-              document.importNode(
-                node,
-                true
-              )
-            );
+            body:
+              JSON.stringify({
+                templateId:
+                  template.id
+              })
 
           }
+        );
 
-        }
-      );
-
-    }
-
-
-    /* =====================================================
-       TRIGGER DOWNLOAD AD
-    ===================================================== */
-
-    async function triggerDownloadAd() {
-
-      if (
-        !downloadAdData ||
-        !downloadAdData.code
+      } catch (
+        analyticsError
       ) {
 
-        return;
+        console.log(
+          "Analytics error:",
+          analyticsError
+        );
 
       }
 
 
-      /*
-        Open the ad overlay while
-        the user click is still active.
-      */
-
-      downloadAdOverlay.classList.add(
-        "show"
-      );
+      renderMessage();
 
 
-      downloadAdContent.innerHTML = "";
+      downloadBtn.textContent =
+        "⏳ Opening advertisement...";
 
 
-      /*
-        Execute the ad code.
-      */
-
-      executeAdCode(
-        downloadAdData.code,
-        downloadAdContent
-      );
+      await triggerDownloadAd();
 
 
-      /*
-        Give the advertisement
-        time to initialize.
-      */
-
-      await wait(1800);
+      downloadBtn.textContent =
+        "⏳ Creating MP4...";
 
 
-      /*
-        Close the overlay.
-      */
+      const response =
+        await fetch(
+          "/api/generate-video",
+          {
 
-      downloadAdOverlay.classList.remove(
-        "show"
-      );
+            method: "POST",
 
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-      downloadAdContent.innerHTML = "";
+            body:
+              JSON.stringify({
 
-    }
+                templateId:
+                  template.id,
 
+                name:
+                  nameInput.value.trim() ||
+                  "Rafiki"
 
-    /* =====================================================
-       WAIT
-    ===================================================== */
+              })
 
-    function wait(ms) {
-
-      return new Promise(
-        resolve =>
-          setTimeout(
-            resolve,
-            ms
-          )
-      );
-
-    }
+          }
+        );
 
 
-    /* =====================================================
-       DOWNLOAD MP4
-    ===================================================== */
+      if (!response.ok) {
 
-    downloadBtn.addEventListener(
-      "click",
-      async () => {
-
-        if (!template) return;
-
-
-        /*
-          Prevent double clicks.
-        */
-
-        downloadBtn.disabled =
-          true;
-
-        playBtn.disabled =
-          true;
-
-        shareBtn.disabled =
-          true;
-
-
-        const oldText =
-          downloadBtn.textContent;
+        let errorMessage =
+          "Video generation failed.";
 
 
         try {
 
-          /*
-            Count download.
-          */
-
-          try {
-
-            await fetch(
-              "/api/analytics/download",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify({
-                    templateId:
-                      template.id
-                  })
-              }
-            );
-
-          } catch (
-            analyticsError
-          ) {
-
-            console.log(
-              "Analytics error:",
-              analyticsError
-            );
-
-          }
-
-
-          /*
-            Make sure the
-            message is current.
-          */
-
-          renderMessage();
-
-
-          /*
-            DOWNLOAD AD FIRST
-          */
-
-          downloadBtn.textContent =
-            "⏳ Opening advertisement...";
-
-
-          await triggerDownloadAd();
-
-
-          /*
-            Start server-side
-            video generation.
-          */
-
-          downloadBtn.textContent =
-            "⏳ Creating MP4...";
-
-
-          const response =
-            await fetch(
-              "/api/generate-video",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify({
-
-                    templateId:
-                      template.id,
-
-                    name:
-                      nameInput.value.trim() ||
-                      "Rafiki"
-
-                  })
-              }
-            );
-
-
-          if (!response.ok) {
-
-            let errorMessage =
-              "Video generation failed.";
-
-
-            try {
-
-              const errorData =
-                await response.json();
-
-
-              if (
-                errorData &&
-                errorData.error
-              ) {
-
-                errorMessage =
-                  errorData.error;
-
-              }
-
-            } catch (
-              parseError
-            ) {
-
-              console.log(
-                parseError
-              );
-
-            }
-
-
-            throw new Error(
-              errorMessage
-            );
-
-          }
-
-
-          /*
-            Server returns the
-            generated MP4.
-          */
-
-          const blob =
-            await response.blob();
+          const errorData =
+            await response.json();
 
 
           if (
-            !blob ||
-            blob.size === 0
+            errorData &&
+            errorData.error
           ) {
 
-            throw new Error(
-              "Empty video received."
-            );
+            errorMessage =
+              errorData.error;
 
           }
 
+        } catch (
+          parseError
+        ) {
 
-          /*
-            Download MP4 automatically.
-          */
-
-          downloadBlob(
-            blob,
-            makeFileName() +
-            ".mp4"
+          console.log(
+            parseError
           );
-
-
-          showTemporaryMessage(
-            "✓ MP4 video downloaded"
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "Video download error:",
-            error
-          );
-
-
-          showTemporaryMessage(
-            "❌ " +
-            (
-              error.message ||
-              "Video failed. Try again."
-            )
-          );
-
-
-        } finally {
-
-          downloadBtn.disabled =
-            false;
-
-
-          playBtn.disabled =
-            false;
-
-
-          shareBtn.disabled =
-            false;
-
-
-          downloadBtn.textContent =
-            oldText;
 
         }
 
+
+        throw new Error(
+          errorMessage
+        );
+
       }
-    );
 
 
-    /* =====================================================
-       DOWNLOAD BLOB
-    ===================================================== */
+      const blob =
+        await response.blob();
 
-    function downloadBlob(
-      blob,
-      filename
-    ) {
 
-      const url =
-        URL.createObjectURL(
-          blob
+      if (
+        !blob ||
+        blob.size === 0
+      ) {
+
+        throw new Error(
+          "Empty video received."
         );
 
-
-      const link =
-        document.createElement(
-          "a"
-        );
+      }
 
 
-      link.href =
-        url;
-
-
-      link.download =
-        filename;
-
-
-      document.body.appendChild(
-        link
+      downloadBlob(
+        blob,
+        makeFileName() +
+        ".mp4"
       );
 
 
-      link.click();
-
-
-      link.remove();
-
-
-      setTimeout(
-        () => {
-
-          URL.revokeObjectURL(
-            url
-          );
-
-        },
-        5000
+      showTemporaryMessage(
+        "✓ MP4 video downloaded"
       );
 
-    }
+
+    } catch (error) {
+
+      console.error(
+        "Video download error:",
+        error
+      );
 
 
-    /* =====================================================
-       FILE NAME
-    ===================================================== */
-
-    function makeFileName() {
-
-      const base =
-        template &&
-        template.title
-          ? template.title
-          : "MAKYAMA_Message";
-
-
-      const clean =
-        base
-          .replace(
-            /[^a-z0-9_\- ]/gi,
-            ""
-          )
-          .trim()
-          .replace(
-            /\s+/g,
-            "_"
-          );
-
-
-      return (
-        "MAKYAMA_" +
+      showTemporaryMessage(
+        "❌ " +
         (
-          clean ||
-          "Message"
+          error.message ||
+          "Video failed. Try again."
         )
       );
 
+
+    } finally {
+
+      downloadBtn.disabled =
+        false;
+
+
+      playBtn.disabled =
+        false;
+
+
+      shareBtn.disabled =
+        false;
+
+
+      downloadBtn.textContent =
+        oldText;
+
     }
 
+  }
+);
 
-    /* =====================================================
-       START
-    ===================================================== */
 
-    loadTemplate();
+/* =====================================================
+   DOWNLOAD BLOB
+===================================================== */
 
-  </script></body></html>
+function downloadBlob(
+  blob,
+  filename
+) {
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    url;
+
+
+  link.download =
+    filename;
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  link.remove();
+
+
+  setTimeout(
+    () => {
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    },
+    5000
+  );
+
+}
+
+
+/* =====================================================
+   FILE NAME
+===================================================== */
+
+function makeFileName() {
+
+  const base =
+    template &&
+    template.title
+      ? template.title
+      : "MAKYAMA_Message";
+
+
+  const clean =
+    base
+      .replace(
+        /[^a-z0-9_\- ]/gi,
+        ""
+      )
+      .trim()
+      .replace(
+        /\s+/g,
+        "_"
+      );
+
+
+  return (
+    "MAKYAMA_" +
+    (
+      clean ||
+      "Message"
+    )
+  );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadTemplate();
+
+</script></body>
+  </html>
