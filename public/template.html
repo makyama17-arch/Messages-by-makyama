@@ -780,64 +780,51 @@ button:disabled {
 @media (max-width:600px) {
 
   header {
-
     padding:
       11px 12px;
   }
 
   .page {
-
     padding:
       20px 12px 45px;
   }
 
   .brand {
-
     font-size: 10px;
   }
 
   .back {
-
     font-size: 11px;
-
     padding:
       7px 8px;
   }
 
   .title-area {
-
     padding-top: 8px;
   }
 
   .title {
-
     font-size: 31px;
   }
 
   .message-shell {
-
     border-radius: 19px;
   }
 
   .message-box {
-
     min-height: 460px;
-
     border-radius: 18px;
   }
 
   .loading {
-
     min-height: 460px;
   }
 
   .controls {
-
     grid-template-columns: 1fr;
   }
 
   button {
-
     min-height: 48px;
   }
 
@@ -1076,6 +1063,7 @@ async function loadTemplate() {
     template =
       await response.json();
 
+
     title.textContent =
       template.title ||
       "MAKYAMA Message";
@@ -1093,6 +1081,7 @@ async function loadTemplate() {
 
     const sharedName =
       params.get("name");
+
 
     if (sharedName) {
 
@@ -1189,13 +1178,180 @@ function renderMessage() {
     );
 
 
-  messageBox.innerHTML =
+  /*
+    Clear previous template.
+  */
+
+  messageBox.innerHTML = "";
+
+
+  /*
+    Create a temporary wrapper.
+    This lets us separate:
+      HTML
+      STYLE
+      SCRIPT
+  */
+
+  const wrapper =
+    document.createElement(
+      "div"
+    );
+
+
+  wrapper.innerHTML =
     html;
 
 
+  /*
+    Move all normal nodes into
+    the message box first.
+  */
+
+  const nodes =
+    Array.from(
+      wrapper.childNodes
+    );
+
+
+  const scripts = [];
+
+
+  nodes.forEach(
+    node => {
+
+      if (
+        node.nodeName.toLowerCase()
+        === "script"
+      ) {
+
+        scripts.push(node);
+
+        return;
+
+      }
+
+
+      messageBox.appendChild(
+        node
+      );
+
+    }
+  );
+
+
+  /*
+    Run CSS animations.
+  */
+
   runAnimations();
 
-  setupTemplateClicks();
+
+  /*
+    IMPORTANT:
+    Execute scripts AFTER the HTML
+    has been inserted into messageBox.
+  */
+
+  executeTemplateScripts(
+    scripts
+  );
+
+}
+
+
+/* =====================================================
+   EXECUTE TEMPLATE SCRIPTS
+===================================================== */
+
+function executeTemplateScripts(
+  scripts
+) {
+
+  scripts.forEach(
+    oldScript => {
+
+      const newScript =
+        document.createElement(
+          "script"
+        );
+
+
+      /*
+        Copy attributes.
+        This supports:
+        <script src="">
+        <script type="">
+        etc.
+      */
+
+      Array.from(
+        oldScript.attributes
+      ).forEach(
+        attribute => {
+
+          newScript.setAttribute(
+            attribute.name,
+            attribute.value
+          );
+
+        }
+      );
+
+
+      /*
+        Copy JavaScript code.
+      */
+
+      if (
+        oldScript.textContent
+      ) {
+
+        newScript.textContent =
+          oldScript.textContent;
+
+      }
+
+
+      /*
+        Add it to the document,
+        not just messageBox.
+
+        This allows template scripts
+        to create global functions,
+        event listeners, etc.
+      */
+
+      document.body.appendChild(
+        newScript
+      );
+
+
+      /*
+        Remove temporary script
+        after execution.
+
+        External scripts may continue
+        loading normally.
+      */
+
+      if (
+        !oldScript.src
+      ) {
+
+        setTimeout(
+          () => {
+
+            newScript.remove();
+
+          },
+          0
+        );
+
+      }
+
+    }
+  );
 
 }
 
@@ -1239,244 +1395,90 @@ function runAnimations() {
 
 
 /* =====================================================
-   IMPORTANT:
-   HANDLE CLICKS INSIDE TEMPLATE
+   UNIVERSAL CLICK SUPPORT
 ===================================================== */
 
-function setupTemplateClicks() {
+/*
+   Because template HTML is injected dynamically,
+   we also support inline onclick naturally.
 
-  const clickable =
-    messageBox.querySelectorAll(
-      "[onclick]"
-    );
+   Example:
 
+   <button onclick="openSomething()">
+      Open
+   </button>
 
-  clickable.forEach(
-    element => {
+   The script inside the template can define:
 
-      const code =
-        element.getAttribute(
-          "onclick"
-        ) || "";
+   function openSomething() {
+      ...
+   }
 
+   and it will work.
+*/
 
-      /*
-        Remove inline onclick.
-        We handle it ourselves.
-      */
 
-      element.removeAttribute(
-        "onclick"
-      );
+/*
+   Capture clicks only for template content.
 
-
-      element.addEventListener(
-        "click",
-        function(event) {
-
-          /*
-            OPEN LOVE LETTER
-          */
-
-          if (
-            code.includes(
-              "openLoveLetter"
-            ) ||
-            code.includes(
-              "mkOpenLetter"
-            ) ||
-            code.includes(
-              "openLetterPage"
-            )
-          ) {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            openTemplateLetter();
-
-            return;
-
-          }
-
-
-          /*
-            CLOSE LOVE LETTER
-          */
-
-          if (
-            code.includes(
-              "closeLoveLetter"
-            ) ||
-            code.includes(
-              "mkCloseLetter"
-            ) ||
-            code.includes(
-              "closeLetterPage"
-            )
-          ) {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            closeTemplateLetter(event);
-
-            return;
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   OPEN TEMPLATE LETTER
-===================================================== */
-
-function openTemplateLetter() {
-
-  const scene =
-    messageBox.querySelector(
-      "#loveScene, .love-scene, .mk-love-scene"
-    );
-
-
-  const overlay =
-    messageBox.querySelector(
-      "#letterOverlay, #mkLetterOverlay, .letter-overlay, .mk-letter-overlay"
-    );
-
-
-  if (!scene || !overlay) {
-
-    console.log(
-      "Letter elements not found."
-    );
-
-    return;
-
-  }
-
-
-  /*
-    Freeze animation.
-  */
-
-  scene.classList.add(
-    "letter-open"
-  );
-
-  scene.classList.add(
-    "mk-letter-is-open"
-  );
-
-
-  /*
-    Open letter.
-  */
-
-  overlay.classList.add(
-    "show"
-  );
-
-  overlay.classList.add(
-    "mk-show-letter"
-  );
-
-}
-
-
-/* =====================================================
-   CLOSE TEMPLATE LETTER
-===================================================== */
-
-function closeTemplateLetter(event) {
-
-  if (event) {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-  }
-
-
-  const scene =
-    messageBox.querySelector(
-      "#loveScene, .love-scene, .mk-love-scene"
-    );
-
-
-  const overlay =
-    messageBox.querySelector(
-      "#letterOverlay, #mkLetterOverlay, .letter-overlay, .mk-letter-overlay"
-    );
-
-
-  if (!scene || !overlay) {
-
-    return;
-
-  }
-
-
-  /*
-    Close letter.
-  */
-
-  overlay.classList.remove(
-    "show"
-  );
-
-  overlay.classList.remove(
-    "mk-show-letter"
-  );
-
-
-  /*
-    Resume animation.
-  */
-
-  setTimeout(
-    function() {
-
-      scene.classList.remove(
-        "letter-open"
-      );
-
-      scene.classList.remove(
-        "mk-letter-is-open"
-      );
-
-    },
-    600
-  );
-
-}
-
-
-/* =====================================================
-   ESC KEY FOR LETTER
-===================================================== */
+   This is intentionally delegated so new
+   interactive elements added dynamically
+   are also supported.
+*/
 
 messageBox.addEventListener(
-  "keydown",
+  "click",
   function(event) {
 
+    const target =
+      event.target;
+
+
+    /*
+      Find closest clickable element.
+    */
+
+    const clickable =
+      target.closest(
+        "[data-mk-action]"
+      );
+
+
+    /*
+      data-mk-action gives templates
+      an optional universal interaction
+      system without needing custom
+      template.html changes.
+    */
+
+    if (!clickable) return;
+
+
+    const action =
+      clickable.dataset.mkAction;
+
+
     if (
-      event.key === "Escape"
+      action === "close"
     ) {
 
-      closeTemplateLetter(
-        event
-      );
+      const overlay =
+        clickable.closest(
+          "[data-mk-overlay]"
+        );
+
+
+      if (overlay) {
+
+        overlay.classList.remove(
+          "show"
+        );
+
+        overlay.classList.remove(
+          "open"
+        );
+
+      }
 
     }
 
@@ -2289,5 +2291,4 @@ function makeFileName() {
 
 loadTemplate();
 
-</script></body>
-  </html>
+</script></body></html>
