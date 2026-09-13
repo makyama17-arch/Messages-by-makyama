@@ -856,51 +856,53 @@ main{
 /* ================= LIKE / DISLIKE ================= */
 
 .reaction-wrap{
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  gap:5px;
-  margin-left:auto;
+  gap:8px;
+  margin:0;
+  padding:0;
 }
 
 .reaction-btn{
-  min-width:43px;
-  height:28px;
-  padding:0 7px;
+  width:auto;
+  min-width:0;
+  height:auto;
+  padding:0;
+  margin:0;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:3px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:8px;
-  background:rgba(255,255,255,.035);
+  border:none;
+  border-radius:0;
+  background:transparent;
   color:#71809e;
   cursor:pointer;
-  font-size:11px;
+  font-size:10px;
+  line-height:1;
   transition:.2s ease;
 }
 
 .reaction-btn:hover{
-  transform:translateY(-1px);
   color:#fff;
-  background:rgba(255,255,255,.07);
+  background:transparent;
+  transform:none;
 }
 
 .reaction-btn.active-like{
   color:#ff6b9d;
-  border-color:rgba(255,95,162,.4);
-  background:rgba(255,95,162,.10);
+  background:transparent;
 }
 
 .reaction-btn.active-dislike{
   color:#9eb1d9;
-  border-color:rgba(158,177,217,.35);
-  background:rgba(158,177,217,.09);
+  background:transparent;
 }
 
 .reaction-count{
-  font-size:9px;
   min-width:7px;
   text-align:center;
+  font-size:10px;
 }
 
 /* ================= TRENDING ================= */
@@ -1293,12 +1295,12 @@ main{
   }
 
   .reaction-wrap{
-    margin-left:0;
-    width:100%;
+    margin:0;
+    width:auto;
   }
 
   .reaction-btn{
-    flex:1;
+    flex:none;
   }
 
   .section-head h2{
@@ -2632,12 +2634,6 @@ async function reactToTemplate(
       reaction
     );
 
-    /*
-      Update local template data pia,
-      ili count ibaki sahihi wakati
-      wa search/filter/render.
-    */
-
     templates =
       templates.map(
         template => {
@@ -3754,4 +3750,4 @@ loadAds();
 </script>
 
 </body>
-    </html>
+  </html>
