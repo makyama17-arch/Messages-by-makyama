@@ -9,7 +9,8 @@ const admin = require("firebase-admin");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+  process.env.PORT || 3000;
 
 /* =====================================================
 MIDDLEWARE
@@ -25,7 +26,10 @@ app.use(cookieParser());
 
 app.use(
   express.static(
-    path.join(__dirname, "public")
+    path.join(
+      __dirname,
+      "public"
+    )
   )
 );
 
@@ -49,13 +53,17 @@ function initFirebase() {
     !serviceAccount ||
     !databaseURL
   ) {
+
     return null;
+
   }
 
   try {
 
     const credentials =
-      JSON.parse(serviceAccount);
+      JSON.parse(
+        serviceAccount
+      );
 
     if (!admin.apps.length) {
 
@@ -90,7 +98,9 @@ function initFirebase() {
 
 }
 
-async function firebaseGet(ref) {
+async function firebaseGet(
+  ref
+) {
 
   const database =
     initFirebase();
@@ -134,7 +144,9 @@ async function firebaseSet(
 
 }
 
-async function increment(ref) {
+async function increment(
+  ref
+) {
 
   const database =
     initFirebase();
@@ -183,7 +195,9 @@ function requireAdmin(
   }
 
   const session =
-    adminSessions.get(token);
+    adminSessions.get(
+      token
+    );
 
   if (!session) {
 
@@ -201,7 +215,9 @@ function requireAdmin(
     Date.now()
   ) {
 
-    adminSessions.delete(token);
+    adminSessions.delete(
+      token
+    );
 
     return res.status(401).json({
 
@@ -224,32 +240,44 @@ app.get(
   "/health",
   (req, res) => {
 
-    let playwrightAvailable = false;
-    let ffmpegAvailable = false;
+    let playwrightAvailable =
+      false;
+
+    let ffmpegAvailable =
+      false;
 
     try {
 
-      require("playwright");
+      require(
+        "playwright"
+      );
 
-      playwrightAvailable = true;
+      playwrightAvailable =
+        true;
 
     } catch (error) {
 
-      playwrightAvailable = false;
+      playwrightAvailable =
+        false;
 
     }
 
     try {
 
       const ffmpeg =
-        require("ffmpeg-static");
+        require(
+          "ffmpeg-static"
+        );
 
       ffmpegAvailable =
-        Boolean(ffmpeg);
+        Boolean(
+          ffmpeg
+        );
 
     } catch (error) {
 
-      ffmpegAvailable = false;
+      ffmpegAvailable =
+        false;
 
     }
 
@@ -334,7 +362,8 @@ app.post(
     }
 
     const token =
-      crypto.randomBytes(32)
+      crypto
+        .randomBytes(32)
         .toString("hex");
 
     adminSessions.set(
@@ -345,7 +374,10 @@ app.post(
 
         expiresAt:
           Date.now() +
-          12 * 60 * 60 * 1000
+          12 *
+          60 *
+          60 *
+          1000
 
       }
     );
@@ -364,7 +396,10 @@ app.post(
           "production",
 
         maxAge:
-          12 * 60 * 60 * 1000
+          12 *
+          60 *
+          60 *
+          1000
 
       }
     );
@@ -557,6 +592,7 @@ app.get(
       );
 
       res.json({
+
         ...template,
 
         likes:
@@ -677,11 +713,6 @@ app.post(
           template.dislikes || 0
         );
 
-      /*
-        Same reaction again:
-        usiongeze count mara mbili.
-      */
-
       if (
         reaction === previous
       ) {
@@ -699,10 +730,6 @@ app.post(
         });
 
       }
-
-      /*
-        Ondoa reaction ya zamani.
-      */
 
       if (
         previous === "like"
@@ -728,10 +755,6 @@ app.post(
 
       }
 
-      /*
-        Ongeza reaction mpya.
-      */
-
       if (
         reaction === "like"
       ) {
@@ -752,13 +775,17 @@ app.post(
         .ref(
           `templates/${id}/likes`
         )
-        .set(likes);
+        .set(
+          likes
+        );
 
       await database
         .ref(
           `templates/${id}/dislikes`
         )
-        .set(dislikes);
+        .set(
+          dislikes
+        );
 
       res.json({
 
@@ -1588,7 +1615,8 @@ app.get(
 
       const onlineLimit =
         now -
-        90 * 1000;
+        90 *
+        1000;
 
       const onlineCount =
         Object.values(
@@ -1604,7 +1632,8 @@ app.get(
 
               Number(
                 user.lastSeen
-              ) >= onlineLimit
+              ) >=
+              onlineLimit
 
             );
 
@@ -1704,7 +1733,6 @@ app.get(
                 )
 
             })
-
           );
 
       res.json({
@@ -1841,6 +1869,16 @@ app.post(
           name || "Rafiki"
         );
 
+      /*
+        IMPORTANT:
+
+        Interactive JavaScript is removed
+        only for MP4 rendering.
+
+        Website template itself remains
+        fully interactive.
+      */
+
       const templateHTML =
         String(
           template.html || ""
@@ -1856,9 +1894,125 @@ app.post(
           safeName
         );
 
+      /*
+        AUTOMATIC MAKYAMA BRANDING
+
+        This is added automatically to
+        every generated MP4.
+
+        The template author does not need
+        to add this manually.
+      */
+
+      const brandingHTML = `
+
+<div
+  id="makyama-brand"
+  aria-hidden="true"
+>
+
+  <div class="makyama-brand-name">
+    MAKYAMA MESSAGES
+  </div>
+
+  <div class="makyama-brand-url">
+    makyama.pntr.dev
+  </div>
+
+</div>
+
+<style>
+
+#makyama-brand{
+
+  position:absolute;
+
+  right:18px;
+  bottom:16px;
+
+  z-index:999999;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-end;
+
+  gap:3px;
+
+  padding:7px 10px;
+
+  border-radius:10px;
+
+  background:
+    rgba(4,10,22,.62);
+
+  border:
+    1px solid
+    rgba(255,255,255,.14);
+
+  box-shadow:
+    0 4px 18px
+    rgba(0,0,0,.28);
+
+  backdrop-filter:
+    blur(7px);
+
+  -webkit-backdrop-filter:
+    blur(7px);
+
+  pointer-events:none;
+
+  user-select:none;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+.makyama-brand-name{
+
+  color:#ffffff;
+
+  font-size:11px;
+
+  line-height:1;
+
+  font-weight:800;
+
+  letter-spacing:.7px;
+
+  text-shadow:
+    0 1px 4px
+    rgba(0,0,0,.55);
+
+}
+
+.makyama-brand-url{
+
+  color:
+    rgba(255,255,255,.68);
+
+  font-size:7px;
+
+  line-height:1;
+
+  font-weight:500;
+
+  letter-spacing:.25px;
+
+}
+
+</style>
+
+`;
+
       const fullHtml = `
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -1873,32 +2027,35 @@ app.post(
 html,
 body {
 
-  margin: 0;
-  padding: 0;
+  margin:0;
 
-  width: 720px;
-  height: 720px;
+  padding:0;
 
-  overflow: hidden;
+  width:720px;
 
-  background: #07101f;
+  height:720px;
+
+  overflow:hidden;
+
+  background:#07101f;
 
 }
 
 * {
 
-  box-sizing: border-box;
+  box-sizing:border-box;
 
 }
 
 #stage {
 
-  width: 720px;
-  height: 720px;
+  width:720px;
 
-  position: relative;
+  height:720px;
 
-  overflow: hidden;
+  position:relative;
+
+  overflow:hidden;
 
 }
 
@@ -1912,9 +2069,12 @@ body {
 
 ${templateHTML}
 
+${brandingHTML}
+
 </div>
 
 </body>
+
 </html>
 `;
 
@@ -1922,6 +2082,10 @@ ${templateHTML}
         htmlPath,
         fullHtml,
         "utf8"
+      );
+
+      console.log(
+        "Starting MP4 rendering..."
       );
 
       await renderVideoWithTools(
@@ -1959,6 +2123,24 @@ ${templateHTML}
 
       }
 
+      console.log(
+        "MP4 created:",
+        outputPath
+      );
+
+      console.log(
+        "MP4 size:",
+        fileSize,
+        "bytes"
+      );
+
+      /*
+        ANALYTICS
+
+        Analytics failure must NOT
+        prevent the MP4 download.
+      */
+
       try {
 
         await increment(
@@ -1980,26 +2162,126 @@ ${templateHTML}
 
       }
 
-      res.download(
-        outputPath,
-        "MAKYAMA_Message.mp4",
+      /*
+        ROBUST MP4 DOWNLOAD
+
+        Instead of relying only on
+        res.download(), we explicitly
+        stream the file and set the
+        download headers.
+      */
+
+      res.statusCode = 200;
+
+      res.setHeader(
+        "Content-Type",
+        "video/mp4"
+      );
+
+      res.setHeader(
+        "Content-Length",
+        String(fileSize)
+      );
+
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="MAKYAMA_Message.mp4"'
+      );
+
+      res.setHeader(
+        "Cache-Control",
+        "no-store"
+      );
+
+      const stream =
+        fs.createReadStream(
+          outputPath
+        );
+
+      let streamFinished =
+        false;
+
+      stream.on(
+        "error",
         async error => {
+
+          console.error(
+            "MP4 stream error:",
+            error.message
+          );
+
+          if (
+            !res.headersSent
+          ) {
+
+            res.status(500).json({
+
+              error:
+                "Unable to download generated video."
+
+            });
+
+          }
 
           await cleanupTempDirectory(
             tempDir
           );
 
-          if (error) {
+        }
+      );
 
-            console.error(
-              "Video download error:",
-              error.message
+      stream.on(
+        "end",
+        async () => {
+
+          streamFinished =
+            true;
+
+          console.log(
+            "MP4 download stream completed."
+          );
+
+          await cleanupTempDirectory(
+            tempDir
+          );
+
+        }
+      );
+
+      res.on(
+        "close",
+        async () => {
+
+          /*
+            If browser closes connection
+            before stream finishes, cleanup.
+          */
+
+          if (
+            !streamFinished
+          ) {
+
+            stream.destroy();
+
+            await cleanupTempDirectory(
+              tempDir
             );
 
           }
 
         }
       );
+
+      stream.pipe(
+        res
+      );
+
+      /*
+        Prevent catch block from trying
+        to send another response.
+      */
+
+      tempDir = null;
 
     } catch (error) {
 
@@ -2012,7 +2294,9 @@ ${templateHTML}
         tempDir
       );
 
-      if (!res.headersSent) {
+      if (
+        !res.headersSent
+      ) {
 
         res.status(500).json({
 
@@ -2081,7 +2365,9 @@ async function renderVideoWithTools(
   try {
 
     playwright =
-      require("playwright");
+      require(
+        "playwright"
+      );
 
   } catch (error) {
 
@@ -2096,7 +2382,9 @@ async function renderVideoWithTools(
   try {
 
     ffmpegPath =
-      require("ffmpeg-static");
+      require(
+        "ffmpeg-static"
+      );
 
   } catch (error) {
 
@@ -2117,48 +2405,53 @@ async function renderVideoWithTools(
   }
 
   const browser =
-    await playwright.chromium.launch({
+    await playwright
+      .chromium
+      .launch({
 
-      headless: true,
+        headless:true,
 
-      args: [
+        args:[
 
-        "--no-sandbox",
+          "--no-sandbox",
 
-        "--disable-setuid-sandbox",
+          "--disable-setuid-sandbox",
 
-        "--disable-dev-shm-usage",
+          "--disable-dev-shm-usage",
 
-        "--disable-gpu",
+          "--disable-gpu",
 
-        "--font-render-hinting=medium"
+          "--font-render-hinting=medium"
 
-      ]
+        ]
 
-    });
+      });
 
   try {
 
     const page =
       await browser.newPage({
 
-        viewport: {
+        viewport:{
 
-          width: 720,
+          width:720,
 
-          height: 720
+          height:720
 
         },
 
-        deviceScaleFactor: 1
+        deviceScaleFactor:1
 
       });
 
     await page.goto(
-      "file://" + htmlPath,
+      "file://" +
+      htmlPath,
       {
+
         waitUntil:
           "load"
+
       }
     );
 
@@ -2170,7 +2463,9 @@ async function renderVideoWithTools(
           document.fonts.ready
         ) {
 
-          await document.fonts.ready;
+          await document
+            .fonts
+            .ready;
 
         }
 
@@ -2259,7 +2554,6 @@ async function renderVideoWithTools(
                     value
                   ) || 0
                 ) *
-
                 1000
 
               );
@@ -2321,11 +2615,14 @@ async function renderVideoWithTools(
             );
 
           return Math.min(
+
             Math.max(
               longest + 500,
               3000
             ),
+
             15000
+
           );
 
         }
@@ -2385,7 +2682,9 @@ async function captureAnimationFrames(
   await page.evaluate(
     () => {
 
-      void document.body.offsetHeight;
+      void document
+        .body
+        .offsetHeight;
 
     }
   );
@@ -2414,7 +2713,9 @@ async function captureAnimationFrames(
   await page.evaluate(
     () => {
 
-      void document.body.offsetHeight;
+      void document
+        .body
+        .offsetHeight;
 
     }
   );
@@ -2445,18 +2746,22 @@ async function captureAnimationFrames(
     }
   );
 
-  const fps = 24;
+  const fps =
+    24;
 
   const frameDuration =
     1000 / fps;
 
   const totalFrames =
     Math.max(
+
       1,
+
       Math.ceil(
         duration /
         frameDuration
       )
+
     );
 
   const start =
@@ -2475,7 +2780,9 @@ async function captureAnimationFrames(
       );
 
     await page
-      .locator("#stage")
+      .locator(
+        "#stage"
+      )
       .screenshot({
 
         path:
@@ -2490,7 +2797,9 @@ async function captureAnimationFrames(
       });
 
     const target =
-      (frame + 1) *
+      (
+        frame + 1
+      ) *
       frameDuration;
 
     const elapsed =
@@ -2537,8 +2846,12 @@ function convertFramesToMp4(
           "frame-%05d.png"
         );
 
-      const { spawn } =
-        require("child_process");
+      const {
+        spawn
+      } =
+        require(
+          "child_process"
+        );
 
       const ffmpeg =
         spawn(
@@ -2580,12 +2893,11 @@ function convertFramesToMp4(
 
           {
 
-            stdio:
-              [
-                "ignore",
-                "pipe",
-                "pipe"
-              ]
+            stdio:[
+              "ignore",
+              "pipe",
+              "pipe"
+            ]
 
           }
 
@@ -2632,7 +2944,9 @@ function convertFramesToMp4(
             reject(
               new Error(
                 "FFmpeg failed: " +
-                stderr.slice(-3000)
+                stderr.slice(
+                  -3000
+                )
               )
             );
 
@@ -2661,8 +2975,11 @@ async function cleanupTempDirectory(
     await fs.promises.rm(
       tempDir,
       {
-        recursive: true,
-        force: true
+
+        recursive:true,
+
+        force:true
+
       }
     );
 
