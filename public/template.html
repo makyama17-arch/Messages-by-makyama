@@ -1,36 +1,48 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
 
-«»
+<head>
 
-<title>MAKYAMA Message</title><style>
+<meta charset="UTF-8">
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>MAKYAMA Message</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-:root {
-  --bg: #050816;
-  --panel: rgba(15, 23, 47, .78);
-  --line: rgba(255,255,255,.10);
-  --text: #ffffff;
-  --muted: #8d9bb9;
-  --blue: #5b8cff;
-  --purple: #8b5cff;
-  --cyan: #39d9ff;
-  --green: #25d366;
+:root{
+  --bg:#050816;
+  --panel:rgba(15,23,47,.78);
+  --line:rgba(255,255,255,.10);
+  --text:#ffffff;
+  --muted:#8d9bb9;
+  --blue:#5b8cff;
+  --purple:#8b5cff;
+  --cyan:#39d9ff;
+  --green:#25d366;
 }
 
-html {
-  scroll-behavior: smooth;
+html{
+  scroll-behavior:smooth;
 }
 
-body {
+body{
 
-  min-height: 100vh;
+  min-height:100vh;
 
   background:
     radial-gradient(
@@ -45,7 +57,7 @@ body {
     ),
     var(--bg);
 
-  color: var(--text);
+  color:var(--text);
 
   font-family:
     Inter,
@@ -53,21 +65,24 @@ body {
     Helvetica,
     sans-serif;
 
-  overflow-x: hidden;
+  overflow-x:hidden;
+
 }
 
 
-/* ================= HEADER ================= */
+/* =====================================================
+   HEADER
+===================================================== */
 
-header {
+header{
 
-  position: sticky;
+  position:sticky;
 
-  top: 0;
+  top:0;
 
-  z-index: 1000;
+  z-index:1000;
 
-  padding: 14px 18px;
+  padding:14px 18px;
 
   background:
     rgba(5,8,22,.78);
@@ -77,147 +92,158 @@ header {
 
   border-bottom:
     1px solid var(--line);
+
 }
 
-.header-inner {
+.header-inner{
 
-  max-width: 1000px;
+  max-width:1000px;
 
-  margin: auto;
+  margin:auto;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: space-between;
+  justify-content:space-between;
 
-  gap: 15px;
+  gap:15px;
+
 }
 
-.back {
+.back{
 
-  display: inline-flex;
+  display:inline-flex;
 
-  align-items: center;
+  align-items:center;
 
-  gap: 8px;
+  gap:8px;
 
-  color: #d8e2f7;
+  color:#d8e2f7;
 
-  text-decoration: none;
+  text-decoration:none;
 
-  font-size: 13px;
+  font-size:13px;
 
-  padding: 9px 12px;
+  padding:9px 12px;
 
-  border-radius: 10px;
+  border-radius:10px;
 
-  transition: .25s;
+  transition:.25s;
+
 }
 
-.back:hover {
+.back:hover{
 
   background:
     rgba(255,255,255,.07);
 
-  color: white;
+  color:white;
 
   transform:
     translateX(-3px);
+
 }
 
-.brand {
+.brand{
 
-  font-size: 13px;
+  font-size:13px;
 
-  font-weight: 900;
+  font-weight:900;
 
-  letter-spacing: .7px;
+  letter-spacing:.7px;
 
-  color: #9eb5e8;
+  color:#9eb5e8;
+
 }
 
 
-/* ================= PAGE ================= */
+/* =====================================================
+   PAGE
+===================================================== */
 
-.page {
+.page{
 
-  max-width: 1000px;
+  max-width:1000px;
 
-  margin: auto;
+  margin:auto;
 
   padding:
     25px 18px 60px;
+
 }
 
-.title-area {
+.title-area{
 
-  text-align: center;
+  text-align:center;
 
   padding:
     15px 0 25px;
+
 }
 
-.eyebrow {
+.eyebrow{
 
-  display: inline-flex;
+  display:inline-flex;
 
-  align-items: center;
+  align-items:center;
 
-  gap: 7px;
+  gap:7px;
 
-  color: #9bb5ed;
+  color:#9bb5ed;
 
-  font-size: 10px;
+  font-size:10px;
 
-  letter-spacing: 1.5px;
+  letter-spacing:1.5px;
 
-  text-transform: uppercase;
+  text-transform:uppercase;
 
-  margin-bottom: 11px;
+  margin-bottom:11px;
+
 }
 
-.eyebrow-dot {
+.eyebrow-dot{
 
-  width: 6px;
+  width:6px;
 
-  height: 6px;
+  height:6px;
 
-  border-radius: 50%;
+  border-radius:50%;
 
-  background: #55e9a3;
+  background:#55e9a3;
 
   box-shadow:
     0 0 12px #55e9a3;
 
   animation:
     pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-
-  0%,100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(.65);
-    opacity: .5;
-  }
 
 }
 
-.title {
+@keyframes pulse{
+
+  0%,100%{
+    transform:scale(1);
+    opacity:1;
+  }
+
+  50%{
+    transform:scale(.65);
+    opacity:.5;
+  }
+
+}
+
+.title{
 
   font-size:
-    clamp(28px, 6vw, 48px);
+    clamp(28px,6vw,48px);
 
-  line-height: 1.1;
+  line-height:1.1;
 
-  font-weight: 900;
+  font-weight:900;
 
-  letter-spacing: -1.5px;
+  letter-spacing:-1.5px;
 
   background:
     linear-gradient(
@@ -237,99 +263,111 @@ header {
   background-clip:
     text;
 
-  color: transparent;
+  color:transparent;
 
   animation:
     titleGradient 5s linear infinite;
+
 }
 
-@keyframes titleGradient {
+@keyframes titleGradient{
 
-  to {
+  to{
+
     background-position:
       250% center;
+
   }
 
 }
 
 
-/* ================= NAME ================= */
+/* =====================================================
+   NAME
+===================================================== */
 
-.name-box {
+.name-box{
 
-  display: none;
+  display:none;
 
   margin:
     0 auto 17px;
 
-  max-width: 620px;
+  max-width:620px;
+
 }
 
-.name-label {
+.name-label{
 
-  display: block;
+  display:block;
 
-  color: #91a0bd;
+  color:#91a0bd;
 
-  font-size: 11px;
+  font-size:11px;
 
   margin:
     0 0 7px 4px;
+
 }
 
-.name-input-wrap {
+.name-input-wrap{
 
-  position: relative;
+  position:relative;
+
 }
 
-.name-input-icon {
+.name-input-icon{
 
-  position: absolute;
+  position:absolute;
 
-  left: 15px;
+  left:15px;
 
-  top: 50%;
+  top:50%;
 
   transform:
     translateY(-50%);
 
-  font-size: 17px;
+  font-size:17px;
 
-  opacity: .7;
+  opacity:.7;
+
 }
 
-.name-box input {
+.name-box input{
 
-  width: 100%;
+  width:100%;
 
-  height: 52px;
+  height:52px;
 
   padding:
     0 15px 0 45px;
 
-  border-radius: 13px;
+  border-radius:13px;
 
   border:
     1px solid
     rgba(255,255,255,.10);
 
-  outline: none;
+  outline:none;
 
   background:
     rgba(13,20,42,.85);
 
-  color: white;
+  color:white;
 
-  font-size: 15px;
+  font-size:15px;
 
-  transition: .25s;
+  transition:.25s;
+
 }
 
-.name-box input::placeholder {
-  color: #586682;
+.name-box input::placeholder{
+
+  color:#586682;
+
 }
 
-.name-box input:focus {
+.name-box input:focus{
 
   border-color:
     rgba(91,140,255,.6);
@@ -337,22 +375,25 @@ header {
   box-shadow:
     0 0 0 4px
     rgba(91,140,255,.08);
+
 }
 
 
-/* ================= MESSAGE ================= */
+/* =====================================================
+   MESSAGE
+===================================================== */
 
-.message-shell {
+.message-shell{
 
-  position: relative;
+  position:relative;
 
-  max-width: 900px;
+  max-width:900px;
 
-  margin: auto;
+  margin:auto;
 
-  padding: 1px;
+  padding:1px;
 
-  border-radius: 25px;
+  border-radius:25px;
 
   background:
     linear-gradient(
@@ -365,17 +406,18 @@ header {
   box-shadow:
     0 30px 90px
     rgba(0,0,0,.32);
+
 }
 
-.message-box {
+.message-box{
 
-  min-height: 520px;
+  min-height:520px;
 
-  position: relative;
+  position:relative;
 
-  overflow: hidden;
+  overflow:hidden;
 
-  border-radius: 24px;
+  border-radius:24px;
 
   background:
     radial-gradient(
@@ -384,23 +426,24 @@ header {
       transparent 35%
     ),
     #07101f;
+
 }
 
-.message-box::before {
+.message-box::before{
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  width: 250px;
+  width:250px;
 
-  height: 250px;
+  height:250px;
 
-  border-radius: 50%;
+  border-radius:50%;
 
-  left: -130px;
+  left:-130px;
 
-  top: -120px;
+  top:-120px;
 
   background:
     rgba(91,140,255,.08);
@@ -408,24 +451,25 @@ header {
   filter:
     blur(30px);
 
-  pointer-events: none;
+  pointer-events:none;
+
 }
 
-.message-box::after {
+.message-box::after{
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  width: 250px;
+  width:250px;
 
-  height: 250px;
+  height:250px;
 
-  border-radius: 50%;
+  border-radius:50%;
 
-  right: -130px;
+  right:-130px;
 
-  bottom: -120px;
+  bottom:-120px;
 
   background:
     rgba(139,92,255,.08);
@@ -433,35 +477,37 @@ header {
   filter:
     blur(30px);
 
-  pointer-events: none;
+  pointer-events:none;
+
 }
 
-.loading {
+.loading{
 
-  min-height: 520px;
+  min-height:520px;
 
-  display: flex;
+  display:flex;
 
-  flex-direction: column;
+  flex-direction:column;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  gap: 13px;
+  gap:13px;
 
-  color: #8190ad;
+  color:#8190ad;
 
-  font-size: 12px;
+  font-size:12px;
+
 }
 
-.loader {
+.loader{
 
-  width: 42px;
+  width:42px;
 
-  height: 42px;
+  height:42px;
 
-  border-radius: 50%;
+  border-radius:50%;
 
   border:
     3px solid
@@ -475,51 +521,55 @@ header {
 
   animation:
     spin .8s linear infinite;
+
 }
 
-@keyframes spin {
+@keyframes spin{
 
-  to {
-    transform: rotate(360deg);
+  to{
+    transform:rotate(360deg);
   }
 
 }
 
 
-/* ================= CONTROLS ================= */
+/* =====================================================
+   CONTROLS
+===================================================== */
 
-.controls {
+.controls{
 
-  max-width: 900px;
+  max-width:900px;
 
   margin:
     17px auto 0;
 
-  display: grid;
+  display:grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(3,1fr);
 
-  gap: 10px;
+  gap:10px;
+
 }
 
-button {
+button{
 
-  min-height: 50px;
+  min-height:50px;
 
   border:
     1px solid
     rgba(255,255,255,.08);
 
-  border-radius: 13px;
+  border-radius:13px;
 
-  cursor: pointer;
+  cursor:pointer;
 
-  color: white;
+  color:white;
 
-  font-size: 13px;
+  font-size:13px;
 
-  font-weight: 800;
+  font-weight:800;
 
   background:
     rgba(19,29,57,.9);
@@ -528,9 +578,10 @@ button {
     transform .25s,
     box-shadow .25s,
     border-color .25s;
+
 }
 
-button:hover {
+button:hover{
 
   transform:
     translateY(-3px);
@@ -541,19 +592,20 @@ button:hover {
   box-shadow:
     0 12px 30px
     rgba(0,0,0,.22);
+
 }
 
-button:disabled {
+button:disabled{
 
-  opacity: .55;
+  opacity:.55;
 
-  cursor:
-    not-allowed;
+  cursor:not-allowed;
 
-  transform: none;
+  transform:none;
+
 }
 
-#playBtn {
+#playBtn{
 
   background:
     linear-gradient(
@@ -568,9 +620,10 @@ button:disabled {
   box-shadow:
     0 8px 25px
     rgba(79,130,255,.18);
+
 }
 
-#shareBtn {
+#shareBtn{
 
   background:
     linear-gradient(
@@ -578,9 +631,10 @@ button:disabled {
       rgba(32,50,86,.95),
       rgba(25,36,66,.95)
     );
+
 }
 
-#downloadBtn {
+#downloadBtn{
 
   background:
     linear-gradient(
@@ -595,16 +649,19 @@ button:disabled {
   box-shadow:
     0 8px 25px
     rgba(11,159,216,.14);
+
 }
 
 
-/* ================= AD ================= */
+/* =====================================================
+   AD
+===================================================== */
 
-.ad {
+.ad{
 
-  max-width: 900px;
+  max-width:900px;
 
-  min-height: 70px;
+  min-height:70px;
 
   margin:
     20px auto 0;
@@ -613,79 +670,85 @@ button:disabled {
     1px dashed
     rgba(126,154,255,.15);
 
-  border-radius: 14px;
+  border-radius:14px;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  color: #52617c;
+  color:#52617c;
 
   background:
     rgba(255,255,255,.012);
 
-  font-size: 10px;
+  font-size:10px;
 
-  letter-spacing: 1px;
+  letter-spacing:1px;
 
-  text-transform: uppercase;
+  text-transform:uppercase;
+
 }
 
-.ad.has-ad {
+.ad.has-ad{
 
   border:
     1px solid
     rgba(126,154,255,.12);
 
-  text-transform: none;
+  text-transform:none;
 
-  letter-spacing: normal;
+  letter-spacing:normal;
+
 }
 
 
-/* ================= DOWNLOAD AD ================= */
+/* =====================================================
+   DOWNLOAD AD
+===================================================== */
 
-.download-ad-overlay {
+.download-ad-overlay{
 
-  position: fixed;
+  position:fixed;
 
-  inset: 0;
+  inset:0;
 
-  z-index: 99999;
+  z-index:99999;
 
-  display: none;
+  display:none;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  padding: 20px;
+  padding:20px;
 
   background:
     rgba(0,0,0,.72);
 
   backdrop-filter:
     blur(8px);
+
 }
 
-.download-ad-overlay.show {
+.download-ad-overlay.show{
 
-  display: flex;
+  display:flex;
+
 }
 
-.download-ad-box {
+.download-ad-box{
 
-  width: 100%;
+  width:100%;
 
-  max-width: 520px;
+  max-width:520px;
 
-  min-height: 180px;
+  min-height:180px;
 
-  padding: 20px;
+  padding:20px;
 
-  border-radius: 20px;
+  border-radius:20px;
 
   border:
     1px solid
@@ -698,69 +761,76 @@ button:disabled {
     0 30px 100px
     rgba(0,0,0,.55);
 
-  text-align: center;
+  text-align:center;
+
 }
 
-.download-ad-title {
+.download-ad-title{
 
-  color: #8fa4cc;
+  color:#8fa4cc;
 
-  font-size: 11px;
+  font-size:11px;
 
-  text-transform: uppercase;
+  text-transform:uppercase;
 
-  letter-spacing: 1.3px;
+  letter-spacing:1.3px;
 
-  margin-bottom: 12px;
+  margin-bottom:12px;
+
 }
 
-#downloadAdContent {
+#downloadAdContent{
 
-  width: 100%;
+  width:100%;
 
-  min-height: 100px;
+  min-height:100px;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  overflow: hidden;
+  overflow:hidden;
+
 }
 
-.ad-loading {
+.ad-loading{
 
-  color: #7e8da9;
+  color:#7e8da9;
 
-  font-size: 12px;
+  font-size:12px;
+
 }
 
 
-/* ================= INFO ================= */
+/* =====================================================
+   INFO
+===================================================== */
 
-.info {
+.info{
 
-  max-width: 900px;
+  max-width:900px;
 
   margin:
     18px auto 0;
 
-  display: flex;
+  display:flex;
 
-  justify-content: center;
+  justify-content:center;
 
-  gap: 8px;
+  gap:8px;
 
-  flex-wrap: wrap;
+  flex-wrap:wrap;
+
 }
 
-.info-pill {
+.info-pill{
 
   padding:
     7px 10px;
 
-  border-radius: 999px;
+  border-radius:999px;
 
   background:
     rgba(255,255,255,.035);
@@ -769,185 +839,310 @@ button:disabled {
     1px solid
     rgba(255,255,255,.06);
 
-  color: #667594;
+  color:#667594;
 
-  font-size: 9px;
+  font-size:9px;
+
 }
 
 
-/* ================= MOBILE ================= */
+/* =====================================================
+   DOWNLOAD STATUS
+===================================================== */
 
-@media (max-width:600px) {
+.download-status{
 
-  header {
+  max-width:900px;
+
+  margin:
+    10px auto 0;
+
+  text-align:center;
+
+  min-height:18px;
+
+  color:#71809e;
+
+  font-size:10px;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+  header{
+
     padding:
       11px 12px;
+
   }
 
-  .page {
+  .page{
+
     padding:
       20px 12px 45px;
+
   }
 
-  .brand {
-    font-size: 10px;
+  .brand{
+
+    font-size:10px;
+
   }
 
-  .back {
-    font-size: 11px;
+  .back{
+
+    font-size:11px;
+
     padding:
       7px 8px;
+
   }
 
-  .title-area {
-    padding-top: 8px;
+  .title-area{
+
+    padding-top:8px;
+
   }
 
-  .title {
-    font-size: 31px;
+  .title{
+
+    font-size:31px;
+
   }
 
-  .message-shell {
-    border-radius: 19px;
+  .message-shell{
+
+    border-radius:19px;
+
   }
 
-  .message-box {
-    min-height: 460px;
-    border-radius: 18px;
+  .message-box{
+
+    min-height:460px;
+
+    border-radius:18px;
+
   }
 
-  .loading {
-    min-height: 460px;
+  .loading{
+
+    min-height:460px;
+
   }
 
-  .controls {
-    grid-template-columns: 1fr;
+  .controls{
+
+    grid-template-columns:1fr;
+
   }
 
-  button {
-    min-height: 48px;
+  button{
+
+    min-height:48px;
+
   }
 
 }
 
-</style></head><body><header>  <div class="header-inner"><a
-  class="back"
-  href="/"
->
-  ← Back to Messages
-</a>
+</style>
 
-<div class="brand">
-  MAKYAMA MESSAGES
-</div>
+</head>
 
-  </div></header><main class="page">  <section class="title-area"><div class="eyebrow">
 
-  <span class="eyebrow-dot"></span>
+<body>
 
-  Animated Message
 
-</div>
+<header>
 
-<h1
-  id="title"
-  class="title"
->
-  Loading...
-</h1>
+  <div class="header-inner">
 
-  </section>  <div
-    id="nameBox"
-    class="name-box"
-  ><label
-  class="name-label"
-  for="nameInput"
->
-  Personalize this message
-</label>
+    <a
+      class="back"
+      href="/"
+    >
+      ← Back to Messages
+    </a>
 
-<div class="name-input-wrap">
+    <div class="brand">
+      MAKYAMA MESSAGES
+    </div>
 
-  <span class="name-input-icon">
-    👤
-  </span>
+  </div>
 
-  <input
-    id="nameInput"
-    type="text"
-    maxlength="80"
-    placeholder="Enter name..."
-    autocomplete="off"
+</header>
+
+
+<main class="page">
+
+
+<section class="title-area">
+
+  <div class="eyebrow">
+
+    <span class="eyebrow-dot"></span>
+
+    Animated Message
+
+  </div>
+
+
+  <h1
+    id="title"
+    class="title"
   >
+    Loading...
+  </h1>
 
-</div>
+</section>
 
-  </div>  <div class="message-shell"><div
-  id="messageBox"
-  class="message-box"
+
+<div
+  id="nameBox"
+  class="name-box"
 >
 
-  <div class="loading">
+  <label
+    class="name-label"
+    for="nameInput"
+  >
+    Personalize this message
+  </label>
 
-    <div class="loader"></div>
 
-    <span>
-      Loading animated message...
+  <div class="name-input-wrap">
+
+    <span class="name-input-icon">
+      👤
     </span>
+
+
+    <input
+      id="nameInput"
+      type="text"
+      maxlength="80"
+      placeholder="Enter name..."
+      autocomplete="off"
+    >
 
   </div>
 
 </div>
 
-  </div>  <div class="controls"><button id="playBtn">
-  ▶ Play Animation
-</button>
 
-<button id="shareBtn">
-  ↗ Share
-</button>
+<div class="message-shell">
 
-<button id="downloadBtn">
-  🎥 Download MP4
-</button>
-
-  </div>  <div class="info"><span class="info-pill">
-  ✨ Animated
-</span>
-
-<span class="info-pill">
-  💬 Swahili Message
-</span>
-
-<span class="info-pill">
-  📱 Shareable
-</span>
-
-<span class="info-pill">
-  🎥 MP4 Video
-</span>
-
-  </div>  <div
-    id="downloadAd"
-    class="ad"
+  <div
+    id="messageBox"
+    class="message-box"
   >
-    Advertisement
-  </div></main><div
-  id="downloadAdOverlay"
-  class="download-ad-overlay"
->  <div class="download-ad-box"><div class="download-ad-title">
+
+    <div class="loading">
+
+      <div class="loader"></div>
+
+      <span>
+        Loading animated message...
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="controls">
+
+  <button id="playBtn">
+    ▶ Play Animation
+  </button>
+
+
+  <button id="shareBtn">
+    ↗ Share
+  </button>
+
+
+  <button id="downloadBtn">
+    🎥 Download MP4
+  </button>
+
+</div>
+
+
+<div
+  id="downloadStatus"
+  class="download-status"
+></div>
+
+
+<div class="info">
+
+  <span class="info-pill">
+    ✨ Animated
+  </span>
+
+  <span class="info-pill">
+    💬 Swahili Message
+  </span>
+
+  <span class="info-pill">
+    📱 Shareable
+  </span>
+
+  <span class="info-pill">
+    🎥 MP4 Video
+  </span>
+
+  <span class="info-pill">
+    ✨ MAKYAMA Branded
+  </span>
+
+</div>
+
+
+<div
+  id="downloadAd"
+  class="ad"
+>
   Advertisement
 </div>
 
-<div id="downloadAdContent">
 
-  <div class="ad-loading">
-    Preparing advertisement...
+</main>
+
+
+<div
+  id="downloadAdOverlay"
+  class="download-ad-overlay"
+>
+
+  <div class="download-ad-box">
+
+    <div class="download-ad-title">
+      Advertisement
+    </div>
+
+
+    <div id="downloadAdContent">
+
+      <div class="ad-loading">
+        Preparing advertisement...
+      </div>
+
+    </div>
+
   </div>
 
 </div>
 
-  </div></div><script>
+
+<script>
 
 /* =====================================================
    URL
@@ -1016,6 +1211,11 @@ const downloadAdContent =
     "downloadAdContent"
   );
 
+const downloadStatus =
+  document.getElementById(
+    "downloadStatus"
+  );
+
 
 /* =====================================================
    DATA
@@ -1032,9 +1232,9 @@ let downloadAdData = null;
    LOAD TEMPLATE
 ===================================================== */
 
-async function loadTemplate() {
+async function loadTemplate(){
 
-  if (!id) {
+  if(!id){
 
     showError(
       "Message ID is missing."
@@ -1044,21 +1244,27 @@ async function loadTemplate() {
 
   }
 
-  try {
+
+  try{
 
     const response =
       await fetch(
         "/api/templates/" +
-        encodeURIComponent(id)
+        encodeURIComponent(id),
+        {
+          cache:"no-store"
+        }
       );
 
-    if (!response.ok) {
+
+    if(!response.ok){
 
       throw new Error(
         "Template not found."
       );
 
     }
+
 
     template =
       await response.json();
@@ -1069,9 +1275,9 @@ async function loadTemplate() {
       "MAKYAMA Message";
 
 
-    if (
+    if(
       template.nameRequired
-    ) {
+    ){
 
       nameBox.style.display =
         "block";
@@ -1083,7 +1289,7 @@ async function loadTemplate() {
       params.get("name");
 
 
-    if (sharedName) {
+    if(sharedName){
 
       nameInput.value =
         sharedName;
@@ -1095,7 +1301,9 @@ async function loadTemplate() {
 
     await loadAds();
 
-  } catch (error) {
+
+  }
+  catch(error){
 
     console.error(
       error
@@ -1114,7 +1322,7 @@ async function loadTemplate() {
    ERROR
 ===================================================== */
 
-function showError(message) {
+function showError(message){
 
   messageBox.innerHTML = `
 
@@ -1157,9 +1365,9 @@ function showError(message) {
    RENDER MESSAGE
 ===================================================== */
 
-function renderMessage() {
+function renderMessage(){
 
-  if (!template) return;
+  if(!template) return;
 
 
   let html =
@@ -1178,20 +1386,9 @@ function renderMessage() {
     );
 
 
-  /*
-    Clear previous template.
-  */
+  messageBox.innerHTML =
+    "";
 
-  messageBox.innerHTML = "";
-
-
-  /*
-    Create a temporary wrapper.
-    This lets us separate:
-      HTML
-      STYLE
-      SCRIPT
-  */
 
   const wrapper =
     document.createElement(
@@ -1202,11 +1399,6 @@ function renderMessage() {
   wrapper.innerHTML =
     html;
 
-
-  /*
-    Move all normal nodes into
-    the message box first.
-  */
 
   const nodes =
     Array.from(
@@ -1220,10 +1412,11 @@ function renderMessage() {
   nodes.forEach(
     node => {
 
-      if (
-        node.nodeName.toLowerCase()
+      if(
+        node.nodeName
+          .toLowerCase()
         === "script"
-      ) {
+      ){
 
         scripts.push(node);
 
@@ -1240,18 +1433,8 @@ function renderMessage() {
   );
 
 
-  /*
-    Run CSS animations.
-  */
-
   runAnimations();
 
-
-  /*
-    IMPORTANT:
-    Execute scripts AFTER the HTML
-    has been inserted into messageBox.
-  */
 
   executeTemplateScripts(
     scripts
@@ -1266,7 +1449,7 @@ function renderMessage() {
 
 function executeTemplateScripts(
   scripts
-) {
+){
 
   scripts.forEach(
     oldScript => {
@@ -1276,14 +1459,6 @@ function executeTemplateScripts(
           "script"
         );
 
-
-      /*
-        Copy attributes.
-        This supports:
-        <script src="">
-        <script type="">
-        etc.
-      */
 
       Array.from(
         oldScript.attributes
@@ -1299,13 +1474,9 @@ function executeTemplateScripts(
       );
 
 
-      /*
-        Copy JavaScript code.
-      */
-
-      if (
+      if(
         oldScript.textContent
-      ) {
+      ){
 
         newScript.textContent =
           oldScript.textContent;
@@ -1313,31 +1484,14 @@ function executeTemplateScripts(
       }
 
 
-      /*
-        Add it to the document,
-        not just messageBox.
-
-        This allows template scripts
-        to create global functions,
-        event listeners, etc.
-      */
-
       document.body.appendChild(
         newScript
       );
 
 
-      /*
-        Remove temporary script
-        after execution.
-
-        External scripts may continue
-        loading normally.
-      */
-
-      if (
+      if(
         !oldScript.src
-      ) {
+      ){
 
         setTimeout(
           () => {
@@ -1360,7 +1514,7 @@ function executeTemplateScripts(
    RUN CSS ANIMATIONS
 ===================================================== */
 
-function runAnimations() {
+function runAnimations(){
 
   const elements =
     messageBox.querySelectorAll(
@@ -1375,7 +1529,7 @@ function runAnimations() {
         element.dataset.animation;
 
 
-      if (!animation) return;
+      if(!animation) return;
 
 
       element.style.animation =
@@ -1398,45 +1552,13 @@ function runAnimations() {
    UNIVERSAL CLICK SUPPORT
 ===================================================== */
 
-/*
-   Because template HTML is injected dynamically,
-   we also support inline onclick naturally.
-
-   Example:
-
-   <button onclick="openSomething()">
-      Open
-   </button>
-
-   The script inside the template can define:
-
-   function openSomething() {
-      ...
-   }
-
-   and it will work.
-*/
-
-
-/*
-   Capture clicks only for template content.
-
-   This is intentionally delegated so new
-   interactive elements added dynamically
-   are also supported.
-*/
-
 messageBox.addEventListener(
   "click",
-  function(event) {
+  function(event){
 
     const target =
       event.target;
 
-
-    /*
-      Find closest clickable element.
-    */
 
     const clickable =
       target.closest(
@@ -1444,23 +1566,16 @@ messageBox.addEventListener(
       );
 
 
-    /*
-      data-mk-action gives templates
-      an optional universal interaction
-      system without needing custom
-      template.html changes.
-    */
-
-    if (!clickable) return;
+    if(!clickable) return;
 
 
     const action =
       clickable.dataset.mkAction;
 
 
-    if (
+    if(
       action === "close"
-    ) {
+    ){
 
       const overlay =
         clickable.closest(
@@ -1468,7 +1583,7 @@ messageBox.addEventListener(
         );
 
 
-      if (overlay) {
+      if(overlay){
 
         overlay.classList.remove(
           "show"
@@ -1490,15 +1605,17 @@ messageBox.addEventListener(
    ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(value){
 
   const div =
     document.createElement(
       "div"
     );
 
+
   div.textContent =
     value;
+
 
   return div.innerHTML;
 
@@ -1527,7 +1644,7 @@ playBtn.addEventListener(
   "click",
   () => {
 
-    if (!template) return;
+    if(!template) return;
 
 
     renderMessage();
@@ -1559,7 +1676,7 @@ shareBtn.addEventListener(
   "click",
   async () => {
 
-    if (!template) return;
+    if(!template) return;
 
 
     const url =
@@ -1572,11 +1689,18 @@ shareBtn.addEventListener(
       nameInput.value.trim();
 
 
-    if (name) {
+    if(name){
 
       url.searchParams.set(
         "name",
         name
+      );
+
+    }
+    else{
+
+      url.searchParams.delete(
+        "name"
       );
 
     }
@@ -1586,11 +1710,11 @@ shareBtn.addEventListener(
       url.toString();
 
 
-    try {
+    try{
 
-      if (
+      if(
         navigator.share
-      ) {
+      ){
 
         await navigator.share({
 
@@ -1606,7 +1730,8 @@ shareBtn.addEventListener(
 
         });
 
-      } else {
+      }
+      else{
 
         await navigator.clipboard
           .writeText(
@@ -1620,7 +1745,8 @@ shareBtn.addEventListener(
 
       }
 
-    } catch (error) {
+    }
+    catch(error){
 
       console.log(
         error
@@ -1638,7 +1764,7 @@ shareBtn.addEventListener(
 
 function showTemporaryMessage(
   message
-) {
+){
 
   const old =
     document.getElementById(
@@ -1646,7 +1772,7 @@ function showTemporaryMessage(
     );
 
 
-  if (old) {
+  if(old){
 
     old.remove();
 
@@ -1733,20 +1859,42 @@ function showTemporaryMessage(
 
 
 /* =====================================================
+   DOWNLOAD STATUS
+===================================================== */
+
+function setDownloadStatus(
+  message
+){
+
+  if(!downloadStatus){
+    return;
+  }
+
+
+  downloadStatus.textContent =
+    message || "";
+
+}
+
+
+/* =====================================================
    LOAD ADS
 ===================================================== */
 
-async function loadAds() {
+async function loadAds(){
 
-  try {
+  try{
 
     const response =
       await fetch(
-        "/api/ads"
+        "/api/ads",
+        {
+          cache:"no-store"
+        }
       );
 
 
-    if (!response.ok) {
+    if(!response.ok){
 
       return;
 
@@ -1767,9 +1915,9 @@ async function loadAds() {
       );
 
 
-    if (
+    if(
       downloadAds.length > 0
-    ) {
+    ){
 
       downloadAdData =
         downloadAds[0];
@@ -1780,14 +1928,16 @@ async function loadAds() {
         downloadAd
       );
 
-    } else {
+    }
+    else{
 
       downloadAd.style.display =
         "none";
 
     }
 
-  } catch (error) {
+  }
+  catch(error){
 
     console.log(
       "Ad loading error:",
@@ -1810,12 +1960,12 @@ async function loadAds() {
 function renderNormalAd(
   ad,
   container
-) {
+){
 
-  if (!ad) return;
+  if(!ad) return;
 
 
-  if (!ad.code) {
+  if(!ad.code){
 
     container.textContent =
       ad.title ||
@@ -1826,7 +1976,8 @@ function renderNormalAd(
   }
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
   executeAdCode(
@@ -1849,7 +2000,7 @@ function renderNormalAd(
 function executeAdCode(
   code,
   container
-) {
+){
 
   const parser =
     new DOMParser();
@@ -1871,10 +2022,11 @@ function executeAdCode(
   nodes.forEach(
     node => {
 
-      if (
-        node.nodeName.toLowerCase()
+      if(
+        node.nodeName
+          .toLowerCase()
         === "script"
-      ) {
+      ){
 
         const script =
           document.createElement(
@@ -1904,7 +2056,8 @@ function executeAdCode(
           script
         );
 
-      } else {
+      }
+      else{
 
         container.appendChild(
           document.importNode(
@@ -1925,12 +2078,12 @@ function executeAdCode(
    DOWNLOAD AD
 ===================================================== */
 
-async function triggerDownloadAd() {
+async function triggerDownloadAd(){
 
-  if (
+  if(
     !downloadAdData ||
     !downloadAdData.code
-  ) {
+  ){
 
     return;
 
@@ -1970,7 +2123,7 @@ async function triggerDownloadAd() {
    WAIT
 ===================================================== */
 
-function wait(ms) {
+function wait(ms){
 
   return new Promise(
     resolve =>
@@ -1991,7 +2144,7 @@ downloadBtn.addEventListener(
   "click",
   async () => {
 
-    if (!template) return;
+    if(!template) return;
 
 
     downloadBtn.disabled =
@@ -2008,40 +2161,19 @@ downloadBtn.addEventListener(
       downloadBtn.textContent;
 
 
-    try {
+    try{
 
-      try {
+      setDownloadStatus(
+        "Preparing your MAKYAMA video..."
+      );
 
-        await fetch(
-          "/api/analytics/download",
-          {
 
-            method: "POST",
+      /*
+        Usiongeze analytics hapa.
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-                templateId:
-                  template.id
-              })
-
-          }
-        );
-
-      } catch (
-        analyticsError
-      ) {
-
-        console.log(
-          "Analytics error:",
-          analyticsError
-        );
-
-      }
+        Server /api/generate-video
+        tayari inaongeza download.
+      */
 
 
       renderMessage();
@@ -2051,6 +2183,11 @@ downloadBtn.addEventListener(
         "⏳ Opening advertisement...";
 
 
+      setDownloadStatus(
+        "Preparing advertisement..."
+      );
+
+
       await triggerDownloadAd();
 
 
@@ -2058,59 +2195,101 @@ downloadBtn.addEventListener(
         "⏳ Creating MP4...";
 
 
-      const response =
-        await fetch(
-          "/api/generate-video",
-          {
+      setDownloadStatus(
+        "Creating your MP4. Please wait..."
+      );
 
-            method: "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
+      const controller =
+        new AbortController();
 
-            body:
-              JSON.stringify({
 
-                templateId:
-                  template.id,
+      /*
+        Video inaweza kuchukua muda
+        kutengenezwa, hasa Render
+        inapokuwa na load.
+      */
 
-                name:
-                  nameInput.value.trim() ||
-                  "Rafiki"
+      const timeout =
+        setTimeout(
+          () => {
 
-              })
+            controller.abort();
 
-          }
+          },
+          180000
         );
 
 
-      if (!response.ok) {
+      let response;
+
+
+      try{
+
+        response =
+          await fetch(
+            "/api/generate-video",
+            {
+
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+
+                  templateId:
+                    template.id,
+
+                  name:
+                    nameInput.value.trim() ||
+                    "Rafiki"
+
+                }),
+
+              signal:
+                controller.signal
+
+            }
+          );
+
+      }
+      finally{
+
+        clearTimeout(
+          timeout
+        );
+
+      }
+
+
+      if(!response.ok){
 
         let errorMessage =
           "Video generation failed.";
 
 
-        try {
+        try{
 
           const errorData =
             await response.json();
 
 
-          if (
+          if(
             errorData &&
             errorData.error
-          ) {
+          ){
 
             errorMessage =
               errorData.error;
 
           }
 
-        } catch (
-          parseError
-        ) {
+        }
+        catch(parseError){
 
           console.log(
             parseError
@@ -2126,26 +2305,44 @@ downloadBtn.addEventListener(
       }
 
 
+      downloadBtn.textContent =
+        "⏳ Receiving MP4...";
+
+
+      setDownloadStatus(
+        "MP4 created. Preparing download..."
+      );
+
+
       const blob =
         await response.blob();
 
 
-      if (
+      if(
         !blob ||
-        blob.size === 0
-      ) {
+        blob.size <= 0
+      ){
 
         throw new Error(
-          "Empty video received."
+          "Empty video received from server."
         );
 
       }
 
 
+      const filename =
+        makeFileName() +
+        ".mp4";
+
+
       downloadBlob(
         blob,
-        makeFileName() +
-        ".mp4"
+        filename
+      );
+
+
+      setDownloadStatus(
+        "✓ MP4 download started"
       );
 
 
@@ -2154,7 +2351,8 @@ downloadBtn.addEventListener(
       );
 
 
-    } catch (error) {
+    }
+    catch(error){
 
       console.error(
         "Video download error:",
@@ -2162,28 +2360,39 @@ downloadBtn.addEventListener(
       );
 
 
-      showTemporaryMessage(
-        "❌ " +
-        (
-          error.message ||
-          "Video failed. Try again."
-        )
+      let message =
+        error &&
+        error.name ===
+        "AbortError"
+
+          ? "Video generation took too long. Please try again."
+
+          : (
+              error.message ||
+              "Video failed. Try again."
+            );
+
+
+      setDownloadStatus(
+        "❌ " + message
       );
 
 
-    } finally {
+      showTemporaryMessage(
+        "❌ " + message
+      );
+
+    }
+    finally{
 
       downloadBtn.disabled =
         false;
 
-
       playBtn.disabled =
         false;
 
-
       shareBtn.disabled =
         false;
-
 
       downloadBtn.textContent =
         oldText;
@@ -2201,7 +2410,19 @@ downloadBtn.addEventListener(
 function downloadBlob(
   blob,
   filename
-) {
+){
+
+  if(
+    !blob ||
+    blob.size === 0
+  ){
+
+    throw new Error(
+      "Video file is empty."
+    );
+
+  }
+
 
   const url =
     URL.createObjectURL(
@@ -2223,26 +2444,46 @@ function downloadBlob(
     filename;
 
 
+  link.setAttribute(
+    "download",
+    filename
+  );
+
+
+  link.style.display =
+    "none";
+
+
   document.body.appendChild(
     link
   );
 
 
+  /*
+    click() directly after the
+    user-triggered async operation.
+  */
+
   link.click();
 
 
-  link.remove();
-
+  /*
+    Keep it alive briefly so
+    mobile browsers get enough
+    time to start the download.
+  */
 
   setTimeout(
     () => {
+
+      link.remove();
 
       URL.revokeObjectURL(
         url
       );
 
     },
-    5000
+    10000
   );
 
 }
@@ -2252,7 +2493,7 @@ function downloadBlob(
    FILE NAME
 ===================================================== */
 
-function makeFileName() {
+function makeFileName(){
 
   const base =
     template &&
@@ -2291,4 +2532,8 @@ function makeFileName() {
 
 loadTemplate();
 
-</script></body></html>
+</script>
+
+</body>
+
+  </html>
