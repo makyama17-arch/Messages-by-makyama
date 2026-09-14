@@ -168,6 +168,730 @@ async function increment(
 }
 
 /* =====================================================
+MAILTRAP EMAIL
+===================================================== */
+
+const MAILTRAP_API_URL =
+  "https://send.api.mailtrap.io/api/send";
+
+function normalizeEmail(
+  email
+) {
+
+  return String(
+    email || ""
+  )
+    .trim()
+    .toLowerCase();
+
+}
+
+function isValidEmail(
+  email
+) {
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(email);
+
+}
+
+function hashVerificationValue(
+  value
+) {
+
+  return crypto
+    .createHash("sha256")
+    .update(
+      String(value)
+    )
+    .digest("hex");
+
+}
+
+function generateVerificationCode() {
+
+  return String(
+    crypto.randomInt(
+      100000,
+      1000000
+    )
+  );
+
+}
+
+async function sendVerificationEmail(
+  email,
+  code
+) {
+
+  const token =
+    process.env.MAILTRAP_API_TOKEN;
+
+  const fromEmail =
+    process.env.MAILTRAP_FROM_EMAIL;
+
+  const fromName =
+    process.env.MAILTRAP_FROM_NAME ||
+    "MAKYAMA Messages";
+
+  if (!token) {
+
+    throw new Error(
+      "MAILTRAP_API_TOKEN is not configured on Render."
+    );
+
+  }
+
+  if (!fromEmail) {
+
+    throw new Error(
+      "MAILTRAP_FROM_EMAIL is not configured on Render."
+    );
+
+  }
+
+  const response =
+    await fetch(
+      MAILTRAP_API_URL,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json",
+
+          "Api-Token":
+            token
+
+        },
+
+        body:
+          JSON.stringify({
+
+            from: {
+
+              email:
+                fromEmail,
+
+              name:
+                fromName
+
+            },
+
+            to: [
+
+              {
+
+                email
+
+              }
+
+            ],
+
+            subject:
+              "MAKYAMA Verification Code",
+
+            text:
+              `Your MAKYAMA verification code is ${code}. This code expires in 10 minutes.`,
+
+            html: `
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>
+MAKYAMA Verification
+</title>
+
+</head>
+
+<body
+  style="
+    margin:0;
+    padding:0;
+    background:#07101f;
+    font-family:Arial,Helvetica,sans-serif;
+  "
+>
+
+<div
+  style="
+    max-width:520px;
+    margin:40px auto;
+    padding:30px 22px;
+    background:#0d1729;
+    border-radius:18px;
+    color:#ffffff;
+    text-align:center;
+  "
+>
+
+<div
+  style="
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  "
+>
+MAKYAMA MESSAGES
+</div>
+
+<div
+  style="
+    font-size:16px;
+    color:#b8c4d8;
+    margin-bottom:24px;
+  "
+>
+Email Verification
+</div>
+
+<div
+  style="
+    display:inline-block;
+    padding:16px 24px;
+    border-radius:14px;
+    background:#16243c;
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:8px;
+    color:#ffffff;
+  "
+>
+${code}
+</div>
+
+<p
+  style="
+    color:#b8c4d8;
+    font-size:14px;
+    line-height:1.6;
+    margin-top:24px;
+  "
+>
+This verification code expires in
+<strong>10 minutes</strong>.
+</p>
+
+<p
+  style="
+    color:#71809a;
+    font-size:12px;
+    margin-top:30px;
+  "
+>
+If you did not request this code,
+you can safely ignore this email.
+</p>
+
+<div
+  style="
+    margin-top:24px;
+    color:#66758d;
+    font-size:11px;
+  "
+>
+makyama.pntr.dev
+</div>
+
+</div>
+
+</body>
+
+</html>
+
+`
+
+          })
+
+      }
+    );
+
+  const responseText =
+    await response.text();
+
+  let data = null;
+
+  try {
+
+    data =
+      JSON.parse(
+        responseText
+      );
+
+  } catch (
+    error
+  ) {
+
+    data = null;
+
+  }
+
+  if (!response.ok) {
+
+    console.error(
+      "Mailtrap error:",
+      response.status,
+      responseText
+    );
+
+    throw new Error(
+      data?.errors?.[0]?.message ||
+      data?.message ||
+      `Mailtrap request failed with status ${response.status}.`
+    );
+
+  }
+
+  return data;
+
+}
+
+/* =====================================================
+EMAIL VERIFICATION
+===================================================== */
+
+const verificationRateLimit =
+  new Map();
+
+const verificationCooldown =
+  60 *
+  1000;
+
+const verificationExpiry =
+  10 *
+  60 *
+  1000;
+
+const verificationMaxAttempts =
+  5;
+
+function getVerificationKey(
+  email
+) {
+
+  return hashVerificationValue(
+    normalizeEmail(
+      email
+    )
+  );
+
+}
+
+/* =====================================================
+SEND VERIFICATION CODE
+===================================================== */
+
+app.post(
+  "/api/auth/send-code",
+  async (req, res) => {
+
+    try {
+
+      const email =
+        normalizeEmail(
+          req.body.email
+        );
+
+      if (
+        !isValidEmail(
+          email
+        )
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Please enter a valid email address."
+
+        });
+
+      }
+
+      const now =
+        Date.now();
+
+      const rateKey =
+        getVerificationKey(
+          email
+        );
+
+      const previousRequest =
+        verificationRateLimit.get(
+          rateKey
+        );
+
+      if (
+        previousRequest &&
+        now -
+        previousRequest <
+        verificationCooldown
+      ) {
+
+        const remaining =
+          Math.ceil(
+
+            (
+              verificationCooldown -
+              (
+                now -
+                previousRequest
+              )
+            ) /
+            1000
+
+          );
+
+        return res.status(429).json({
+
+          error:
+            `Please wait ${remaining} seconds before requesting another code.`
+
+        });
+
+      }
+
+      const code =
+        generateVerificationCode();
+
+      const codeHash =
+        hashVerificationValue(
+          code
+        );
+
+      const verificationData = {
+
+        email,
+
+        codeHash,
+
+        expiresAt:
+          now +
+          verificationExpiry,
+
+        attempts: 0,
+
+        createdAt:
+          now
+
+      };
+
+      await firebaseSet(
+
+        `emailVerifications/${rateKey}`,
+
+        verificationData
+
+      );
+
+      try {
+
+        await sendVerificationEmail(
+          email,
+          code
+        );
+
+      } catch (
+        emailError
+      ) {
+
+        await firebaseSet(
+
+          `emailVerifications/${rateKey}`,
+
+          null
+
+        );
+
+        throw emailError;
+
+      }
+
+      verificationRateLimit.set(
+        rateKey,
+        now
+      );
+
+      res.json({
+
+        ok: true,
+
+        message:
+          "Verification code sent to your email.",
+
+        expiresIn:
+          verificationExpiry
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Send verification code error:",
+        error.message
+      );
+
+      res.status(500).json({
+
+        error:
+          error.message ||
+          "Unable to send verification code."
+
+      });
+
+    }
+
+  }
+);
+
+/* =====================================================
+VERIFY CODE
+===================================================== */
+
+app.post(
+  "/api/auth/verify-code",
+  async (req, res) => {
+
+    try {
+
+      const email =
+        normalizeEmail(
+          req.body.email
+        );
+
+      const code =
+        String(
+          req.body.code || ""
+        )
+        .trim();
+
+      if (
+        !isValidEmail(
+          email
+        )
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Invalid email address."
+
+        });
+
+      }
+
+      if (
+        !/^\d{6}$/.test(
+          code
+        )
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Verification code must contain 6 digits."
+
+        });
+
+      }
+
+      const rateKey =
+        getVerificationKey(
+          email
+        );
+
+      const verification =
+        await firebaseGet(
+
+          `emailVerifications/${rateKey}`
+
+        );
+
+      if (!verification) {
+
+        return res.status(400).json({
+
+          error:
+            "No active verification code found. Please request a new code."
+
+        });
+
+      }
+
+      if (
+        Number(
+          verification.expiresAt
+        ) <
+        Date.now()
+      ) {
+
+        await firebaseSet(
+
+          `emailVerifications/${rateKey}`,
+
+          null
+
+        );
+
+        return res.status(400).json({
+
+          error:
+            "This verification code has expired. Please request a new code."
+
+        });
+
+      }
+
+      const attempts =
+        Number(
+          verification.attempts || 0
+        );
+
+      if (
+        attempts >=
+        verificationMaxAttempts
+      ) {
+
+        await firebaseSet(
+
+          `emailVerifications/${rateKey}`,
+
+          null
+
+        );
+
+        return res.status(429).json({
+
+          error:
+            "Too many incorrect attempts. Please request a new code."
+
+        });
+
+      }
+
+      const submittedHash =
+        hashVerificationValue(
+          code
+        );
+
+      const storedHash =
+        String(
+          verification.codeHash ||
+          ""
+        );
+
+      const hashesMatch =
+        submittedHash.length ===
+          storedHash.length &&
+        crypto.timingSafeEqual(
+          Buffer.from(
+            submittedHash
+          ),
+          Buffer.from(
+            storedHash
+          )
+        );
+
+      if (
+        !hashesMatch
+      ) {
+
+        await firebaseSet(
+
+          `emailVerifications/${rateKey}/attempts`,
+
+          attempts + 1
+
+        );
+
+        const remaining =
+          Math.max(
+
+            0,
+
+            verificationMaxAttempts -
+            (
+              attempts + 1
+            )
+
+          );
+
+        return res.status(400).json({
+
+          error:
+            remaining > 0
+
+              ? `Incorrect verification code. ${remaining} attempts remaining.`
+
+              : "Too many incorrect attempts. Please request a new code."
+
+        });
+
+      }
+
+      /*
+        Code is correct.
+
+        Remove the temporary OTP immediately
+        so it cannot be reused.
+      */
+
+      await firebaseSet(
+
+        `emailVerifications/${rateKey}`,
+
+        null
+
+      );
+
+      res.json({
+
+        ok: true,
+
+        verified: true,
+
+        email,
+
+        message:
+          "Email verified successfully."
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Verify code error:",
+        error.message
+      );
+
+      res.status(500).json({
+
+        error:
+          error.message ||
+          "Unable to verify code."
+
+      });
+
+    }
+
+  }
+);
+
+/* =====================================================
 ADMIN SESSION
 ===================================================== */
 
@@ -291,6 +1015,16 @@ app.get(
       firebase:
         Boolean(
           initFirebase()
+        ),
+
+      mailtrap:
+        Boolean(
+          process.env.MAILTRAP_API_TOKEN
+        ),
+
+      mailtrapFromEmail:
+        Boolean(
+          process.env.MAILTRAP_FROM_EMAIL
         ),
 
       playwright:
@@ -1860,7 +2594,8 @@ app.post(
       await fs.promises.mkdir(
         framesDir,
         {
-          recursive: true
+          recursive:
+            true
         }
       );
 
@@ -1868,16 +2603,6 @@ app.post(
         escapeHtmlServer(
           name || "Rafiki"
         );
-
-      /*
-        IMPORTANT:
-
-        Interactive JavaScript is removed
-        only for MP4 rendering.
-
-        Website template itself remains
-        fully interactive.
-      */
 
       const templateHTML =
         String(
@@ -1893,16 +2618,6 @@ app.post(
           "{name}",
           safeName
         );
-
-      /*
-        AUTOMATIC MAKYAMA BRANDING
-
-        This is added automatically to
-        every generated MP4.
-
-        The template author does not need
-        to add this manually.
-      */
 
       const brandingHTML = `
 
@@ -2134,13 +2849,6 @@ ${brandingHTML}
         "bytes"
       );
 
-      /*
-        ANALYTICS
-
-        Analytics failure must NOT
-        prevent the MP4 download.
-      */
-
       try {
 
         await increment(
@@ -2161,15 +2869,6 @@ ${brandingHTML}
         );
 
       }
-
-      /*
-        ROBUST MP4 DOWNLOAD
-
-        Instead of relying only on
-        res.download(), we explicitly
-        stream the file and set the
-        download headers.
-      */
 
       res.statusCode = 200;
 
@@ -2252,11 +2951,6 @@ ${brandingHTML}
         "close",
         async () => {
 
-          /*
-            If browser closes connection
-            before stream finishes, cleanup.
-          */
-
           if (
             !streamFinished
           ) {
@@ -2275,11 +2969,6 @@ ${brandingHTML}
       stream.pipe(
         res
       );
-
-      /*
-        Prevent catch block from trying
-        to send another response.
-      */
 
       tempDir = null;
 
@@ -2409,7 +3098,8 @@ async function renderVideoWithTools(
       .chromium
       .launch({
 
-        headless:true,
+        headless:
+          true,
 
         args:[
 
@@ -2434,13 +3124,16 @@ async function renderVideoWithTools(
 
         viewport:{
 
-          width:720,
+          width:
+            720,
 
-          height:720
+          height:
+            720
 
         },
 
-        deviceScaleFactor:1
+        deviceScaleFactor:
+          1
 
       });
 
@@ -2976,9 +3669,11 @@ async function cleanupTempDirectory(
       tempDir,
       {
 
-        recursive:true,
+        recursive:
+          true,
 
-        force:true
+        force:
+          true
 
       }
     );
