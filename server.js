@@ -2,8 +2,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const path = require("path");
-const fs = require("fs");
-const os = require("os");
 
 const admin = require("firebase-admin");
 
@@ -166,6 +164,1128 @@ async function increment(
     );
 
 }
+
+/* =====================================================
+LANGUAGE SYSTEM
+===================================================== */
+
+/*
+  The website can send:
+
+  ?lang=en
+  ?lang=sw
+  ?lang=fr
+  ?lang=ar
+
+  or use the Accept-Language browser header.
+
+  Translation itself is performed server-side.
+
+  The provider URL and optional API key are kept
+  in Render Environment Variables.
+
+  Recommended variables:
+
+  TRANSLATION_API_URL
+  TRANSLATION_API_KEY
+  DEFAULT_LANGUAGE
+
+  Example:
+
+  TRANSLATION_API_URL=https://libretranslate.com/translate
+
+  If the provider does not require a key,
+  TRANSLATION_API_KEY can be left empty.
+*/
+
+const DEFAULT_LANGUAGE =
+  String(
+    process.env.DEFAULT_LANGUAGE ||
+    "en"
+  )
+    .trim()
+    .toLowerCase();
+
+/*
+  A broad list for the language selector.
+
+  The backend does not hard-limit translation
+  to this list. If the selected translation
+  provider supports another language code,
+  it can still be requested.
+*/
+
+const supportedLanguages = [
+
+  {
+    code: "en",
+    name: "English",
+    nativeName: "English",
+    rtl: false
+  },
+
+  {
+    code: "sw",
+    name: "Swahili",
+    nativeName: "Kiswahili",
+    rtl: false
+  },
+
+  {
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+    rtl: false
+  },
+
+  {
+    code: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    rtl: false
+  },
+
+  {
+    code: "pt",
+    name: "Portuguese",
+    nativeName: "Português",
+    rtl: false
+  },
+
+  {
+    code: "de",
+    name: "German",
+    nativeName: "Deutsch",
+    rtl: false
+  },
+
+  {
+    code: "it",
+    name: "Italian",
+    nativeName: "Italiano",
+    rtl: false
+  },
+
+  {
+    code: "nl",
+    name: "Dutch",
+    nativeName: "Nederlands",
+    rtl: false
+  },
+
+  {
+    code: "pl",
+    name: "Polish",
+    nativeName: "Polski",
+    rtl: false
+  },
+
+  {
+    code: "tr",
+    name: "Turkish",
+    nativeName: "Türkçe",
+    rtl: false
+  },
+
+  {
+    code: "ru",
+    name: "Russian",
+    nativeName: "Русский",
+    rtl: false
+  },
+
+  {
+    code: "uk",
+    name: "Ukrainian",
+    nativeName: "Українська",
+    rtl: false
+  },
+
+  {
+    code: "ar",
+    name: "Arabic",
+    nativeName: "العربية",
+    rtl: true
+  },
+
+  {
+    code: "fa",
+    name: "Persian",
+    nativeName: "فارسی",
+    rtl: true
+  },
+
+  {
+    code: "he",
+    name: "Hebrew",
+    nativeName: "עברית",
+    rtl: true
+  },
+
+  {
+    code: "hi",
+    name: "Hindi",
+    nativeName: "हिन्दी",
+    rtl: false
+  },
+
+  {
+    code: "bn",
+    name: "Bengali",
+    nativeName: "বাংলা",
+    rtl: false
+  },
+
+  {
+    code: "ur",
+    name: "Urdu",
+    nativeName: "اردو",
+    rtl: true
+  },
+
+  {
+    code: "zh",
+    name: "Chinese",
+    nativeName: "中文",
+    rtl: false
+  },
+
+  {
+    code: "ja",
+    name: "Japanese",
+    nativeName: "日本語",
+    rtl: false
+  },
+
+  {
+    code: "ko",
+    name: "Korean",
+    nativeName: "한국어",
+    rtl: false
+  },
+
+  {
+    code: "id",
+    name: "Indonesian",
+    nativeName: "Bahasa Indonesia",
+    rtl: false
+  },
+
+  {
+    code: "ms",
+    name: "Malay",
+    nativeName: "Bahasa Melayu",
+    rtl: false
+  },
+
+  {
+    code: "vi",
+    name: "Vietnamese",
+    nativeName: "Tiếng Việt",
+    rtl: false
+  },
+
+  {
+    code: "th",
+    name: "Thai",
+    nativeName: "ไทย",
+    rtl: false
+  },
+
+  {
+    code: "fil",
+    name: "Filipino",
+    nativeName: "Filipino",
+    rtl: false
+  },
+
+  {
+    code: "am",
+    name: "Amharic",
+    nativeName: "አማርኛ",
+    rtl: false
+  },
+
+  {
+    code: "ha",
+    name: "Hausa",
+    nativeName: "Hausa",
+    rtl: false
+  },
+
+  {
+    code: "yo",
+    name: "Yoruba",
+    nativeName: "Yorùbá",
+    rtl: false
+  },
+
+  {
+    code: "zu",
+    name: "Zulu",
+    nativeName: "isiZulu",
+    rtl: false
+  },
+
+  {
+    code: "af",
+    name: "Afrikaans",
+    nativeName: "Afrikaans",
+    rtl: false
+  },
+
+  {
+    code: "so",
+    name: "Somali",
+    nativeName: "Soomaali",
+    rtl: false
+  },
+
+  {
+    code: "ro",
+    name: "Romanian",
+    nativeName: "Română",
+    rtl: false
+  },
+
+  {
+    code: "cs",
+    name: "Czech",
+    nativeName: "Čeština",
+    rtl: false
+  },
+
+  {
+    code: "sk",
+    name: "Slovak",
+    nativeName: "Slovenčina",
+    rtl: false
+  },
+
+  {
+    code: "el",
+    name: "Greek",
+    nativeName: "Ελληνικά",
+    rtl: false
+  },
+
+  {
+    code: "hu",
+    name: "Hungarian",
+    nativeName: "Magyar",
+    rtl: false
+  },
+
+  {
+    code: "sv",
+    name: "Swedish",
+    nativeName: "Svenska",
+    rtl: false
+  },
+
+  {
+    code: "da",
+    name: "Danish",
+    nativeName: "Dansk",
+    rtl: false
+  },
+
+  {
+    code: "no",
+    name: "Norwegian",
+    nativeName: "Norsk",
+    rtl: false
+  },
+
+  {
+    code: "fi",
+    name: "Finnish",
+    nativeName: "Suomi",
+    rtl: false
+  },
+
+  {
+    code: "bg",
+    name: "Bulgarian",
+    nativeName: "Български",
+    rtl: false
+  },
+
+  {
+    code: "sr",
+    name: "Serbian",
+    nativeName: "Српски",
+    rtl: false
+  },
+
+  {
+    code: "hr",
+    name: "Croatian",
+    nativeName: "Hrvatski",
+    rtl: false
+  },
+
+  {
+    code: "sl",
+    name: "Slovenian",
+    nativeName: "Slovenščina",
+    rtl: false
+  },
+
+  {
+    code: "et",
+    name: "Estonian",
+    nativeName: "Eesti",
+    rtl: false
+  },
+
+  {
+    code: "lv",
+    name: "Latvian",
+    nativeName: "Latviešu",
+    rtl: false
+  },
+
+  {
+    code: "lt",
+    name: "Lithuanian",
+    nativeName: "Lietuvių",
+    rtl: false
+  }
+
+];
+
+function normalizeLanguage(
+  language
+) {
+
+  let value =
+    String(
+      language || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  if (!value) {
+
+    return DEFAULT_LANGUAGE;
+
+  }
+
+  /*
+    Convert common regional codes:
+
+    en-US -> en
+    en-GB -> en
+    sw-TZ -> sw
+    fr-FR -> fr
+  */
+
+  if (
+    value.includes("-")
+  ) {
+
+    value =
+      value.split("-")[0];
+
+  }
+
+  if (
+    value.includes("_")
+  ) {
+
+    value =
+      value.split("_")[0];
+
+  }
+
+  return value;
+
+}
+
+function getLanguageInfo(
+  language
+) {
+
+  const code =
+    normalizeLanguage(
+      language
+    );
+
+  return (
+    supportedLanguages.find(
+      item =>
+        item.code === code
+    ) ||
+    {
+
+      code,
+
+      name: code,
+
+      nativeName: code,
+
+      rtl: false
+
+    }
+  );
+
+}
+
+function detectBrowserLanguage(
+  req
+) {
+
+  const header =
+    String(
+      req.headers[
+        "accept-language"
+      ] || ""
+    );
+
+  if (!header) {
+
+    return DEFAULT_LANGUAGE;
+
+  }
+
+  const first =
+    header
+      .split(",")[0]
+      .split(";")[0]
+      .trim();
+
+  return normalizeLanguage(
+    first
+  );
+
+}
+
+/* =====================================================
+LANGUAGE API
+===================================================== */
+
+app.get(
+  "/api/languages",
+  (req, res) => {
+
+    res.json({
+
+      ok: true,
+
+      defaultLanguage:
+        DEFAULT_LANGUAGE,
+
+      languages:
+        supportedLanguages
+
+    });
+
+  }
+);
+
+/* =====================================================
+TRANSLATION CACHE
+===================================================== */
+
+const translationMemory =
+  new Map();
+
+const translationMemoryLimit =
+  5000;
+
+function createTranslationCacheKey(
+  source,
+  target,
+  text
+) {
+
+  return crypto
+    .createHash("sha256")
+    .update(
+      JSON.stringify({
+
+        source,
+        target,
+        text
+
+      })
+    )
+    .digest("hex");
+
+}
+
+function cleanTranslationCache() {
+
+  if (
+    translationMemory.size <=
+    translationMemoryLimit
+  ) {
+
+    return;
+
+  }
+
+  const firstKey =
+    translationMemory
+      .keys()
+      .next()
+      .value;
+
+  if (firstKey) {
+
+    translationMemory.delete(
+      firstKey
+    );
+
+  }
+
+}
+
+/* =====================================================
+TRANSLATION PROVIDER
+===================================================== */
+
+async function translateWithProvider(
+  text,
+  sourceLanguage,
+  targetLanguage
+) {
+
+  const apiUrl =
+    String(
+      process.env.TRANSLATION_API_URL ||
+      "https://libretranslate.com/translate"
+    ).trim();
+
+  const apiKey =
+    String(
+      process.env.TRANSLATION_API_KEY ||
+      ""
+    ).trim();
+
+  const body = {
+
+    q:
+      text,
+
+    source:
+      sourceLanguage,
+
+    target:
+      targetLanguage,
+
+    format:
+      "text"
+
+  };
+
+  if (apiKey) {
+
+    body.api_key =
+      apiKey;
+
+  }
+
+  const response =
+    await fetch(
+      apiUrl,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json",
+
+          "Accept":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify(
+            body
+          )
+
+      }
+    );
+
+  const responseText =
+    await response.text();
+
+  let data = null;
+
+  try {
+
+    data =
+      JSON.parse(
+        responseText
+      );
+
+  } catch (
+    error
+  ) {
+
+    data = null;
+
+  }
+
+  if (!response.ok) {
+
+    throw new Error(
+
+      data?.error ||
+      data?.message ||
+      `Translation provider returned HTTP ${response.status}.`
+
+    );
+
+  }
+
+  const translated =
+    String(
+      data?.translatedText ||
+      data?.translation ||
+      ""
+    ).trim();
+
+  if (!translated) {
+
+    throw new Error(
+      "Translation provider returned an empty translation."
+    );
+
+  }
+
+  return translated;
+
+}
+
+/* =====================================================
+TRANSLATE TEXT
+===================================================== */
+
+async function translateText(
+  text,
+  sourceLanguage,
+  targetLanguage
+) {
+
+  const original =
+    String(
+      text || ""
+    );
+
+  const source =
+    normalizeLanguage(
+      sourceLanguage
+    );
+
+  const target =
+    normalizeLanguage(
+      targetLanguage
+    );
+
+  if (!original.trim()) {
+
+    return original;
+
+  }
+
+  if (
+    source === target
+  ) {
+
+    return original;
+
+  }
+
+  const cacheKey =
+    createTranslationCacheKey(
+      source,
+      target,
+      original
+    );
+
+  const cached =
+    translationMemory.get(
+      cacheKey
+    );
+
+  if (cached) {
+
+    return cached;
+
+  }
+
+  /*
+    Firebase translation cache.
+
+    This prevents repeated API calls
+    for the same text.
+  */
+
+  const database =
+    initFirebase();
+
+  if (database) {
+
+    try {
+
+      const firebaseKey =
+        `translationCache/${source}/${target}/${cacheKey}`;
+
+      const firebaseCached =
+        await firebaseGet(
+          firebaseKey
+        );
+
+      if (
+        typeof firebaseCached ===
+        "string" &&
+        firebaseCached.trim()
+      ) {
+
+        translationMemory.set(
+          cacheKey,
+          firebaseCached
+        );
+
+        cleanTranslationCache();
+
+        return firebaseCached;
+
+      }
+
+    } catch (
+      error
+    ) {
+
+      console.warn(
+        "Firebase translation cache read failed:",
+        error.message
+      );
+
+    }
+
+  }
+
+  /*
+    Ask the translation provider.
+  */
+
+  const translated =
+    await translateWithProvider(
+      original,
+      source,
+      target
+    );
+
+  translationMemory.set(
+    cacheKey,
+    translated
+  );
+
+  cleanTranslationCache();
+
+  /*
+    Save translated text to Firebase.
+  */
+
+  if (database) {
+
+    try {
+
+      await firebaseSet(
+
+        `translationCache/${source}/${target}/${cacheKey}`,
+
+        translated
+
+      );
+
+    } catch (
+      error
+    ) {
+
+      console.warn(
+        "Firebase translation cache write failed:",
+        error.message
+      );
+
+    }
+
+  }
+
+  return translated;
+
+}
+
+/* =====================================================
+TRANSLATION ENDPOINT
+===================================================== */
+
+app.post(
+  "/api/translate",
+  async (req, res) => {
+
+    try {
+
+      const text =
+        String(
+          req.body.text || ""
+        );
+
+      const source =
+        normalizeLanguage(
+          req.body.source ||
+          DEFAULT_LANGUAGE
+        );
+
+      const target =
+        normalizeLanguage(
+          req.body.target ||
+          DEFAULT_LANGUAGE
+        );
+
+      if (!text.trim()) {
+
+        return res.status(400).json({
+
+          error:
+            "Text is required."
+
+        });
+
+      }
+
+      if (
+        text.length >
+        10000
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Text is too long. Maximum 10000 characters per request."
+
+        });
+
+      }
+
+      const translated =
+        await translateText(
+          text,
+          source,
+          target
+        );
+
+      const languageInfo =
+        getLanguageInfo(
+          target
+        );
+
+      res.json({
+
+        ok: true,
+
+        source,
+
+        target,
+
+        rtl:
+          Boolean(
+            languageInfo.rtl
+          ),
+
+        original:
+          text,
+
+        translated
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Translation error:",
+        error.message
+      );
+
+      res.status(500).json({
+
+        error:
+          error.message ||
+          "Unable to translate text."
+
+      });
+
+    }
+
+  }
+);
+
+/* =====================================================
+TRANSLATE MANY TEXTS
+===================================================== */
+
+/*
+  The frontend can send many UI strings
+  in one request.
+
+  Example:
+
+  {
+    source: "sw",
+    target: "fr",
+    texts: {
+      search: "Tafuta",
+      share: "Shiriki",
+      contact: "Wasiliana nasi"
+    }
+  }
+
+  The response keeps the same keys.
+*/
+
+app.post(
+  "/api/translate/batch",
+  async (req, res) => {
+
+    try {
+
+      const source =
+        normalizeLanguage(
+          req.body.source ||
+          DEFAULT_LANGUAGE
+        );
+
+      const target =
+        normalizeLanguage(
+          req.body.target ||
+          DEFAULT_LANGUAGE
+        );
+
+      const texts =
+        req.body.texts;
+
+      if (
+        !texts ||
+        typeof texts !==
+        "object" ||
+        Array.isArray(texts)
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "texts must be an object."
+
+        });
+
+      }
+
+      const keys =
+        Object.keys(
+          texts
+        );
+
+      if (
+        keys.length >
+        100
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Maximum 100 texts per batch."
+
+        });
+
+      }
+
+      const result = {};
+
+      /*
+        Translate sequentially.
+
+        This is intentionally controlled
+        to avoid sending a huge number
+        of simultaneous requests.
+      */
+
+      for (
+        const key of keys
+      ) {
+
+        const text =
+          String(
+            texts[key] || ""
+          );
+
+        if (!text.trim()) {
+
+          result[key] =
+            text;
+
+          continue;
+
+        }
+
+        result[key] =
+          await translateText(
+            text,
+            source,
+            target
+          );
+
+      }
+
+      const languageInfo =
+        getLanguageInfo(
+          target
+        );
+
+      res.json({
+
+        ok: true,
+
+        source,
+
+        target,
+
+        rtl:
+          Boolean(
+            languageInfo.rtl
+          ),
+
+        translations:
+          result
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Batch translation error:",
+        error.message
+      );
+
+      res.status(500).json({
+
+        error:
+          error.message ||
+          "Unable to translate texts."
+
+      });
+
+    }
+
+  }
+);
 
 /* =====================================================
 MAILTRAP EMAIL
@@ -843,13 +1963,6 @@ app.post(
 
       }
 
-      /*
-        Code is correct.
-
-        Remove the temporary OTP immediately
-        so it cannot be reused.
-      */
-
       await firebaseSet(
 
         `emailVerifications/${rateKey}`,
@@ -964,47 +2077,6 @@ app.get(
   "/health",
   (req, res) => {
 
-    let playwrightAvailable =
-      false;
-
-    let ffmpegAvailable =
-      false;
-
-    try {
-
-      require(
-        "playwright"
-      );
-
-      playwrightAvailable =
-        true;
-
-    } catch (error) {
-
-      playwrightAvailable =
-        false;
-
-    }
-
-    try {
-
-      const ffmpeg =
-        require(
-          "ffmpeg-static"
-        );
-
-      ffmpegAvailable =
-        Boolean(
-          ffmpeg
-        );
-
-    } catch (error) {
-
-      ffmpegAvailable =
-        false;
-
-    }
-
     res.json({
 
       ok: true,
@@ -1027,11 +2099,18 @@ app.get(
           process.env.MAILTRAP_FROM_EMAIL
         ),
 
-      playwright:
-        playwrightAvailable,
+      translation:
+        Boolean(
+          process.env.TRANSLATION_API_URL
+        ),
 
-      ffmpeg:
-        ffmpegAvailable,
+      translationApiKey:
+        Boolean(
+          process.env.TRANSLATION_API_KEY
+        ),
+
+      defaultLanguage:
+        DEFAULT_LANGUAGE,
 
       time:
         new Date().toISOString()
@@ -1247,11 +2326,6 @@ app.get(
             views:
               Number(
                 template.views || 0
-              ),
-
-            downloads:
-              Number(
-                template.downloads || 0
               ),
 
             likes:
@@ -1661,8 +2735,6 @@ app.post(
 
         views: 0,
 
-        downloads: 0,
-
         likes: 0,
 
         dislikes: 0,
@@ -1945,9 +3017,7 @@ app.post(
 
         "middle",
 
-        "social",
-
-        "download"
+        "social"
 
       ];
 
@@ -2054,9 +3124,7 @@ app.put(
 
         "middle",
 
-        "social",
-
-        "download"
+        "social"
 
       ];
 
@@ -2190,46 +3258,6 @@ app.post(
 
         await increment(
           `templates/${req.body.templateId}/views`
-        );
-
-      }
-
-      res.json({
-
-        ok: true
-
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-app.post(
-  "/api/analytics/download",
-  async (req, res) => {
-
-    try {
-
-      await increment(
-        "stats/totalDownloads"
-      );
-
-      if (
-        req.body.templateId
-      ) {
-
-        await increment(
-          `templates/${req.body.templateId}/downloads`
         );
 
       }
@@ -2426,59 +3454,11 @@ app.get(
             })
           );
 
-      const mostDownloaded =
-        [...templateList]
-
-          .sort(
-            (a, b) => {
-
-              return (
-
-                Number(
-                  b.downloads || 0
-                ) -
-
-                Number(
-                  a.downloads || 0
-                )
-
-              );
-
-            }
-          )
-
-          .slice(
-            0,
-            10
-          )
-
-          .map(
-            template => ({
-
-              id:
-                template.id,
-
-              title:
-                template.title,
-
-              downloads:
-                Number(
-                  template.downloads || 0
-                )
-
-            })
-          );
-
       res.json({
 
         totalViews:
           Number(
             stats?.totalViews || 0
-          ),
-
-        totalDownloads:
-          Number(
-            stats?.totalDownloads || 0
           ),
 
         onlineUsers:
@@ -2487,9 +3467,7 @@ app.get(
         templatesCount:
           templateList.length,
 
-        trending,
-
-        mostDownloaded
+        trending
 
       });
 
@@ -2506,1192 +3484,6 @@ app.get(
 
   }
 );
-
-/* =====================================================
-SERVER-SIDE VIDEO GENERATION
-===================================================== */
-
-app.post(
-  "/api/generate-video",
-  async (req, res) => {
-
-    let tempDir = null;
-
-    try {
-
-      const templateId =
-        String(
-          req.body.templateId || ""
-        ).trim();
-
-      const name =
-        String(
-          req.body.name ||
-          "Rafiki"
-        )
-        .trim()
-        .slice(
-          0,
-          80
-        );
-
-      if (!templateId) {
-
-        return res.status(400).json({
-
-          error:
-            "Template ID is required."
-
-        });
-
-      }
-
-      const template =
-        await firebaseGet(
-          `templates/${templateId}`
-        );
-
-      if (
-        !template ||
-        template.published !== true
-      ) {
-
-        return res.status(404).json({
-
-          error:
-            "Template not found."
-
-        });
-
-      }
-
-      tempDir =
-        await fs.promises.mkdtemp(
-          path.join(
-            os.tmpdir(),
-            "makyama-video-"
-          )
-        );
-
-      const htmlPath =
-        path.join(
-          tempDir,
-          "render.html"
-        );
-
-      const framesDir =
-        path.join(
-          tempDir,
-          "frames"
-        );
-
-      const outputPath =
-        path.join(
-          tempDir,
-          "MAKYAMA_Message.mp4"
-        );
-
-      await fs.promises.mkdir(
-        framesDir,
-        {
-          recursive:
-            true
-        }
-      );
-
-      const safeName =
-        escapeHtmlServer(
-          name || "Rafiki"
-        );
-
-      const templateHTML =
-        String(
-          template.html || ""
-        )
-
-        .replace(
-          /<script[\s\S]*?<\/script>/gi,
-          ""
-        )
-
-        .replaceAll(
-          "{name}",
-          safeName
-        );
-
-      const brandingHTML = `
-
-<div
-  id="makyama-brand"
-  aria-hidden="true"
->
-
-  <div class="makyama-brand-name">
-    MAKYAMA MESSAGES
-  </div>
-
-  <div class="makyama-brand-url">
-    makyama.pntr.dev
-  </div>
-
-</div>
-
-<style>
-
-#makyama-brand{
-
-  position:absolute;
-
-  right:18px;
-  bottom:16px;
-
-  z-index:999999;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:flex-end;
-
-  gap:3px;
-
-  padding:7px 10px;
-
-  border-radius:10px;
-
-  background:
-    rgba(4,10,22,.62);
-
-  border:
-    1px solid
-    rgba(255,255,255,.14);
-
-  box-shadow:
-    0 4px 18px
-    rgba(0,0,0,.28);
-
-  backdrop-filter:
-    blur(7px);
-
-  -webkit-backdrop-filter:
-    blur(7px);
-
-  pointer-events:none;
-
-  user-select:none;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-}
-
-.makyama-brand-name{
-
-  color:#ffffff;
-
-  font-size:11px;
-
-  line-height:1;
-
-  font-weight:800;
-
-  letter-spacing:.7px;
-
-  text-shadow:
-    0 1px 4px
-    rgba(0,0,0,.55);
-
-}
-
-.makyama-brand-url{
-
-  color:
-    rgba(255,255,255,.68);
-
-  font-size:7px;
-
-  line-height:1;
-
-  font-weight:500;
-
-  letter-spacing:.25px;
-
-}
-
-</style>
-
-`;
-
-      const fullHtml = `
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=720,height=720,initial-scale=1"
->
-
-<style>
-
-html,
-body {
-
-  margin:0;
-
-  padding:0;
-
-  width:720px;
-
-  height:720px;
-
-  overflow:hidden;
-
-  background:#07101f;
-
-}
-
-* {
-
-  box-sizing:border-box;
-
-}
-
-#stage {
-
-  width:720px;
-
-  height:720px;
-
-  position:relative;
-
-  overflow:hidden;
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div id="stage">
-
-${templateHTML}
-
-${brandingHTML}
-
-</div>
-
-</body>
-
-</html>
-`;
-
-      await fs.promises.writeFile(
-        htmlPath,
-        fullHtml,
-        "utf8"
-      );
-
-      console.log(
-        "Starting MP4 rendering..."
-      );
-
-      await renderVideoWithTools(
-        htmlPath,
-        framesDir,
-        outputPath
-      );
-
-      if (
-        !fs.existsSync(
-          outputPath
-        )
-      ) {
-
-        throw new Error(
-          "Video file was not created."
-        );
-
-      }
-
-      const fileSize =
-        (
-          await fs.promises.stat(
-            outputPath
-          )
-        ).size;
-
-      if (
-        fileSize <= 1000
-      ) {
-
-        throw new Error(
-          "Generated video is empty."
-        );
-
-      }
-
-      console.log(
-        "MP4 created:",
-        outputPath
-      );
-
-      console.log(
-        "MP4 size:",
-        fileSize,
-        "bytes"
-      );
-
-      try {
-
-        await increment(
-          "stats/totalDownloads"
-        );
-
-        await increment(
-          `templates/${templateId}/downloads`
-        );
-
-      } catch (
-        analyticsError
-      ) {
-
-        console.error(
-          "Analytics error:",
-          analyticsError.message
-        );
-
-      }
-
-      res.statusCode = 200;
-
-      res.setHeader(
-        "Content-Type",
-        "video/mp4"
-      );
-
-      res.setHeader(
-        "Content-Length",
-        String(fileSize)
-      );
-
-      res.setHeader(
-        "Content-Disposition",
-        'attachment; filename="MAKYAMA_Message.mp4"'
-      );
-
-      res.setHeader(
-        "Cache-Control",
-        "no-store"
-      );
-
-      const stream =
-        fs.createReadStream(
-          outputPath
-        );
-
-      let streamFinished =
-        false;
-
-      stream.on(
-        "error",
-        async error => {
-
-          console.error(
-            "MP4 stream error:",
-            error.message
-          );
-
-          if (
-            !res.headersSent
-          ) {
-
-            res.status(500).json({
-
-              error:
-                "Unable to download generated video."
-
-            });
-
-          }
-
-          await cleanupTempDirectory(
-            tempDir
-          );
-
-        }
-      );
-
-      stream.on(
-        "end",
-        async () => {
-
-          streamFinished =
-            true;
-
-          console.log(
-            "MP4 download stream completed."
-          );
-
-          await cleanupTempDirectory(
-            tempDir
-          );
-
-        }
-      );
-
-      res.on(
-        "close",
-        async () => {
-
-          if (
-            !streamFinished
-          ) {
-
-            stream.destroy();
-
-            await cleanupTempDirectory(
-              tempDir
-            );
-
-          }
-
-        }
-      );
-
-      stream.pipe(
-        res
-      );
-
-      tempDir = null;
-
-    } catch (error) {
-
-      console.error(
-        "Generate video error:",
-        error
-      );
-
-      await cleanupTempDirectory(
-        tempDir
-      );
-
-      if (
-        !res.headersSent
-      ) {
-
-        res.status(500).json({
-
-          error:
-            error.message ||
-            "Video generation failed."
-
-        });
-
-      }
-
-    }
-
-  }
-);
-
-/* =====================================================
-ESCAPE HTML
-===================================================== */
-
-function escapeHtmlServer(
-  value
-) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-/* =====================================================
-VIDEO RENDER ENGINE
-===================================================== */
-
-async function renderVideoWithTools(
-  htmlPath,
-  framesDir,
-  outputPath
-) {
-
-  let playwright;
-
-  try {
-
-    playwright =
-      require(
-        "playwright"
-      );
-
-  } catch (error) {
-
-    throw new Error(
-      "Playwright is not installed."
-    );
-
-  }
-
-  let ffmpegPath;
-
-  try {
-
-    ffmpegPath =
-      require(
-        "ffmpeg-static"
-      );
-
-  } catch (error) {
-
-    throw new Error(
-      "ffmpeg-static is not installed."
-    );
-
-  }
-
-  if (
-    !ffmpegPath
-  ) {
-
-    throw new Error(
-      "FFmpeg executable was not found."
-    );
-
-  }
-
-  const browser =
-    await playwright
-      .chromium
-      .launch({
-
-        headless:
-          true,
-
-        args:[
-
-          "--no-sandbox",
-
-          "--disable-setuid-sandbox",
-
-          "--disable-dev-shm-usage",
-
-          "--disable-gpu",
-
-          "--font-render-hinting=medium"
-
-        ]
-
-      });
-
-  try {
-
-    const page =
-      await browser.newPage({
-
-        viewport:{
-
-          width:
-            720,
-
-          height:
-            720
-
-        },
-
-        deviceScaleFactor:
-          1
-
-      });
-
-    await page.goto(
-      "file://" +
-      htmlPath,
-      {
-
-        waitUntil:
-          "load"
-
-      }
-    );
-
-    await page.evaluate(
-      async () => {
-
-        if (
-          document.fonts &&
-          document.fonts.ready
-        ) {
-
-          await document
-            .fonts
-            .ready;
-
-        }
-
-        const images =
-          Array.from(
-            document.images
-          );
-
-        await Promise.all(
-
-          images.map(
-            image => {
-
-              if (
-                image.complete
-              ) {
-
-                return Promise.resolve();
-
-              }
-
-              return new Promise(
-                resolve => {
-
-                  image.onload =
-                    resolve;
-
-                  image.onerror =
-                    resolve;
-
-                }
-              );
-
-            }
-          )
-
-        );
-
-      }
-    );
-
-    await page.waitForTimeout(
-      700
-    );
-
-    const duration =
-      await page.evaluate(
-        () => {
-
-          let longest =
-            5000;
-
-          function parseTime(
-            value
-          ) {
-
-            value =
-              String(
-                value || ""
-              ).trim();
-
-            if (
-              value.endsWith(
-                "ms"
-              )
-            ) {
-
-              return (
-                parseFloat(
-                  value
-                ) || 0
-              );
-
-            }
-
-            if (
-              value.endsWith(
-                "s"
-              )
-            ) {
-
-              return (
-
-                (
-                  parseFloat(
-                    value
-                  ) || 0
-                ) *
-                1000
-
-              );
-
-            }
-
-            return 0;
-
-          }
-
-          document
-            .querySelectorAll("*")
-            .forEach(
-              element => {
-
-                const style =
-                  getComputedStyle(
-                    element
-                  );
-
-                const durations =
-                  style
-                    .animationDuration
-                    .split(",");
-
-                const delays =
-                  style
-                    .animationDelay
-                    .split(",");
-
-                durations.forEach(
-                  (
-                    durationValue,
-                    index
-                  ) => {
-
-                    const d =
-                      parseTime(
-                        durationValue
-                      );
-
-                    const delay =
-                      parseTime(
-                        delays[index] ||
-                        delays[0] ||
-                        "0s"
-                      );
-
-                    longest =
-                      Math.max(
-                        longest,
-                        d + delay
-                      );
-
-                  }
-                );
-
-              }
-            );
-
-          return Math.min(
-
-            Math.max(
-              longest + 500,
-              3000
-            ),
-
-            15000
-
-          );
-
-        }
-      );
-
-    await captureAnimationFrames(
-      page,
-      framesDir,
-      duration
-    );
-
-    await convertFramesToMp4(
-      ffmpegPath,
-      framesDir,
-      outputPath
-    );
-
-  } finally {
-
-    await browser.close();
-
-  }
-
-}
-
-/* =====================================================
-CAPTURE ANIMATION FRAMES
-===================================================== */
-
-async function captureAnimationFrames(
-  page,
-  framesDir,
-  duration
-) {
-
-  await page.evaluate(
-    () => {
-
-      document
-        .querySelectorAll("*")
-        .forEach(
-          element => {
-
-            element.style
-              .setProperty(
-                "animation-play-state",
-                "paused",
-                "important"
-              );
-
-          }
-        );
-
-    }
-  );
-
-  await page.evaluate(
-    () => {
-
-      void document
-        .body
-        .offsetHeight;
-
-    }
-  );
-
-  await page.evaluate(
-    () => {
-
-      document
-        .querySelectorAll("*")
-        .forEach(
-          element => {
-
-            element.style
-              .setProperty(
-                "animation",
-                "none",
-                "important"
-              );
-
-          }
-        );
-
-    }
-  );
-
-  await page.evaluate(
-    () => {
-
-      void document
-        .body
-        .offsetHeight;
-
-    }
-  );
-
-  await page.evaluate(
-    () => {
-
-      document
-        .querySelectorAll("*")
-        .forEach(
-          element => {
-
-            element.style
-              .removeProperty(
-                "animation"
-              );
-
-            element.style
-              .setProperty(
-                "animation-play-state",
-                "running",
-                "important"
-              );
-
-          }
-        );
-
-    }
-  );
-
-  const fps =
-    24;
-
-  const frameDuration =
-    1000 / fps;
-
-  const totalFrames =
-    Math.max(
-
-      1,
-
-      Math.ceil(
-        duration /
-        frameDuration
-      )
-
-    );
-
-  const start =
-    Date.now();
-
-  for (
-    let frame = 0;
-    frame < totalFrames;
-    frame++
-  ) {
-
-    const filename =
-      path.join(
-        framesDir,
-        `frame-${String(frame).padStart(5, "0")}.png`
-      );
-
-    await page
-      .locator(
-        "#stage"
-      )
-      .screenshot({
-
-        path:
-          filename,
-
-        type:
-          "png",
-
-        animations:
-          "allow"
-
-      });
-
-    const target =
-      (
-        frame + 1
-      ) *
-      frameDuration;
-
-    const elapsed =
-      Date.now() -
-      start;
-
-    const wait =
-      target -
-      elapsed;
-
-    if (
-      wait > 0
-    ) {
-
-      await page.waitForTimeout(
-        wait
-      );
-
-    }
-
-  }
-
-}
-
-/* =====================================================
-FRAMES → MP4
-===================================================== */
-
-function convertFramesToMp4(
-  ffmpegPath,
-  framesDir,
-  outputPath
-) {
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    ) => {
-
-      const inputPattern =
-        path.join(
-          framesDir,
-          "frame-%05d.png"
-        );
-
-      const {
-        spawn
-      } =
-        require(
-          "child_process"
-        );
-
-      const ffmpeg =
-        spawn(
-          ffmpegPath,
-          [
-
-            "-y",
-
-            "-framerate",
-            "24",
-
-            "-start_number",
-            "0",
-
-            "-i",
-            inputPattern,
-
-            "-c:v",
-            "libx264",
-
-            "-preset",
-            "veryfast",
-
-            "-crf",
-            "20",
-
-            "-pix_fmt",
-            "yuv420p",
-
-            "-vf",
-            "scale=720:720:force_original_aspect_ratio=decrease,pad=720:720:(ow-iw)/2:(oh-ih)/2",
-
-            "-movflags",
-            "+faststart",
-
-            outputPath
-
-          ],
-
-          {
-
-            stdio:[
-              "ignore",
-              "pipe",
-              "pipe"
-            ]
-
-          }
-
-        );
-
-      let stderr = "";
-
-      ffmpeg.stderr.on(
-        "data",
-        data => {
-
-          stderr +=
-            data.toString();
-
-        }
-      );
-
-      ffmpeg.on(
-        "error",
-        error => {
-
-          reject(
-            new Error(
-              "FFmpeg could not start: " +
-              error.message
-            )
-          );
-
-        }
-      );
-
-      ffmpeg.on(
-        "close",
-        code => {
-
-          if (
-            code === 0
-          ) {
-
-            resolve();
-
-          } else {
-
-            reject(
-              new Error(
-                "FFmpeg failed: " +
-                stderr.slice(
-                  -3000
-                )
-              )
-            );
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-}
-
-/* =====================================================
-TEMP FILE CLEANUP
-===================================================== */
-
-async function cleanupTempDirectory(
-  tempDir
-) {
-
-  if (!tempDir) return;
-
-  try {
-
-    await fs.promises.rm(
-      tempDir,
-      {
-
-        recursive:
-          true,
-
-        force:
-          true
-
-      }
-    );
-
-    console.log(
-      "Temporary video files deleted."
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Temporary cleanup error:",
-      error.message
-    );
-
-  }
-
-}
 
 /* =====================================================
 PAGES
@@ -3722,6 +3514,7 @@ app.get(
         "public",
         "template.html"
       )
+
     );
 
   }
@@ -3737,6 +3530,7 @@ app.get(
         "public",
         "admin.html"
       )
+
     );
 
   }
