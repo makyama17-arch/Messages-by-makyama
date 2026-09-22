@@ -22,6 +22,30 @@ app.use(
 
 app.use(cookieParser());
 
+/* =====================================================
+TEMPLATE HTML REDIRECT
+===================================================== */
+
+/*
+  /template is the official public URL.
+
+  /template.html is the old/static URL.
+  Redirect it to /template so Google and users
+  have one canonical URL.
+*/
+
+app.get(
+  "/template.html",
+  (req, res) => {
+
+    res.redirect(
+      301,
+      "/template"
+    );
+
+  }
+);
+
 app.use(
   express.static(
     path.join(
@@ -169,35 +193,6 @@ async function increment(
 LANGUAGE SYSTEM
 ===================================================== */
 
-/*
-  The website can send:
-
-  ?lang=en
-  ?lang=sw
-  ?lang=fr
-  ?lang=ar
-
-  or use the Accept-Language browser header.
-
-  Translation itself is performed server-side.
-
-  The provider URL and optional API key are kept
-  in Render Environment Variables.
-
-  Recommended variables:
-
-  TRANSLATION_API_URL
-  TRANSLATION_API_KEY
-  DEFAULT_LANGUAGE
-
-  Example:
-
-  TRANSLATION_API_URL=https://libretranslate.com/translate
-
-  If the provider does not require a key,
-  TRANSLATION_API_KEY can be left empty.
-*/
-
 const DEFAULT_LANGUAGE =
   String(
     process.env.DEFAULT_LANGUAGE ||
@@ -205,15 +200,6 @@ const DEFAULT_LANGUAGE =
   )
     .trim()
     .toLowerCase();
-
-/*
-  A broad list for the language selector.
-
-  The backend does not hard-limit translation
-  to this list. If the selected translation
-  provider supports another language code,
-  it can still be requested.
-*/
 
 const supportedLanguages = [
 
@@ -572,15 +558,6 @@ function normalizeLanguage(
 
   }
 
-  /*
-    Convert common regional codes:
-
-    en-US -> en
-    en-GB -> en
-    sw-TZ -> sw
-    fr-FR -> fr
-  */
-
   if (
     value.includes("-")
   ) {
@@ -921,13 +898,6 @@ async function translateText(
 
   }
 
-  /*
-    Firebase translation cache.
-
-    This prevents repeated API calls
-    for the same text.
-  */
-
   const database =
     initFirebase();
 
@@ -973,10 +943,6 @@ async function translateText(
 
   }
 
-  /*
-    Ask the translation provider.
-  */
-
   const translated =
     await translateWithProvider(
       original,
@@ -990,10 +956,6 @@ async function translateText(
   );
 
   cleanTranslationCache();
-
-  /*
-    Save translated text to Firebase.
-  */
 
   if (database) {
 
@@ -1132,25 +1094,6 @@ app.post(
 TRANSLATE MANY TEXTS
 ===================================================== */
 
-/*
-  The frontend can send many UI strings
-  in one request.
-
-  Example:
-
-  {
-    source: "sw",
-    target: "fr",
-    texts: {
-      search: "Tafuta",
-      share: "Shiriki",
-      contact: "Wasiliana nasi"
-    }
-  }
-
-  The response keeps the same keys.
-*/
-
 app.post(
   "/api/translate/batch",
   async (req, res) => {
@@ -1208,14 +1151,6 @@ app.post(
       }
 
       const result = {};
-
-      /*
-        Translate sequentially.
-
-        This is intentionally controlled
-        to avoid sending a huge number
-        of simultaneous requests.
-      */
 
       for (
         const key of keys
