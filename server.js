@@ -3,30 +3,26 @@ const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
-
 const admin = require("firebase-admin");
 
 const app = express();
 
-const PORT =
-process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-const SITE_URL =
-String(
-process.env.SITE_URL ||
-"https://makyama.pntr.dev"
+const SITE_URL = String(
+  process.env.SITE_URL || "https://makyama.pntr.dev"
 )
-.trim()
-.replace(//+$/, "");
+  .trim()
+  .replace(/\/+$/, "");
 
 /* =====================================================
 MIDDLEWARE
 ===================================================== */
 
 app.use(
-express.json({
-limit: "5mb"
-})
+  express.json({
+    limit: "5mb"
+  })
 );
 
 app.use(cookieParser());
@@ -35,30 +31,9 @@ app.use(cookieParser());
 TEMPLATE HTML REDIRECT
 ===================================================== */
 
-app.get(
-"/template.html",
-(req, res) => {
-
-res.redirect(  
-  301,  
-  "/template"  
-);
-
-}
-);
-
-/*
-Static files are served after the
-special routes below are declared.
-*/
-app.use(
-express.static(
-path.join(
-__dirname,
-"public"
-)
-)
-);
+app.get("/template.html", (req, res) => {
+  res.redirect(301, "/template");
+});
 
 /* =====================================================
 FIREBASE
@@ -67,1195 +42,887 @@ FIREBASE
 let db = null;
 
 function initFirebase() {
+  if (db) return db;
 
-if (db) return db;
+  const serviceAccount =
+    process.env.FIREBASE_SERVICE_ACCOUNT;
 
-const serviceAccount =
-process.env.FIREBASE_SERVICE_ACCOUNT;
+  const databaseURL =
+    process.env.FIREBASE_DATABASE_URL;
 
-const databaseURL =
-process.env.FIREBASE_DATABASE_URL;
+  if (!serviceAccount || !databaseURL) {
+    return null;
+  }
 
-if (
-!serviceAccount ||
-!databaseURL
-) {
+  try {
+    const credentials =
+      JSON.parse(serviceAccount);
 
-return null;
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential:
+          admin.credential.cert(credentials),
+        databaseURL
+      });
+    }
 
+    db = admin.database();
+
+    return db;
+  } catch (error) {
+    console.error(
+      "Firebase error:",
+      error.message
+    );
+
+    return null;
+  }
 }
 
-try {
+async function firebaseGet(ref) {
+  const database = initFirebase();
 
-const credentials =  
-  JSON.parse(  
-    serviceAccount  
-  );  
+  if (!database) {
+    throw new Error(
+      "Firebase is not configured."
+    );
+  }
 
-if (!admin.apps.length) {  
+  const snapshot =
+    await database
+      .ref(ref)
+      .once("value");
 
-  admin.initializeApp({  
-
-    credential:  
-      admin.credential.cert(  
-        credentials  
-      ),  
-
-    databaseURL  
-
-  });  
-
-}  
-
-db =  
-  admin.database();  
-
-return db;
-
-} catch (error) {
-
-console.error(  
-  "Firebase error:",  
-  error.message  
-);  
-
-return null;
-
+  return snapshot.val();
 }
 
+async function firebaseSet(ref, value) {
+  const database = initFirebase();
+
+  if (!database) {
+    throw new Error(
+      "Firebase is not configured."
+    );
+  }
+
+  await database
+    .ref(ref)
+    .set(value);
 }
 
-async function firebaseGet(
-ref
-) {
+async function increment(ref) {
+  const database = initFirebase();
 
-const database =
-initFirebase();
+  if (!database) return;
 
-if (!database) {
-
-throw new Error(  
-  "Firebase is not configured."  
-);
-
-}
-
-const snapshot =
-await database
-.ref(ref)
-.once("value");
-
-return snapshot.val();
-
-}
-
-async function firebaseSet(
-ref,
-value
-) {
-
-const database =
-initFirebase();
-
-if (!database) {
-
-throw new Error(  
-  "Firebase is not configured."  
-);
-
-}
-
-await database
-.ref(ref)
-.set(value);
-
-}
-
-async function increment(
-ref
-) {
-
-const database =
-initFirebase();
-
-if (!database) return;
-
-await database
-.ref(ref)
-.transaction(
-current => {
-
-return (  
-      Number(current) || 0  
-    ) + 1;  
-
-  }  
-);
-
+  await database
+    .ref(ref)
+    .transaction((current) => {
+      return (
+        Number(current) || 0
+      ) + 1;
+    });
 }
 
 /* =====================================================
 SEO HELPERS
 ===================================================== */
 
-function escapeHTML(
-value
-) {
-
-return String(
-value ?? ""
-).replace(
-/[&<>"']/g,
-char => ({
-
-"&":  
-    "&amp;",  
-
-  "<":  
-    "&lt;",  
-
-  ">":  
-    "&gt;",  
-
-  '"':  
-    "&quot;",  
-
-  "'":  
-    "&#039;"  
-
-}[char])
-
-);
-
+function escapeHTML(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[char])
+  );
 }
 
-function escapeAttribute(
-value
-) {
-
-return escapeHTML(
-value
-);
-
+function escapeAttribute(value) {
+  return escapeHTML(value);
 }
 
-function cleanSEOText(
-value,
-fallback
-) {
+function cleanSEOText(value, fallback) {
+  const text = String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-const text =
-String(
-value ||
-""
-)
-.replace(
-/<[^>]*>/g,
-" "
-)
-.replace(
-/\s+/g,
-" "
-)
-.trim();
-
-return (
-text ||
-fallback
-);
-
+  return text || fallback;
 }
 
-function makeTemplateSlug(
-title
-) {
+function makeTemplateSlug(title) {
+  let slug = String(
+    title || "message"
+  )
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
-let slug =
-String(
-title ||
-"message"
-)
-.toLowerCase()
-.normalize("NFKD")
-.replace(
-/[\u0300-\u036f]/g,
-""
-)
-.replace(
-/[^a-z0-9]+/g,
-"-"
-)
-.replace(
-/^-+|-+$/g,
-""
-);
+  if (!slug) {
+    slug = "message";
+  }
 
-if (!slug) {
-slug = "message";
+  return slug;
 }
 
-return slug;
+function getTemplateSEOUrl(template) {
+  const slug =
+    makeTemplateSlug(
+      template?.title
+    );
 
+  const id =
+    encodeURIComponent(
+      String(template?.id || "")
+    );
+
+  return `${SITE_URL}/message/${slug}-${id}`;
 }
 
-function getTemplateSEOUrl(
-template
-) {
-
-const slug =
-makeTemplateSlug(
-template?.title
-);
-
-const id =
-encodeURIComponent(
-String(
-template?.id ||
-""
-)
-);
-
-return (
-${SITE_URL}/message/${slug}-${id}
-);
-
+function extractTemplateText(html) {
+  return String(html || "")
+    .replace(
+      /<script[\s\S]*?<\/script>/gi,
+      " "
+    )
+    .replace(
+      /<style[\s\S]*?<\/style>/gi,
+      " "
+    )
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\{name\}/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-/*
-Extract a short text preview from
-template HTML.
+function createTemplateDescription(template) {
+  const title =
+    cleanSEOText(
+      template?.title,
+      "Animated Message"
+    );
 
-This is only used for server-side
-SEO fallback content.
-*/
-function extractTemplateText(
-html
-) {
+  const supplied =
+    cleanSEOText(
+      template?.description,
+      ""
+    );
 
-return String(
-html || ""
-)
-.replace(
-/<script[\s\S]?</script>/gi,
-" "
-)
-.replace(
-/<style[\s\S]?</style>/gi,
-" "
-)
-.replace(
-/<[^>]+>/g,
-" "
-)
-.replace(
-/{name}/gi,
-""
-)
-.replace(
-/\s+/g,
-" "
-)
-.trim();
+  if (supplied) {
+    return supplied.slice(0, 300);
+  }
 
-}
+  const text =
+    extractTemplateText(
+      template?.html
+    );
 
-function createTemplateDescription(
-template
-) {
+  if (text) {
+    return (
+      `Create and share this ${title} animated message with MAKYAMA MESSAGES. ${text}`
+    ).slice(0, 300);
+  }
 
-const title =
-cleanSEOText(
-template?.title,
-"Animated Message"
-);
-
-const supplied =
-cleanSEOText(
-template?.description,
-""
-);
-
-if (supplied) {
-
-return supplied  
-  .slice(0, 300);
-
-}
-
-const text =
-extractTemplateText(
-template?.html
-);
-
-if (text) {
-
-return (  
-  `Create and share this ${title} animated message with MAKYAMA MESSAGES. ${text}`  
-)  
-  .slice(0, 300);
-
-}
-
-return (
-Create and share this beautiful ${title} animated message with MAKYAMA MESSAGES.
-)
-.slice(0, 300);
-
+  return (
+    `Create and share this beautiful ${title} animated message with MAKYAMA MESSAGES.`
+  ).slice(0, 300);
 }
 
 /*
 Reads public/template.html and injects
 server-side SEO metadata.
-
-The normal frontend JavaScript still
-loads the template through the API,
-so existing functionality remains.
-*/
-function buildTemplateSEOPage(
-template
-) {
-
-const templatePath =
-path.join(
-__dirname,
-"public",
-"template.html"
-);
-
-let html =
-fs.readFileSync(
-templatePath,
-"utf8"
-);
-
-const title =
-cleanSEOText(
-template?.title,
-"Animated Message"
-);
-
-const description =
-createTemplateDescription(
-template
-);
-
-const canonical =
-getTemplateSEOUrl(
-template
-);
-
-const safeTitle =
-escapeAttribute(
-${title} | MAKYAMA MESSAGES
-);
-
-const safeDescription =
-escapeAttribute(
-description
-);
-
-const safeCanonical =
-escapeAttribute(
-canonical
-);
-
-/*
-Replace existing title.
 */
 
-html =
-html.replace(
-/<title[\s\S]*?</title>/i,
-<title>${safeTitle}</title>
-);
+function buildTemplateSEOPage(template) {
+  const templatePath =
+    path.join(
+      __dirname,
+      "public",
+      "template.html"
+    );
 
-/*
-Replace or insert canonical.
-*/
+  let html =
+    fs.readFileSync(
+      templatePath,
+      "utf8"
+    );
 
-const canonicalTag =
-<link rel="canonical" href="${safeCanonical}" id="canonicalUrl">;
+  const title =
+    cleanSEOText(
+      template?.title,
+      "Animated Message"
+    );
 
-if (
-/<link[^>]+rel=["']canonical["'][^>]*>/i
-.test(html)
-) {
+  const description =
+    createTemplateDescription(
+      template
+    );
 
-html =  
-  html.replace(  
-    /<link[^>]+rel=["']canonical["'][^>]*>/i,  
-    canonicalTag  
+  const canonical =
+    getTemplateSEOUrl(
+      template
+    );
+
+  const safeTitle =
+    escapeAttribute(
+      `${title} | MAKYAMA MESSAGES`
+    );
+
+  const safeDescription =
+    escapeAttribute(
+      description
+    );
+
+  const safeCanonical =
+    escapeAttribute(
+      canonical
+    );
+
+  /*
+  Replace existing title.
+  */
+
+  html = html.replace(
+    /<title[\s\S]*?<\/title>/i,
+    `<title>${safeTitle}</title>`
   );
 
-} else {
+  /*
+  Replace or insert canonical.
+  */
 
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${canonicalTag}\n</head>`  
+  const canonicalTag =
+    `<link rel="canonical" href="${safeCanonical}" id="canonicalUrl">`;
+
+  if (
+    /<link[^>]+rel=["']canonical["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<link[^>]+rel=["']canonical["'][^>]*>/i,
+      canonicalTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${canonicalTag}\n</head>`
+    );
+  }
+
+  /*
+  Meta description.
+  */
+
+  const descriptionTag =
+    `<meta name="description" content="${safeDescription}" id="metaDescription">`;
+
+  if (
+    /<meta[^>]+name=["']description["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+name=["']description["'][^>]*>/i,
+      descriptionTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${descriptionTag}\n</head>`
+    );
+  }
+
+  /*
+  OG title.
+  */
+
+  const ogTitleTag =
+    `<meta property="og:title" content="${safeTitle}" id="ogTitle">`;
+
+  if (
+    /<meta[^>]+property=["']og:title["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+property=["']og:title["'][^>]*>/i,
+      ogTitleTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${ogTitleTag}\n</head>`
+    );
+  }
+
+  /*
+  OG description.
+  */
+
+  const ogDescriptionTag =
+    `<meta property="og:description" content="${safeDescription}" id="ogDescription">`;
+
+  if (
+    /<meta[^>]+property=["']og:description["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+property=["']og:description["'][^>]*>/i,
+      ogDescriptionTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${ogDescriptionTag}\n</head>`
+    );
+  }
+
+  /*
+  OG URL.
+  */
+
+  const ogUrlTag =
+    `<meta property="og:url" content="${safeCanonical}" id="ogUrl">`;
+
+  if (
+    /<meta[^>]+property=["']og:url["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+property=["']og:url["'][^>]*>/i,
+      ogUrlTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${ogUrlTag}\n</head>`
+    );
+  }
+
+  /*
+  Twitter title.
+  */
+
+  const twitterTitleTag =
+    `<meta name="twitter:title" content="${safeTitle}" id="twitterTitle">`;
+
+  if (
+    /<meta[^>]+name=["']twitter:title["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+name=["']twitter:title["'][^>]*>/i,
+      twitterTitleTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${twitterTitleTag}\n</head>`
+    );
+  }
+
+  /*
+  Twitter description.
+  */
+
+  const twitterDescriptionTag =
+    `<meta name="twitter:description" content="${safeDescription}" id="twitterDescription">`;
+
+  if (
+    /<meta[^>]+name=["']twitter:description["'][^>]*>/i.test(
+      html
+    )
+  ) {
+    html = html.replace(
+      /<meta[^>]+name=["']twitter:description["'][^>]*>/i,
+      twitterDescriptionTag
+    );
+  } else {
+    html = html.replace(
+      /<\/head>/i,
+      `${twitterDescriptionTag}\n</head>`
+    );
+  }
+
+  /*
+  Server-side SEO text.
+  */
+
+  const seoText =
+    escapeHTML(
+      extractTemplateText(
+        template?.html
+      )
+    );
+
+  const seoBlock = `
+<noscript id="seoTemplateContent">
+  <article>
+    <h1>${escapeHTML(title)}</h1>
+    <p>${escapeHTML(description)}</p>
+    ${
+      seoText
+        ? `<p>${seoText.slice(0, 2000)}</p>`
+        : ""
+    }
+  </article>
+</noscript>
+`;
+
+  if (
+    !html.includes(
+      'id="seoTemplateContent"'
+    )
+  ) {
+    html = html.replace(
+      /<body[^>]*>/i,
+      (match) =>
+        `${match}\n${seoBlock}`
+    );
+  }
+
+  /*
+  Structured data.
+  */
+
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "WebPage",
+
+    name:
+      title,
+
+    description:
+      description,
+
+    url:
+      canonical,
+
+    isPartOf: {
+      "@type":
+        "WebSite",
+
+      name:
+        "MAKYAMA MESSAGES",
+
+      url:
+        SITE_URL
+    }
+  };
+
+  const structuredScript = `
+<script type="application/ld+json">
+${JSON.stringify(
+  structuredData
+)}
+</script>
+`;
+
+  if (
+    !html.includes(
+      '"@type":"WebPage"'
+    )
+  ) {
+    html = html.replace(
+      /<\/head>/i,
+      `${structuredScript}\n</head>`
+    );
+  }
+
+  /*
+  Tell frontend JS the canonical URL
+  and template ID.
+  */
+
+  const seoRouteScript = `
+<script>
+window.__MAKYAMA_SEO_URL__ = ${JSON.stringify(
+    canonical
+  )};
+
+window.__MAKYAMA_TEMPLATE_ID__ = ${JSON.stringify(
+    String(template?.id || "")
+  )};
+</script>
+`;
+
+  html = html.replace(
+    /<body[^>]*>/i,
+    (match) =>
+      `${match}\n${seoRouteScript}`
   );
 
-}
-
-/*
-Meta description.
-*/
-
-const descriptionTag =
-<meta name="description" content="${safeDescription}" id="metaDescription">;
-
-if (
-/<meta[^>]+name=["']description["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+name=["']description["'][^>]*>/i,  
-    descriptionTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${descriptionTag}\n</head>`  
-  );
-
-}
-
-/*
-OG title.
-*/
-
-const ogTitleTag =
-<meta property="og:title" content="${safeTitle}" id="ogTitle">;
-
-if (
-/<meta[^>]+property=["']og:title["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+property=["']og:title["'][^>]*>/i,  
-    ogTitleTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${ogTitleTag}\n</head>`  
-  );
-
-}
-
-/*
-OG description.
-*/
-
-const ogDescriptionTag =
-<meta property="og:description" content="${safeDescription}" id="ogDescription">;
-
-if (
-/<meta[^>]+property=["']og:description["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+property=["']og:description["'][^>]*>/i,  
-    ogDescriptionTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${ogDescriptionTag}\n</head>`  
-  );
-
-}
-
-/*
-OG URL.
-*/
-
-const ogUrlTag =
-<meta property="og:url" content="${safeCanonical}" id="ogUrl">;
-
-if (
-/<meta[^>]+property=["']og:url["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+property=["']og:url["'][^>]*>/i,  
-    ogUrlTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${ogUrlTag}\n</head>`  
-  );
-
-}
-
-/*
-Twitter title.
-*/
-
-const twitterTitleTag =
-<meta name="twitter:title" content="${safeTitle}" id="twitterTitle">;
-
-if (
-/<meta[^>]+name=["']twitter:title["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+name=["']twitter:title["'][^>]*>/i,  
-    twitterTitleTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${twitterTitleTag}\n</head>`  
-  );
-
-}
-
-/*
-Twitter description.
-*/
-
-const twitterDescriptionTag =
-<meta name="twitter:description" content="${safeDescription}" id="twitterDescription">;
-
-if (
-/<meta[^>]+name=["']twitter:description["'][^>]*>/i
-.test(html)
-) {
-
-html =  
-  html.replace(  
-    /<meta[^>]+name=["']twitter:description["'][^>]*>/i,  
-    twitterDescriptionTag  
-  );
-
-} else {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${twitterDescriptionTag}\n</head>`  
-  );
-
-}
-
-/*
-Server-side SEO text.
-
-It is placed inside a noscript block  
-so normal JavaScript behaviour is not  
-affected.  
-
-Search engines can still understand  
-the page topic/title even before the  
-frontend API request runs.
-
-*/
-
-const seoText =
-escapeHTML(
-extractTemplateText(
-template?.html
-)
-);
-
-const seoBlock = `
-
-<noscript id="seoTemplateContent">    <article>  <h1>${escapeHTML(title)}</h1>  
-
-<p>${safeDescription}</p>  
-
-${  
-  seoText  
-    ? `<p>${seoText.slice(0, 2000)}</p>`  
-    : ""  
-}
-
-  </article>  </noscript>  `;
-
-if (
-!html.includes(
-'id="seoTemplateContent"'
-)
-) {
-
-html =  
-  html.replace(  
-    /<body[^>]*>/i,  
-    match =>  
-      `${match}\n${seoBlock}`  
-  );
-
-}
-
-/*
-Add structured data for this
-individual message.
-*/
-
-const structuredData = {
-
-"@context":  
-  "https://schema.org",  
-
-"@type":  
-  "WebPage",  
-
-name:  
-  title,  
-
-description:  
-  description,  
-
-url:  
-  canonical,  
-
-isPartOf: {  
-
-  "@type":  
-    "WebSite",  
-
-  name:  
-    "MAKYAMA MESSAGES",  
-
-  url:  
-    SITE_URL  
-
-}
-
-};
-
-const structuredScript = `
-
-<script type="application/ld+json">  
-  
-${JSON.stringify(  
-  structuredData  
-)}  
-  
-</script>  `;
-
-if (
-!html.includes(
-"@type":"WebPage"
-)
-) {
-
-html =  
-  html.replace(  
-    /<\/head>/i,  
-    `${structuredScript}\n</head>`  
-  );
-
-}
-
-/*
-Tell frontend JS which URL is
-canonical so it doesn't overwrite
-the server-generated canonical.
-*/
-
-const seoRouteScript = `
-
-<script>  
-  
-window.__MAKYAMA_SEO_URL__ =  
-${JSON.stringify(canonical)};  
-  
-window.__MAKYAMA_TEMPLATE_ID__ =  
-${JSON.stringify(  
-  String(  
-    template?.id || ""  
-  )  
-)};  
-  
-</script>  `;
-
-html =
-html.replace(
-/<body[^>]*>/i,
-match =>
-${match}\n${seoRouteScript}
-);
-
-return html;
-
+  return html;
 }
 
 /* =====================================================
 LANGUAGE SYSTEM
 ===================================================== */
 
-const DEFAULT_LANGUAGE =
-String(
-process.env.DEFAULT_LANGUAGE ||
-"en"
+const DEFAULT_LANGUAGE = String(
+  process.env.DEFAULT_LANGUAGE || "en"
 )
-.trim()
-.toLowerCase();
+  .trim()
+  .toLowerCase();
 
 const supportedLanguages = [
-
-{
-code: "en",
-name: "English",
-nativeName: "English",
-rtl: false
-},
-
-{
-code: "sw",
-name: "Swahili",
-nativeName: "Kiswahili",
-rtl: false
-},
-
-{
-code: "fr",
-name: "French",
-nativeName: "Français",
-rtl: false
-},
-
-{
-code: "es",
-name: "Spanish",
-nativeName: "Español",
-rtl: false
-},
-
-{
-code: "pt",
-name: "Portuguese",
-nativeName: "Português",
-rtl: false
-},
-
-{
-code: "de",
-name: "German",
-nativeName: "Deutsch",
-rtl: false
-},
-
-{
-code: "it",
-name: "Italian",
-nativeName: "Italiano",
-rtl: false
-},
-
-{
-code: "nl",
-name: "Dutch",
-nativeName: "Nederlands",
-rtl: false
-},
-
-{
-code: "pl",
-name: "Polish",
-nativeName: "Polski",
-rtl: false
-},
-
-{
-code: "tr",
-name: "Turkish",
-nativeName: "Türkçe",
-rtl: false
-},
-
-{
-code: "ru",
-name: "Russian",
-nativeName: "Русский",
-rtl: false
-},
-
-{
-code: "uk",
-name: "Ukrainian",
-nativeName: "Українська",
-rtl: false
-},
-
-{
-code: "ar",
-name: "Arabic",
-nativeName: "العربية",
-rtl: true
-},
-
-{
-code: "fa",
-name: "Persian",
-nativeName: "فارسی",
-rtl: true
-},
-
-{
-code: "he",
-name: "Hebrew",
-nativeName: "עברית",
-rtl: true
-},
-
-{
-code: "hi",
-name: "Hindi",
-nativeName: "हिन्दी",
-rtl: false
-},
-
-{
-code: "bn",
-name: "Bengali",
-nativeName: "বাংলা",
-rtl: false
-},
-
-{
-code: "ur",
-name: "Urdu",
-nativeName: "اردو",
-rtl: true
-},
-
-{
-code: "zh",
-name: "Chinese",
-nativeName: "中文",
-rtl: false
-},
-
-{
-code: "ja",
-name: "Japanese",
-nativeName: "日本語",
-rtl: false
-},
-
-{
-code: "ko",
-name: "Korean",
-nativeName: "한국어",
-rtl: false
-},
-
-{
-code: "id",
-name: "Indonesian",
-nativeName: "Bahasa Indonesia",
-rtl: false
-},
-
-{
-code: "ms",
-name: "Malay",
-nativeName: "Bahasa Melayu",
-rtl: false
-},
-
-{
-code: "vi",
-name: "Vietnamese",
-nativeName: "Tiếng Việt",
-rtl: false
-},
-
-{
-code: "th",
-name: "Thai",
-nativeName: "ไทย",
-rtl: false
-},
-
-{
-code: "fil",
-name: "Filipino",
-nativeName: "Filipino",
-rtl: false
-},
-
-{
-code: "am",
-name: "Amharic",
-nativeName: "አማርኛ",
-rtl: false
-},
-
-{
-code: "ha",
-name: "Hausa",
-nativeName: "Hausa",
-rtl: false
-},
-
-{
-code: "yo",
-name: "Yoruba",
-nativeName: "Yorùbá",
-rtl: false
-},
-
-{
-code: "zu",
-name: "Zulu",
-nativeName: "isiZulu",
-rtl: false
-},
-
-{
-code: "af",
-name: "Afrikaans",
-nativeName: "Afrikaans",
-rtl: false
-},
-
-{
-code: "so",
-name: "Somali",
-nativeName: "Soomaali",
-rtl: false
-},
-
-{
-code: "ro",
-name: "Romanian",
-nativeName: "Română",
-rtl: false
-},
-
-{
-code: "cs",
-name: "Czech",
-nativeName: "Čeština",
-rtl: false
-},
-
-{
-code: "sk",
-name: "Slovak",
-nativeName: "Slovenčina",
-rtl: false
-},
-
-{
-code: "el",
-name: "Greek",
-nativeName: "Ελληνικά",
-rtl: false
-},
-
-{
-code: "hu",
-name: "Hungarian",
-nativeName: "Magyar",
-rtl: false
-},
-
-{
-code: "sv",
-name: "Swedish",
-nativeName: "Svenska",
-rtl: false
-},
-
-{
-code: "da",
-name: "Danish",
-nativeName: "Dansk",
-rtl: false
-},
-
-{
-code: "no",
-name: "Norwegian",
-nativeName: "Norsk",
-rtl: false
-},
-
-{
-code: "fi",
-name: "Finnish",
-nativeName: "Suomi",
-rtl: false
-},
-
-{
-code: "bg",
-name: "Bulgarian",
-nativeName: "Български",
-rtl: false
-},
-
-{
-code: "sr",
-name: "Serbian",
-nativeName: "Српски",
-rtl: false
-},
-
-{
-code: "hr",
-name: "Croatian",
-nativeName: "Hrvatski",
-rtl: false
-},
-
-{
-code: "sl",
-name: "Slovenian",
-nativeName: "Slovenščina",
-rtl: false
-},
-
-{
-code: "et",
-name: "Estonian",
-nativeName: "Eesti",
-rtl: false
-},
-
-{
-code: "lv",
-name: "Latvian",
-nativeName: "Latviešu",
-rtl: false
-},
-
-{
-code: "lt",
-name: "Lithuanian",
-nativeName: "Lietuvių",
-rtl: false
-}
-
+  {
+    code: "en",
+    name: "English",
+    nativeName: "English",
+    rtl: false
+  },
+  {
+    code: "sw",
+    name: "Swahili",
+    nativeName: "Kiswahili",
+    rtl: false
+  },
+  {
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+    rtl: false
+  },
+  {
+    code: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    rtl: false
+  },
+  {
+    code: "pt",
+    name: "Portuguese",
+    nativeName: "Português",
+    rtl: false
+  },
+  {
+    code: "de",
+    name: "German",
+    nativeName: "Deutsch",
+    rtl: false
+  },
+  {
+    code: "it",
+    name: "Italian",
+    nativeName: "Italiano",
+    rtl: false
+  },
+  {
+    code: "nl",
+    name: "Dutch",
+    nativeName: "Nederlands",
+    rtl: false
+  },
+  {
+    code: "pl",
+    name: "Polish",
+    nativeName: "Polski",
+    rtl: false
+  },
+  {
+    code: "tr",
+    name: "Turkish",
+    nativeName: "Türkçe",
+    rtl: false
+  },
+  {
+    code: "ru",
+    name: "Russian",
+    nativeName: "Русский",
+    rtl: false
+  },
+  {
+    code: "uk",
+    name: "Ukrainian",
+    nativeName: "Українська",
+    rtl: false
+  },
+  {
+    code: "ar",
+    name: "Arabic",
+    nativeName: "العربية",
+    rtl: true
+  },
+  {
+    code: "fa",
+    name: "Persian",
+    nativeName: "فارسی",
+    rtl: true
+  },
+  {
+    code: "he",
+    name: "Hebrew",
+    nativeName: "עברית",
+    rtl: true
+  },
+  {
+    code: "hi",
+    name: "Hindi",
+    nativeName: "हिन्दी",
+    rtl: false
+  },
+  {
+    code: "bn",
+    name: "Bengali",
+    nativeName: "বাংলা",
+    rtl: false
+  },
+  {
+    code: "ur",
+    name: "Urdu",
+    nativeName: "اردو",
+    rtl: true
+  },
+  {
+    code: "zh",
+    name: "Chinese",
+    nativeName: "中文",
+    rtl: false
+  },
+  {
+    code: "ja",
+    name: "Japanese",
+    nativeName: "日本語",
+    rtl: false
+  },
+  {
+    code: "ko",
+    name: "Korean",
+    nativeName: "한국어",
+    rtl: false
+  },
+  {
+    code: "id",
+    name: "Indonesian",
+    nativeName: "Bahasa Indonesia",
+    rtl: false
+  },
+  {
+    code: "ms",
+    name: "Malay",
+    nativeName: "Bahasa Melayu",
+    rtl: false
+  },
+  {
+    code: "vi",
+    name: "Vietnamese",
+    nativeName: "Tiếng Việt",
+    rtl: false
+  },
+  {
+    code: "th",
+    name: "Thai",
+    nativeName: "ไทย",
+    rtl: false
+  },
+  {
+    code: "fil",
+    name: "Filipino",
+    nativeName: "Filipino",
+    rtl: false
+  },
+  {
+    code: "am",
+    name: "Amharic",
+    nativeName: "አማርኛ",
+    rtl: false
+  },
+  {
+    code: "ha",
+    name: "Hausa",
+    nativeName: "Hausa",
+    rtl: false
+  },
+  {
+    code: "yo",
+    name: "Yoruba",
+    nativeName: "Yorùbá",
+    rtl: false
+  },
+  {
+    code: "zu",
+    name: "Zulu",
+    nativeName: "isiZulu",
+    rtl: false
+  },
+  {
+    code: "af",
+    name: "Afrikaans",
+    nativeName: "Afrikaans",
+    rtl: false
+  },
+  {
+    code: "so",
+    name: "Somali",
+    nativeName: "Soomaali",
+    rtl: false
+  },
+  {
+    code: "ro",
+    name: "Romanian",
+    nativeName: "Română",
+    rtl: false
+  },
+  {
+    code: "cs",
+    name: "Czech",
+    nativeName: "Čeština",
+    rtl: false
+  },
+  {
+    code: "sk",
+    name: "Slovak",
+    nativeName: "Slovenčina",
+    rtl: false
+  },
+  {
+    code: "el",
+    name: "Greek",
+    nativeName: "Ελληνικά",
+    rtl: false
+  },
+  {
+    code: "hu",
+    name: "Hungarian",
+    nativeName: "Magyar",
+    rtl: false
+  },
+  {
+    code: "sv",
+    name: "Swedish",
+    nativeName: "Svenska",
+    rtl: false
+  },
+  {
+    code: "da",
+    name: "Danish",
+    nativeName: "Dansk",
+    rtl: false
+  },
+  {
+    code: "no",
+    name: "Norwegian",
+    nativeName: "Norsk",
+    rtl: false
+  },
+  {
+    code: "fi",
+    name: "Finnish",
+    nativeName: "Suomi",
+    rtl: false
+  },
+  {
+    code: "bg",
+    name: "Bulgarian",
+    nativeName: "Български",
+    rtl: false
+  },
+  {
+    code: "sr",
+    name: "Serbian",
+    nativeName: "Српски",
+    rtl: false
+  },
+  {
+    code: "hr",
+    name: "Croatian",
+    nativeName: "Hrvatski",
+    rtl: false
+  },
+  {
+    code: "sl",
+    name: "Slovenian",
+    nativeName: "Slovenščina",
+    rtl: false
+  },
+  {
+    code: "et",
+    name: "Estonian",
+    nativeName: "Eesti",
+    rtl: false
+  },
+  {
+    code: "lv",
+    name: "Latvian",
+    nativeName: "Latviešu",
+    rtl: false
+  },
+  {
+    code: "lt",
+    name: "Lithuanian",
+    nativeName: "Lietuvių",
+    rtl: false
+  }
 ];
 
-function normalizeLanguage(
-language
-) {
+function normalizeLanguage(language) {
+  let value = String(
+    language || ""
+  )
+    .trim()
+    .toLowerCase();
 
-let value =
-String(
-language || ""
-)
-.trim()
-.toLowerCase();
+  if (!value) {
+    return DEFAULT_LANGUAGE;
+  }
 
-if (!value) {
+  if (value.includes("-")) {
+    value = value.split("-")[0];
+  }
 
-return DEFAULT_LANGUAGE;
+  if (value.includes("_")) {
+    value = value.split("_")[0];
+  }
 
+  return value;
 }
 
-if (
-value.includes("-")
-) {
+function getLanguageInfo(language) {
+  const code =
+    normalizeLanguage(language);
 
-value =  
-  value.split("-")[0];
-
+  return (
+    supportedLanguages.find(
+      (item) =>
+        item.code === code
+    ) || {
+      code,
+      name: code,
+      nativeName: code,
+      rtl: false
+    }
+  );
 }
 
-if (
-value.includes("_")
-) {
+function detectBrowserLanguage(req) {
+  const header = String(
+    req.headers["accept-language"] || ""
+  );
 
-value =  
-  value.split("_")[0];
+  if (!header) {
+    return DEFAULT_LANGUAGE;
+  }
 
-}
+  const first = header
+    .split(",")[0]
+    .split(";")[0]
+    .trim();
 
-return value;
-
-}
-
-function getLanguageInfo(
-language
-) {
-
-const code =
-normalizeLanguage(
-language
-);
-
-return (
-supportedLanguages.find(
-item =>
-item.code === code
-) ||
-{
-
-code,  
-
-  name: code,  
-
-  nativeName: code,  
-
-  rtl: false  
-
-}
-
-);
-
-}
-
-function detectBrowserLanguage(
-req
-) {
-
-const header =
-String(
-req.headers[
-"accept-language"
-] || ""
-);
-
-if (!header) {
-
-return DEFAULT_LANGUAGE;
-
-}
-
-const first =
-header
-.split(",")[0]
-.split(";")[0]
-.trim();
-
-return normalizeLanguage(
-first
-);
-
+  return normalizeLanguage(first);
 }
 
 /* =====================================================
@@ -1263,22 +930,16 @@ LANGUAGE API
 ===================================================== */
 
 app.get(
-"/api/languages",
-(req, res) => {
-
-res.json({  
-
-  ok: true,  
-
-  defaultLanguage:  
-    DEFAULT_LANGUAGE,  
-
-  languages:  
-    supportedLanguages  
-
-});
-
-}
+  "/api/languages",
+  (req, res) => {
+    res.json({
+      ok: true,
+      defaultLanguage:
+        DEFAULT_LANGUAGE,
+      languages:
+        supportedLanguages
+    });
+  }
 );
 
 /* =====================================================
@@ -1286,57 +947,47 @@ TRANSLATION CACHE
 ===================================================== */
 
 const translationMemory =
-new Map();
+  new Map();
 
 const translationMemoryLimit =
-5000;
+  5000;
 
 function createTranslationCacheKey(
-source,
-target,
-text
+  source,
+  target,
+  text
 ) {
-
-return crypto
-.createHash("sha256")
-.update(
-JSON.stringify({
-
-source,  
-    target,  
-    text  
-
-  })  
-)  
-.digest("hex");
-
+  return crypto
+    .createHash("sha256")
+    .update(
+      JSON.stringify({
+        source,
+        target,
+        text
+      })
+    )
+    .digest("hex");
 }
 
 function cleanTranslationCache() {
+  if (
+    translationMemory.size <=
+    translationMemoryLimit
+  ) {
+    return;
+  }
 
-if (
-translationMemory.size <=
-translationMemoryLimit
-) {
+  const firstKey =
+    translationMemory
+      .keys()
+      .next()
+      .value;
 
-return;
-
-}
-
-const firstKey =
-translationMemory
-.keys()
-.next()
-.value;
-
-if (firstKey) {
-
-translationMemory.delete(  
-  firstKey  
-);
-
-}
-
+  if (firstKey) {
+    translationMemory.delete(
+      firstKey
+    );
+  }
 }
 
 /* =====================================================
@@ -1344,121 +995,79 @@ TRANSLATION PROVIDER
 ===================================================== */
 
 async function translateWithProvider(
-text,
-sourceLanguage,
-targetLanguage
+  text,
+  sourceLanguage,
+  targetLanguage
 ) {
+  const apiUrl = String(
+    process.env.TRANSLATION_API_URL ||
+      "https://libretranslate.com/translate"
+  ).trim();
 
-const apiUrl =
-String(
-process.env.TRANSLATION_API_URL ||
-"https://libretranslate.com/translate"
-).trim();
+  const apiKey = String(
+    process.env.TRANSLATION_API_KEY ||
+      ""
+  ).trim();
 
-const apiKey =
-String(
-process.env.TRANSLATION_API_KEY ||
-""
-).trim();
+  const body = {
+    q: text,
+    source: sourceLanguage,
+    target: targetLanguage,
+    format: "text"
+  };
 
-const body = {
+  if (apiKey) {
+    body.api_key = apiKey;
+  }
 
-q:  
-  text,  
-
-source:  
-  sourceLanguage,  
-
-target:  
-  targetLanguage,  
-
-format:  
-  "text"
-
-};
-
-if (apiKey) {
-
-body.api_key =  
-  apiKey;
-
-}
-
-const response =
-await fetch(
-apiUrl,
-{
-
-method:  
-      "POST",  
-
-    headers: {  
-
-      "Content-Type":  
-        "application/json",  
-
-      "Accept":  
-        "application/json"  
-
-    },  
-
-    body:  
-      JSON.stringify(  
-        body  
-      )  
-
-  }  
-);
-
-const responseText =
-await response.text();
-
-let data = null;
-
-try {
-
-data =  
-  JSON.parse(  
-    responseText  
+  const response = await fetch(
+    apiUrl,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json",
+        Accept:
+          "application/json"
+      },
+      body:
+        JSON.stringify(body)
+    }
   );
 
-} catch (
-error
-) {
+  const responseText =
+    await response.text();
 
-data = null;
+  let data = null;
 
-}
+  try {
+    data =
+      JSON.parse(responseText);
+  } catch (error) {
+    data = null;
+  }
 
-if (!response.ok) {
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+        data?.message ||
+        `Translation provider returned HTTP ${response.status}.`
+    );
+  }
 
-throw new Error(  
+  const translated = String(
+    data?.translatedText ||
+      data?.translation ||
+      ""
+  ).trim();
 
-  data?.error ||  
-  data?.message ||  
-  `Translation provider returned HTTP ${response.status}.`  
+  if (!translated) {
+    throw new Error(
+      "Translation provider returned an empty translation."
+    );
+  }
 
-);
-
-}
-
-const translated =
-String(
-data?.translatedText ||
-data?.translation ||
-""
-).trim();
-
-if (!translated) {
-
-throw new Error(  
-  "Translation provider returned an empty translation."  
-);
-
-}
-
-return translated;
-
+  return translated;
 }
 
 /* =====================================================
@@ -1466,144 +1075,111 @@ TRANSLATE TEXT
 ===================================================== */
 
 async function translateText(
-text,
-sourceLanguage,
-targetLanguage
+  text,
+  sourceLanguage,
+  targetLanguage
 ) {
+  const original =
+    String(text || "");
 
-const original =
-String(
-text || ""
-);
+  const source =
+    normalizeLanguage(
+      sourceLanguage
+    );
 
-const source =
-normalizeLanguage(
-sourceLanguage
-);
+  const target =
+    normalizeLanguage(
+      targetLanguage
+    );
 
-const target =
-normalizeLanguage(
-targetLanguage
-);
+  if (!original.trim()) {
+    return original;
+  }
 
-if (!original.trim()) {
+  if (source === target) {
+    return original;
+  }
 
-return original;
+  const cacheKey =
+    createTranslationCacheKey(
+      source,
+      target,
+      original
+    );
 
-}
+  const cached =
+    translationMemory.get(
+      cacheKey
+    );
 
-if (
-source === target
-) {
+  if (cached) {
+    return cached;
+  }
 
-return original;
+  const database =
+    initFirebase();
 
-}
+  if (database) {
+    try {
+      const firebaseKey =
+        `translationCache/${source}/${target}/${cacheKey}`;
 
-const cacheKey =
-createTranslationCacheKey(
-source,
-target,
-original
-);
+      const firebaseCached =
+        await firebaseGet(
+          firebaseKey
+        );
 
-const cached =
-translationMemory.get(
-cacheKey
-);
+      if (
+        typeof firebaseCached ===
+          "string" &&
+        firebaseCached.trim()
+      ) {
+        translationMemory.set(
+          cacheKey,
+          firebaseCached
+        );
 
-if (cached) {
+        cleanTranslationCache();
 
-return cached;
+        return firebaseCached;
+      }
+    } catch (error) {
+      console.warn(
+        "Firebase translation cache read failed:",
+        error.message
+      );
+    }
+  }
 
-}
+  const translated =
+    await translateWithProvider(
+      original,
+      source,
+      target
+    );
 
-const database =
-initFirebase();
+  translationMemory.set(
+    cacheKey,
+    translated
+  );
 
-if (database) {
+  cleanTranslationCache();
 
-try {  
+  if (database) {
+    try {
+      await firebaseSet(
+        `translationCache/${source}/${target}/${cacheKey}`,
+        translated
+      );
+    } catch (error) {
+      console.warn(
+        "Firebase translation cache write failed:",
+        error.message
+      );
+    }
+  }
 
-  const firebaseKey =  
-    `translationCache/${source}/${target}/${cacheKey}`;  
-
-  const firebaseCached =  
-    await firebaseGet(  
-      firebaseKey  
-    );  
-
-  if (  
-    typeof firebaseCached ===  
-    "string" &&  
-    firebaseCached.trim()  
-  ) {  
-
-    translationMemory.set(  
-      cacheKey,  
-      firebaseCached  
-    );  
-
-    cleanTranslationCache();  
-
-    return firebaseCached;  
-
-  }  
-
-} catch (  
-  error  
-) {  
-
-  console.warn(  
-    "Firebase translation cache read failed:",  
-    error.message  
-  );  
-
-}
-
-}
-
-const translated =
-await translateWithProvider(
-original,
-source,
-target
-);
-
-translationMemory.set(
-cacheKey,
-translated
-);
-
-cleanTranslationCache();
-
-if (database) {
-
-try {  
-
-  await firebaseSet(  
-
-    `translationCache/${source}/${target}/${cacheKey}`,  
-
-    translated  
-
-  );  
-
-} catch (  
-  error  
-) {  
-
-  console.warn(  
-    "Firebase translation cache write failed:",  
-    error.message  
-  );  
-
-}
-
-}
-
-return translated;
-
+  return translated;
 }
 
 /* =====================================================
@@ -1611,103 +1187,72 @@ TRANSLATION ENDPOINT
 ===================================================== */
 
 app.post(
-"/api/translate",
-async (req, res) => {
+  "/api/translate",
+  async (req, res) => {
+    try {
+      const text = String(
+        req.body.text || ""
+      );
 
-try {  
+      const source =
+        normalizeLanguage(
+          req.body.source ||
+            DEFAULT_LANGUAGE
+        );
 
-  const text =  
-    String(  
-      req.body.text || ""  
-    );  
+      const target =
+        normalizeLanguage(
+          req.body.target ||
+            DEFAULT_LANGUAGE
+        );
 
-  const source =  
-    normalizeLanguage(  
-      req.body.source ||  
-      DEFAULT_LANGUAGE  
-    );  
+      if (!text.trim()) {
+        return res.status(400).json({
+          error:
+            "Text is required."
+        });
+      }
 
-  const target =  
-    normalizeLanguage(  
-      req.body.target ||  
-      DEFAULT_LANGUAGE  
-    );  
+      if (text.length > 10000) {
+        return res.status(400).json({
+          error:
+            "Text is too long. Maximum 10000 characters per request."
+        });
+      }
 
-  if (!text.trim()) {  
+      const translated =
+        await translateText(
+          text,
+          source,
+          target
+        );
 
-    return res.status(400).json({  
+      const languageInfo =
+        getLanguageInfo(target);
 
-      error:  
-        "Text is required."  
+      res.json({
+        ok: true,
+        source,
+        target,
+        rtl: Boolean(
+          languageInfo.rtl
+        ),
+        original: text,
+        translated
+      });
+    } catch (error) {
+      console.error(
+        "Translation error:",
+        error.message
+      );
 
-    });  
-
-  }  
-
-  if (  
-    text.length >  
-    10000  
-  ) {  
-
-    return res.status(400).json({  
-
-      error:  
-        "Text is too long. Maximum 10000 characters per request."  
-
-    });  
-
-  }  
-
-  const translated =  
-    await translateText(  
-      text,  
-      source,  
-      target  
-    );  
-
-  const languageInfo =  
-    getLanguageInfo(  
-      target  
-    );  
-
-  res.json({  
-
-    ok: true,  
-
-    source,  
-
-    target,  
-
-    rtl:  
-      Boolean(  
-        languageInfo.rtl  
-      ),  
-
-    original:  
-      text,  
-
-    translated  
-
-  });  
-
-} catch (error) {  
-
-  console.error(  
-    "Translation error:",  
-    error.message  
-  );  
-
-  res.status(500).json({  
-
-    error:  
-      error.message ||  
-      "Unable to translate text."  
-
-  });  
-
-}
-
-}
+      res.status(500).json({
+        error:
+          error.message ||
+          "Unable to translate text."
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -1715,131 +1260,94 @@ TRANSLATE MANY TEXTS
 ===================================================== */
 
 app.post(
-"/api/translate/batch",
-async (req, res) => {
+  "/api/translate/batch",
+  async (req, res) => {
+    try {
+      const source =
+        normalizeLanguage(
+          req.body.source ||
+            DEFAULT_LANGUAGE
+        );
 
-try {  
+      const target =
+        normalizeLanguage(
+          req.body.target ||
+            DEFAULT_LANGUAGE
+        );
 
-  const source =  
-    normalizeLanguage(  
-      req.body.source ||  
-      DEFAULT_LANGUAGE  
-    );  
+      const texts =
+        req.body.texts;
 
-  const target =  
-    normalizeLanguage(  
-      req.body.target ||  
-      DEFAULT_LANGUAGE  
-    );  
+      if (
+        !texts ||
+        typeof texts !==
+          "object" ||
+        Array.isArray(texts)
+      ) {
+        return res.status(400).json({
+          error:
+            "texts must be an object."
+        });
+      }
 
-  const texts =  
-    req.body.texts;  
+      const keys =
+        Object.keys(texts);
 
-  if (  
-    !texts ||  
-    typeof texts !==  
-    "object" ||  
-    Array.isArray(texts)  
-  ) {  
+      if (keys.length > 100) {
+        return res.status(400).json({
+          error:
+            "Maximum 100 texts per batch."
+        });
+      }
 
-    return res.status(400).json({  
+      const result = {};
 
-      error:  
-        "texts must be an object."  
+      for (
+        const key of keys
+      ) {
+        const text = String(
+          texts[key] || ""
+        );
 
-    });  
+        if (!text.trim()) {
+          result[key] = text;
+          continue;
+        }
 
-  }  
+        result[key] =
+          await translateText(
+            text,
+            source,
+            target
+          );
+      }
 
-  const keys =  
-    Object.keys(  
-      texts  
-    );  
+      const languageInfo =
+        getLanguageInfo(target);
 
-  if (  
-    keys.length >  
-    100  
-  ) {  
+      res.json({
+        ok: true,
+        source,
+        target,
+        rtl: Boolean(
+          languageInfo.rtl
+        ),
+        translations:
+          result
+      });
+    } catch (error) {
+      console.error(
+        "Batch translation error:",
+        error.message
+      );
 
-    return res.status(400).json({  
-
-      error:  
-        "Maximum 100 texts per batch."  
-
-    });  
-
-  }  
-
-  const result = {};  
-
-  for (  
-    const key of keys  
-  ) {  
-
-    const text =  
-      String(  
-        texts[key] || ""  
-      );  
-
-    if (!text.trim()) {  
-
-      result[key] =  
-        text;  
-
-      continue;  
-
-    }  
-
-    result[key] =  
-      await translateText(  
-        text,  
-        source,  
-        target  
-      );  
-
-  }  
-
-  const languageInfo =  
-    getLanguageInfo(  
-      target  
-    );  
-
-  res.json({  
-
-    ok: true,  
-
-    source,  
-
-    target,  
-
-    rtl:  
-      Boolean(  
-        languageInfo.rtl  
-      ),  
-
-    translations:  
-      result  
-
-  });  
-
-} catch (error) {  
-
-  console.error(  
-    "Batch translation error:",  
-    error.message  
-  );  
-
-  res.status(500).json({  
-
-    error:  
-      error.message ||  
-      "Unable to translate texts."  
-
-  });  
-
-}
-
-}
+      res.status(500).json({
+        error:
+          error.message ||
+          "Unable to translate texts."
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -1847,260 +1355,227 @@ MAILTRAP EMAIL
 ===================================================== */
 
 const MAILTRAP_API_URL =
-"https://send.api.mailtrap.io/api/send";
+  "https://send.api.mailtrap.io/api/send";
 
-function normalizeEmail(
-email
-) {
-
-return String(
-email || ""
-)
-.trim()
-.toLowerCase();
-
+function normalizeEmail(email) {
+  return String(email || "")
+    .trim()
+    .toLowerCase();
 }
 
-function isValidEmail(
-email
-) {
-
-return /^[^\s@]+@[^\s@]+.[^\s@]+$/
-.test(email);
-
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+    email
+  );
 }
 
-function hashVerificationValue(
-value
-) {
-
-return crypto
-.createHash("sha256")
-.update(
-String(value)
-)
-.digest("hex");
-
+function hashVerificationValue(value) {
+  return crypto
+    .createHash("sha256")
+    .update(String(value))
+    .digest("hex");
 }
 
 function generateVerificationCode() {
-
-return String(
-crypto.randomInt(
-100000,
-1000000
-)
-);
-
+  return String(
+    crypto.randomInt(
+      100000,
+      1000000
+    )
+  );
 }
 
 async function sendVerificationEmail(
-email,
-code
+  email,
+  code
 ) {
+  const token =
+    process.env.MAILTRAP_API_TOKEN;
 
-const token =
-process.env.MAILTRAP_API_TOKEN;
+  const fromEmail =
+    process.env.MAILTRAP_FROM_EMAIL;
 
-const fromEmail =
-process.env.MAILTRAP_FROM_EMAIL;
+  const fromName =
+    process.env.MAILTRAP_FROM_NAME ||
+    "MAKYAMA Messages";
 
-const fromName =
-process.env.MAILTRAP_FROM_NAME ||
-"MAKYAMA Messages";
+  if (!token) {
+    throw new Error(
+      "MAILTRAP_API_TOKEN is not configured on Render."
+    );
+  }
 
-if (!token) {
+  if (!fromEmail) {
+    throw new Error(
+      "MAILTRAP_FROM_EMAIL is not configured on Render."
+    );
+  }
 
-throw new Error(  
-  "MAILTRAP_API_TOKEN is not configured on Render."  
-);
+  const response = await fetch(
+    MAILTRAP_API_URL,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json",
+        "Api-Token":
+          token
+      },
+      body: JSON.stringify({
+        from: {
+          email:
+            fromEmail,
+          name:
+            fromName
+        },
 
-}
+        to: [
+          {
+            email
+          }
+        ],
 
-if (!fromEmail) {
+        subject:
+          "MAKYAMA Verification Code",
 
-throw new Error(  
-  "MAILTRAP_FROM_EMAIL is not configured on Render."  
-);
-
-}
-
-const response =
-await fetch(
-MAILTRAP_API_URL,
-{
-
-method:  
-      "POST",  
-
-    headers: {  
-
-      "Content-Type":  
-        "application/json",  
-
-      "Api-Token":  
-        token  
-
-    },  
-
-    body:  
-      JSON.stringify({  
-
-        from: {  
-
-          email:  
-            fromEmail,  
-
-          name:  
-            fromName  
-
-        },  
-
-        to: [  
-
-          {  
-
-            email  
-
-          }  
-
-        ],  
-
-        subject:  
-          "MAKYAMA Verification Code",  
-
-        text:  
-          `Your MAKYAMA verification code is ${code}. This code expires in 10 minutes.`,  
+        text:
+          `Your MAKYAMA verification code is ${code}. This code expires in 10 minutes.`,
 
         html: `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+<title>MAKYAMA Verification</title>
+</head>
 
-<!DOCTYPE html>  <html>  <head>  <meta charset="UTF-8">  <meta
-name="viewport"
-content="width=device-width,initial-scale=1"
+<body
+  style="
+    margin:0;
+    padding:0;
+    background:#07101f;
+    font-family:Arial,Helvetica,sans-serif;
+  "
+>
+<div
+  style="
+    max-width:520px;
+    margin:40px auto;
+    padding:30px 22px;
+    background:#0d1729;
+    border-radius:18px;
+    color:#ffffff;
+    text-align:center;
+  "
+>
+<div
+  style="
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  "
+>
+MAKYAMA MESSAGES
+</div>
 
-> 
+<div
+  style="
+    font-size:16px;
+    color:#b8c4d8;
+    margin-bottom:24px;
+  "
+>
+Email Verification
+</div>
 
-<title>  
-MAKYAMA Verification  
-</title>  </head>  <body  
-  style="  
-    margin:0;  
-    padding:0;  
-    background:#07101f;  
-    font-family:Arial,Helvetica,sans-serif;  
-  "  
->  <div  
-  style="  
-    max-width:520px;  
-    margin:40px auto;  
-    padding:30px 22px;  
-    background:#0d1729;  
-    border-radius:18px;  
-    color:#ffffff;  
-    text-align:center;  
-  "  
->  <div  
-  style="  
-    font-size:22px;  
-    font-weight:800;  
-    letter-spacing:1px;  
-    margin-bottom:10px;  
-  "  
->  
-MAKYAMA MESSAGES  
-</div>  <div  
-  style="  
-    font-size:16px;  
-    color:#b8c4d8;  
-    margin-bottom:24px;  
-  "  
->  
-Email Verification  
-</div>  <div  
-  style="  
-    display:inline-block;  
-    padding:16px 24px;  
-    border-radius:14px;  
-    background:#16243c;  
-    font-size:32px;  
-    font-weight:800;  
-    letter-spacing:8px;  
-    color:#ffffff;  
-  "  
->  
-${code}  
-</div>  <p  
-  style="  
-    color:#b8c4d8;  
-    font-size:14px;  
-    line-height:1.6;  
-    margin-top:24px;  
-  "  
->  
-This verification code expires in  
-<strong>10 minutes</strong>.  
-</p>  <p  
-  style="  
-    color:#71809a;  
-    font-size:12px;  
-    margin-top:30px;  
-  "  
->  
-If you did not request this code,  
-you can safely ignore this email.  
-</p>  <div  
-  style="  
-    margin-top:24px;  
-    color:#66758d;  
-    font-size:11px;  
-  "  
->  
-makyama.pntr.dev  
-</div>  </div>  </body>  </html>  `
+<div
+  style="
+    display:inline-block;
+    padding:16px 24px;
+    border-radius:14px;
+    background:#16243c;
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:8px;
+    color:#ffffff;
+  "
+>
+${code}
+</div>
 
-})  
+<p
+  style="
+    color:#b8c4d8;
+    font-size:14px;
+    line-height:1.6;
+    margin-top:24px;
+  "
+>
+This verification code expires in
+<strong>10 minutes</strong>.
+</p>
 
-  }  
-);
+<p
+  style="
+    color:#71809a;
+    font-size:12px;
+    margin-top:30px;
+  "
+>
+If you did not request this code,
+you can safely ignore this email.
+</p>
 
-const responseText =
-await response.text();
+<div
+  style="
+    margin-top:24px;
+    color:#66758d;
+    font-size:11px;
+  "
+>
+makyama.pntr.dev
+</div>
 
-let data = null;
-
-try {
-
-data =  
-  JSON.parse(  
-    responseText  
+</div>
+</body>
+</html>
+`
+      })
+    }
   );
 
-} catch (
-error
-) {
+  const responseText =
+    await response.text();
 
-data = null;
+  let data = null;
 
-}
+  try {
+    data =
+      JSON.parse(responseText);
+  } catch (error) {
+    data = null;
+  }
 
-if (!response.ok) {
+  if (!response.ok) {
+    console.error(
+      "Mailtrap error:",
+      response.status,
+      responseText
+    );
 
-console.error(  
-  "Mailtrap error:",  
-  response.status,  
-  responseText  
-);  
+    throw new Error(
+      data?.errors?.[0]?.message ||
+        data?.message ||
+        `Mailtrap request failed with status ${response.status}.`
+    );
+  }
 
-throw new Error(  
-  data?.errors?.[0]?.message ||  
-  data?.message ||  
-  `Mailtrap request failed with status ${response.status}.`  
-);
-
-}
-
-return data;
-
+  return data;
 }
 
 /* =====================================================
@@ -2108,30 +1583,21 @@ EMAIL VERIFICATION
 ===================================================== */
 
 const verificationRateLimit =
-new Map();
+  new Map();
 
 const verificationCooldown =
-60 *
-1000;
+  60 * 1000;
 
 const verificationExpiry =
-10 *
-60 *
-1000;
+  10 * 60 * 1000;
 
 const verificationMaxAttempts =
-5;
+  5;
 
-function getVerificationKey(
-email
-) {
-
-return hashVerificationValue(
-normalizeEmail(
-email
-)
-);
-
+function getVerificationKey(email) {
+  return hashVerificationValue(
+    normalizeEmail(email)
+  );
 }
 
 /* =====================================================
@@ -2139,165 +1605,124 @@ SEND VERIFICATION CODE
 ===================================================== */
 
 app.post(
-"/api/auth/send-code",
-async (req, res) => {
+  "/api/auth/send-code",
+  async (req, res) => {
+    try {
+      const email =
+        normalizeEmail(
+          req.body.email
+        );
 
-try {  
+      if (
+        !isValidEmail(email)
+      ) {
+        return res.status(400).json({
+          error:
+            "Please enter a valid email address."
+        });
+      }
 
-  const email =  
-    normalizeEmail(  
-      req.body.email  
-    );  
+      const now =
+        Date.now();
 
-  if (  
-    !isValidEmail(  
-      email  
-    )  
-  ) {  
+      const rateKey =
+        getVerificationKey(
+          email
+        );
 
-    return res.status(400).json({  
+      const previousRequest =
+        verificationRateLimit.get(
+          rateKey
+        );
 
-      error:  
-        "Please enter a valid email address."  
+      if (
+        previousRequest &&
+        now - previousRequest <
+          verificationCooldown
+      ) {
+        const remaining =
+          Math.ceil(
+            (
+              verificationCooldown -
+              (now - previousRequest)
+            ) / 1000
+          );
 
-    });  
+        return res.status(429).json({
+          error:
+            `Please wait ${remaining} seconds before requesting another code.`
+        });
+      }
 
-  }  
+      const code =
+        generateVerificationCode();
 
-  const now =  
-    Date.now();  
+      const codeHash =
+        hashVerificationValue(
+          code
+        );
 
-  const rateKey =  
-    getVerificationKey(  
-      email  
-    );  
+      const verificationData = {
+        email,
 
-  const previousRequest =  
-    verificationRateLimit.get(  
-      rateKey  
-    );  
+        codeHash,
 
-  if (  
-    previousRequest &&  
-    now -  
-    previousRequest <  
-    verificationCooldown  
-  ) {  
+        expiresAt:
+          now +
+          verificationExpiry,
 
-    const remaining =  
-      Math.ceil(  
+        attempts: 0,
 
-        (  
-          verificationCooldown -  
-          (  
-            now -  
-            previousRequest  
-          )  
-        ) /  
-        1000  
+        createdAt:
+          now
+      };
 
-      );  
+      await firebaseSet(
+        `emailVerifications/${rateKey}`,
+        verificationData
+      );
 
-    return res.status(429).json({  
+      try {
+        await sendVerificationEmail(
+          email,
+          code
+        );
+      } catch (emailError) {
+        await firebaseSet(
+          `emailVerifications/${rateKey}`,
+          null
+        );
 
-      error:  
-        `Please wait ${remaining} seconds before requesting another code.`  
+        throw emailError;
+      }
 
-    });  
+      verificationRateLimit.set(
+        rateKey,
+        now
+      );
 
-  }  
+      res.json({
+        ok: true,
 
-  const code =  
-    generateVerificationCode();  
+        message:
+          "Verification code sent to your email.",
 
-  const codeHash =  
-    hashVerificationValue(  
-      code  
-    );  
+        expiresIn:
+          verificationExpiry
+      });
+    } catch (error) {
+      console.error(
+        "Send verification code error:",
+        error.message
+      );
 
-  const verificationData = {  
-
-    email,  
-
-    codeHash,  
-
-    expiresAt:  
-      now +  
-      verificationExpiry,  
-
-    attempts: 0,  
-
-    createdAt:  
-      now  
-
-  };  
-
-  await firebaseSet(  
-
-    `emailVerifications/${rateKey}`,  
-
-    verificationData  
-
-  );  
-
-  try {  
-
-    await sendVerificationEmail(  
-      email,  
-      code  
-    );  
-
-  } catch (  
-    emailError  
-  ) {  
-
-    await firebaseSet(  
-
-      `emailVerifications/${rateKey}`,  
-
-      null  
-
-    );  
-
-    throw emailError;  
-
-  }  
-
-  verificationRateLimit.set(  
-    rateKey,  
-    now  
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    message:  
-      "Verification code sent to your email.",  
-
-    expiresIn:  
-      verificationExpiry  
-
-  });  
-
-} catch (error) {  
-
-  console.error(  
-    "Send verification code error:",  
-    error.message  
-  );  
-
-  res.status(500).json({  
-
-    error:  
-      error.message ||  
-      "Unable to send verification code."  
-
-  });  
-
-}
-
-}
+      res.status(500).json({
+        error:
+          error.message ||
+          "Unable to send verification code."
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -2305,225 +1730,159 @@ VERIFY CODE
 ===================================================== */
 
 app.post(
-"/api/auth/verify-code",
-async (req, res) => {
-
-try {  
-
-  const email =  
-    normalizeEmail(  
-      req.body.email  
-    );  
-
-  const code =  
-    String(  
-      req.body.code || ""  
-    )  
-    .trim();  
-
-  if (  
-    !isValidEmail(  
-      email  
-    )  
-  ) {  
-
-    return res.status(400).json({  
-
-      error:  
-        "Invalid email address."  
-
-    });  
-
-  }  
-
-  if (  
-    !/^\d{6}$/.test(  
-      code  
-    )  
-  ) {  
-
-    return res.status(400).json({  
-
-      error:  
-        "Verification code must contain 6 digits."  
-
-    });  
-
-  }  
-
-  const rateKey =  
-    getVerificationKey(  
-      email  
-    );  
-
-  const verification =  
-    await firebaseGet(  
-
-      `emailVerifications/${rateKey}`  
-
-    );  
-
-  if (!verification) {  
-
-    return res.status(400).json({  
-
-      error:  
-        "No active verification code found. Please request a new code."  
-
-    });  
-
-  }  
-
-  if (  
-    Number(  
-      verification.expiresAt  
-    ) <  
-    Date.now()  
-  ) {  
-
-    await firebaseSet(  
-
-      `emailVerifications/${rateKey}`,  
-
-      null  
-
-    );  
-
-    return res.status(400).json({  
-
-      error:  
-        "This verification code has expired. Please request a new code."  
-
-    });  
-
-  }  
-
-  const attempts =  
-    Number(  
-      verification.attempts || 0  
-    );  
-
-  if (  
-    attempts >=  
-    verificationMaxAttempts  
-  ) {  
-
-    await firebaseSet(  
-
-      `emailVerifications/${rateKey}`,  
-
-      null  
-
-    );  
-
-    return res.status(429).json({  
-
-      error:  
-        "Too many incorrect attempts. Please request a new code."  
-
-    });  
-
-  }  
-
-  const submittedHash =  
-    hashVerificationValue(  
-      code  
-    );  
-
-  const storedHash =  
-    String(  
-      verification.codeHash ||  
-      ""  
-    );  
-
-  const hashesMatch =  
-    submittedHash.length ===  
-      storedHash.length &&  
-    crypto.timingSafeEqual(  
-      Buffer.from(  
-        submittedHash  
-      ),  
-      Buffer.from(  
-        storedHash  
-      )  
-    );  
-
-  if (  
-    !hashesMatch  
-  ) {  
-
-    await firebaseSet(  
-
-      `emailVerifications/${rateKey}/attempts`,  
-
-      attempts + 1  
-
-    );  
-
-    const remaining =  
-      Math.max(  
-
-        0,  
-
-        verificationMaxAttempts -  
-        (  
-          attempts + 1  
-        )  
-
-      );  
-
-    return res.status(400).json({  
-
-      error:  
-        remaining > 0  
-
-          ? `Incorrect verification code. ${remaining} attempts remaining.`  
-
-          : "Too many incorrect attempts. Please request a new code."  
-
-    });  
-
-  }  
-
-  await firebaseSet(  
-
-    `emailVerifications/${rateKey}`,  
-
-    null  
-
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    verified: true,  
-
-    email,  
-
-    message:  
-      "Email verified successfully."  
-
-  });  
-
-} catch (error) {  
-
-  console.error(  
-    "Verify code error:",  
-    error.message  
-  );  
-
-  res.status(500).json({  
-
-    error:  
-      error.message ||  
-      "Unable to verify code."  
-
-  });  
-
-}
-
-}
+  "/api/auth/verify-code",
+  async (req, res) => {
+    try {
+      const email =
+        normalizeEmail(
+          req.body.email
+        );
+
+      const code =
+        String(
+          req.body.code || ""
+        ).trim();
+
+      if (
+        !isValidEmail(email)
+      ) {
+        return res.status(400).json({
+          error:
+            "Invalid email address."
+        });
+      }
+
+      if (
+        !/^\d{6}$/.test(code)
+      ) {
+        return res.status(400).json({
+          error:
+            "Verification code must contain 6 digits."
+        });
+      }
+
+      const rateKey =
+        getVerificationKey(
+          email
+        );
+
+      const verification =
+        await firebaseGet(
+          `emailVerifications/${rateKey}`
+        );
+
+      if (!verification) {
+        return res.status(400).json({
+          error:
+            "No active verification code found. Please request a new code."
+        });
+      }
+
+      if (
+        Number(
+          verification.expiresAt
+        ) < Date.now()
+      ) {
+        await firebaseSet(
+          `emailVerifications/${rateKey}`,
+          null
+        );
+
+        return res.status(400).json({
+          error:
+            "This verification code has expired. Please request a new code."
+        });
+      }
+
+      const attempts =
+        Number(
+          verification.attempts || 0
+        );
+
+      if (
+        attempts >=
+        verificationMaxAttempts
+      ) {
+        await firebaseSet(
+          `emailVerifications/${rateKey}`,
+          null
+        );
+
+        return res.status(429).json({
+          error:
+            "Too many incorrect attempts. Please request a new code."
+        });
+      }
+
+      const submittedHash =
+        hashVerificationValue(
+          code
+        );
+
+      const storedHash =
+        String(
+          verification.codeHash || ""
+        );
+
+      const hashesMatch =
+        submittedHash.length ===
+          storedHash.length &&
+        crypto.timingSafeEqual(
+          Buffer.from(
+            submittedHash
+          ),
+          Buffer.from(
+            storedHash
+          )
+        );
+
+      if (!hashesMatch) {
+        await firebaseSet(
+          `emailVerifications/${rateKey}/attempts`,
+          attempts + 1
+        );
+
+        const remaining =
+          Math.max(
+            0,
+            verificationMaxAttempts -
+              (attempts + 1)
+          );
+
+        return res.status(400).json({
+          error:
+            remaining > 0
+              ? `Incorrect verification code. ${remaining} attempts remaining.`
+              : "Too many incorrect attempts. Please request a new code."
+        });
+      }
+
+      await firebaseSet(
+        `emailVerifications/${rateKey}`,
+        null
+      );
+
+      res.json({
+        ok: true,
+        verified: true,
+        email,
+
+        message:
+          "Email verified successfully."
+      });
+    } catch (error) {
+      console.error(
+        "Verify code error:",
+        error.message
+      );
+
+      res.status(500).json({
+        error:
+          error.message ||
+          "Unable to verify code."
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -2531,64 +1890,46 @@ ADMIN SESSION
 ===================================================== */
 
 const adminSessions =
-new Map();
+  new Map();
 
 function requireAdmin(
-req,
-res,
-next
+  req,
+  res,
+  next
 ) {
+  const token =
+    req.cookies.makyama_admin;
 
-const token =
-req.cookies.makyama_admin;
+  if (!token) {
+    return res.status(401).json({
+      error:
+        "Admin login required."
+    });
+  }
 
-if (!token) {
+  const session =
+    adminSessions.get(token);
 
-return res.status(401).json({  
+  if (!session) {
+    return res.status(401).json({
+      error:
+        "Invalid admin session."
+    });
+  }
 
-  error:  
-    "Admin login required."  
+  if (
+    session.expiresAt <
+    Date.now()
+  ) {
+    adminSessions.delete(token);
 
-});
+    return res.status(401).json({
+      error:
+        "Admin session expired."
+    });
+  }
 
-}
-
-const session =
-adminSessions.get(
-token
-);
-
-if (!session) {
-
-return res.status(401).json({  
-
-  error:  
-    "Invalid admin session."  
-
-});
-
-}
-
-if (
-session.expiresAt <
-Date.now()
-) {
-
-adminSessions.delete(  
-  token  
-);  
-
-return res.status(401).json({  
-
-  error:  
-    "Admin session expired."  
-
-});
-
-}
-
-next();
-
+  next();
 }
 
 /* =====================================================
@@ -2596,53 +1937,51 @@ HEALTH
 ===================================================== */
 
 app.get(
-"/health",
-(req, res) => {
+  "/health",
+  (req, res) => {
+    res.json({
+      ok: true,
 
-res.json({  
+      server:
+        "MAKYAMA MESSAGE SERVER",
 
-  ok: true,  
+      firebase: Boolean(
+        initFirebase()
+      ),
 
-  server:  
-    "MAKYAMA MESSAGE SERVER",  
+      mailtrap: Boolean(
+        process.env
+          .MAILTRAP_API_TOKEN
+      ),
 
-  firebase:  
-    Boolean(  
-      initFirebase()  
-    ),  
+      mailtrapFromEmail:
+        Boolean(
+          process.env
+            .MAILTRAP_FROM_EMAIL
+        ),
 
-  mailtrap:  
-    Boolean(  
-      process.env.MAILTRAP_API_TOKEN  
-    ),  
+      translation:
+        Boolean(
+          process.env
+            .TRANSLATION_API_URL
+        ),
 
-  mailtrapFromEmail:  
-    Boolean(  
-      process.env.MAILTRAP_FROM_EMAIL  
-    ),  
+      translationApiKey:
+        Boolean(
+          process.env
+            .TRANSLATION_API_KEY
+        ),
 
-  translation:  
-    Boolean(  
-      process.env.TRANSLATION_API_URL  
-    ),  
+      defaultLanguage:
+        DEFAULT_LANGUAGE,
 
-  translationApiKey:  
-    Boolean(  
-      process.env.TRANSLATION_API_KEY  
-    ),  
+      siteUrl:
+        SITE_URL,
 
-  defaultLanguage:  
-    DEFAULT_LANGUAGE,  
-
-  siteUrl:  
-    SITE_URL,  
-
-  time:  
-    new Date().toISOString()  
-
-});
-
-}
+      time:
+        new Date().toISOString()
+    });
+  }
 );
 
 /* =====================================================
@@ -2650,150 +1989,127 @@ ADMIN LOGIN
 ===================================================== */
 
 app.post(
-"/api/admin/login",
-(req, res) => {
+  "/api/admin/login",
+  (req, res) => {
+    const username =
+      String(
+        req.body.username || ""
+      );
 
-const username =  
-  String(  
-    req.body.username || ""  
-  );  
+    const password =
+      String(
+        req.body.password || ""
+      );
 
-const password =  
-  String(  
-    req.body.password || ""  
-  );  
+    const correctUsername =
+      process.env.ADMIN_USERNAME;
 
-const correctUsername =  
-  process.env.ADMIN_USERNAME;  
+    const correctPassword =
+      process.env.ADMIN_PASSWORD;
 
-const correctPassword =  
-  process.env.ADMIN_PASSWORD;  
+    if (
+      !correctUsername ||
+      !correctPassword
+    ) {
+      return res.status(500).json({
+        error:
+          "Admin credentials are not configured on Render."
+      });
+    }
 
-if (  
-  !correctUsername ||  
-  !correctPassword  
-) {  
+    if (
+      username !==
+        correctUsername ||
+      password !==
+        correctPassword
+    ) {
+      return res.status(401).json({
+        error:
+          "Invalid username or password."
+      });
+    }
 
-  return res.status(500).json({  
+    const token =
+      crypto
+        .randomBytes(32)
+        .toString("hex");
 
-    error:  
-      "Admin credentials are not configured on Render."  
+    adminSessions.set(
+      token,
+      {
+        username,
 
-  });  
+        expiresAt:
+          Date.now() +
+          12 *
+            60 *
+            60 *
+            1000
+      }
+    );
 
-}  
+    res.cookie(
+      "makyama_admin",
+      token,
+      {
+        httpOnly: true,
 
-if (  
-  username !==  
-    correctUsername ||  
-  password !==  
-    correctPassword  
-) {  
+        sameSite: "lax",
 
-  return res.status(401).json({  
+        secure:
+          process.env.NODE_ENV ===
+          "production",
 
-    error:  
-      "Invalid username or password."  
+        maxAge:
+          12 *
+          60 *
+          60 *
+          1000
+      }
+    );
 
-  });  
+    res.json({
+      ok: true,
 
-}  
-
-const token =  
-  crypto  
-    .randomBytes(32)  
-    .toString("hex");  
-
-adminSessions.set(  
-  token,  
-  {  
-
-    username,  
-
-    expiresAt:  
-      Date.now() +  
-      12 *  
-      60 *  
-      60 *  
-      1000  
-
-  }  
-);  
-
-res.cookie(  
-  "makyama_admin",  
-  token,  
-  {  
-
-    httpOnly: true,  
-
-    sameSite: "lax",  
-
-    secure:  
-      process.env.NODE_ENV ===  
-      "production",  
-
-    maxAge:  
-      12 *  
-      60 *  
-      60 *  
-      1000  
-
-  }  
-);  
-
-res.json({  
-
-  ok: true,  
-
-  message:  
-    "Admin login successful."  
-
-});
-
-}
+      message:
+        "Admin login successful."
+    });
+  }
 );
 
 app.get(
-"/api/admin/me",
-requireAdmin,
-(req, res) => {
+  "/api/admin/me",
+  requireAdmin,
+  (req, res) => {
+    res.json({
+      ok: true,
 
-res.json({  
-
-  ok: true,  
-
-  username:  
-    process.env.ADMIN_USERNAME  
-
-});
-
-}
+      username:
+        process.env
+          .ADMIN_USERNAME
+    });
+  }
 );
 
 app.post(
-"/api/admin/logout",
-requireAdmin,
-(req, res) => {
+  "/api/admin/logout",
+  requireAdmin,
+  (req, res) => {
+    const token =
+      req.cookies.makyama_admin;
 
-const token =  
-  req.cookies.makyama_admin;  
+    adminSessions.delete(
+      token
+    );
 
-adminSessions.delete(  
-  token  
-);  
+    res.clearCookie(
+      "makyama_admin"
+    );
 
-res.clearCookie(  
-  "makyama_admin"  
-);  
-
-res.json({  
-
-  ok: true  
-
-});
-
-}
+    res.json({
+      ok: true
+    });
+  }
 );
 
 /* =====================================================
@@ -2801,87 +2117,69 @@ PUBLIC TEMPLATES
 ===================================================== */
 
 app.get(
-"/api/templates",
-async (req, res) => {
+  "/api/templates",
+  async (req, res) => {
+    try {
+      const data =
+        await firebaseGet(
+          "templates"
+        );
 
-try {  
+      const templates =
+        Object.values(
+          data || {}
+        )
+          .filter(
+            (template) =>
+              template &&
+              template.published ===
+                true
+          )
+          .map(
+            (template) => ({
+              id:
+                template.id,
 
-  const data =  
-    await firebaseGet(  
-      "templates"  
-    );  
+              title:
+                template.title,
 
-  const templates =  
-    Object.values(  
-      data || {}  
-    )  
+              category:
+                template.category,
 
-    .filter(  
-      template => {  
+              thumbnail:
+                template.thumbnail ||
+                "",
 
-        return (  
-          template &&  
-          template.published === true  
-        );  
+              nameRequired:
+                Boolean(
+                  template.nameRequired
+                ),
 
-      }  
-    )  
+              views:
+                Number(
+                  template.views || 0
+                ),
 
-    .map(  
-      template => ({  
+              likes:
+                Number(
+                  template.likes || 0
+                ),
 
-        id:  
-          template.id,  
+              dislikes:
+                Number(
+                  template.dislikes || 0
+                )
+            })
+          );
 
-        title:  
-          template.title,  
-
-        category:  
-          template.category,  
-
-        thumbnail:  
-          template.thumbnail ||  
-          "",  
-
-        nameRequired:  
-          Boolean(  
-            template.nameRequired  
-          ),  
-
-        views:  
-          Number(  
-            template.views || 0  
-          ),  
-
-        likes:  
-          Number(  
-            template.likes || 0  
-          ),  
-
-        dislikes:  
-          Number(  
-            template.dislikes || 0  
-          )  
-
-      })  
-    );  
-
-  res.json(  
-    templates  
-  );  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json(templates);
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -2889,232 +2187,185 @@ SINGLE TEMPLATE API
 ===================================================== */
 
 app.get(
-"/api/templates/:id",
-async (req, res) => {
+  "/api/templates/:id",
+  async (req, res) => {
+    try {
+      const id =
+        req.params.id;
 
-try {  
+      const template =
+        await firebaseGet(
+          `templates/${id}`
+        );
 
-  const id =  
-    req.params.id;  
+      if (
+        !template ||
+        template.published !==
+          true
+      ) {
+        return res.status(404).json({
+          error:
+            "Template not found."
+        });
+      }
 
-  const template =  
-    await firebaseGet(  
-      `templates/${id}`  
-    );  
+      await increment(
+        `templates/${id}/views`
+      );
 
-  if (  
-    !template ||  
-    template.published !== true  
-  ) {  
+      await increment(
+        "stats/totalViews"
+      );
 
-    return res.status(404).json({  
+      res.json({
+        ...template,
 
-      error:  
-        "Template not found."  
+        likes:
+          Number(
+            template.likes || 0
+          ),
 
-    });  
-
-  }  
-
-  await increment(  
-    `templates/${id}/views`  
-  );  
-
-  await increment(  
-    "stats/totalViews"  
-  );  
-
-  res.json({  
-
-    ...template,  
-
-    likes:  
-      Number(  
-        template.likes || 0  
-      ),  
-
-    dislikes:  
-      Number(  
-        template.dislikes || 0  
-      )  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+        dislikes:
+          Number(
+            template.dislikes || 0
+          )
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
 SEO MESSAGE PAGE
 ===================================================== */
 
-/*
-Example:
-
-/message/birthday-message-abc123
-
-The final part contains the Firebase
-template ID.
-
-We do NOT trust the slug for lookup.
-We extract the ID after the final "-".
-*/
-
 app.get(
-"/message/:slugAndId",
-async (req, res) => {
+  "/message/:slugAndId",
+  async (req, res) => {
+    try {
+      const slugAndId =
+        String(
+          req.params.slugAndId ||
+            ""
+        ).trim();
 
-try {  
+      if (!slugAndId) {
+        return res.status(404).send(
+          "Message not found."
+        );
+      }
 
-  const slugAndId =  
-    String(  
-      req.params.slugAndId ||  
-      ""  
-    ).trim();  
+      const data =
+        await firebaseGet(
+          "templates"
+        );
 
-  if (!slugAndId) {  
+      const templates =
+        Object.values(
+          data || {}
+        ).filter(
+          (template) =>
+            template &&
+            template.published ===
+              true
+        );
 
-    return res.status(404).send(  
-      "Message not found."  
-    );  
+      let template = null;
 
-  }  
+      for (
+        const item of templates
+      ) {
+        const id =
+          String(
+            item.id || ""
+          );
 
-  /*  
-    IDs generated by crypto.randomUUID()  
-    contain hyphens, so we cannot simply  
-    split on the final hyphen.  
+        if (!id) {
+          continue;
+        }
 
-    Instead, find the Firebase template  
-    whose ID appears at the end of the URL.  
-  */  
+        const expectedSlug =
+          `${makeTemplateSlug(
+            item.title
+          )}-${id}`;
 
-  const data =  
-    await firebaseGet(  
-      "templates"  
-    );  
+        if (
+          slugAndId ===
+          expectedSlug
+        ) {
+          template =
+            item;
 
-  const templates =  
-    Object.values(  
-      data || {}  
-    )  
-    .filter(  
-      template =>  
-        template &&  
-        template.published === true  
-    );  
+          break;
+        }
+      }
 
-  let template =  
-    null;  
+      /*
+      Also support direct ID links.
+      */
 
-  for (  
-    const item of templates  
-  ) {  
+      if (!template) {
+        template =
+          templates.find(
+            (item) =>
+              String(
+                item.id || ""
+              ) === slugAndId
+          ) || null;
+      }
 
-    const id =  
-      String(  
-        item.id ||  
-        ""  
-      );  
+      if (!template) {
+        return res.status(404).send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+  name="robots"
+  content="noindex,follow"
+>
+<title>
+Message Not Found | MAKYAMA MESSAGES
+</title>
+</head>
 
-    if (!id) {  
-      continue;  
-    }  
+<body>
+<h1>Message Not Found</h1>
 
-    const expectedSlug =  
-      `${makeTemplateSlug(  
-        item.title  
-      )}-${id}`;  
+<p>
+This MAKYAMA message does not exist
+or is no longer published.
+</p>
 
-    if (  
-      slugAndId ===  
-      expectedSlug  
-    ) {  
+</body>
+</html>
+`);
+      }
 
-      template =  
-        item;  
+      const html =
+        buildTemplateSEOPage(
+          template
+        );
 
-      break;  
+      res
+        .status(200)
+        .type("html")
+        .send(html);
+    } catch (error) {
+      console.error(
+        "SEO message page error:",
+        error.message
+      );
 
-    }  
-
-  }  
-
-  /*  
-    Also support direct ID if an  
-    old/shared link happens to use it.  
-  */  
-
-  if (!template) {  
-
-    template =  
-      templates.find(  
-        item =>  
-          String(  
-            item.id ||  
-            ""  
-          ) ===  
-          slugAndId  
-      ) || null;  
-
-  }  
-
-  if (!template) {  
-
-    return res.status(404).send(  
-      `
-
-<!DOCTYPE html>  <html lang="en">  <head>  <meta charset="UTF-8">  <meta
-name="robots"
-content="noindex,follow"
-
-> 
-
-<title>  
-Message Not Found | MAKYAMA MESSAGES  
-</title>  </head>  <body>  <h1>  
-Message Not Found  
-</h1>  <p>  
-This MAKYAMA message does not exist or is no longer published.  
-</p>  </body>  </html>  `
-);
-
-}  
-
-  const html =  
-    buildTemplateSEOPage(  
-      template  
-    );  
-
-  res  
-    .status(200)  
-    .type("html")  
-    .send(html);  
-
-} catch (error) {  
-
-  console.error(  
-    "SEO message page error:",  
-    error.message  
-  );  
-
-  res.status(500).send(  
-    "Unable to load message."  
-  );  
-
-}
-
-}
+      res.status(500).send(
+        "Unable to load message."
+      );
+    }
+  }
 );
 
 /* =====================================================
@@ -3122,132 +2373,117 @@ SITEMAP
 ===================================================== */
 
 app.get(
-"/sitemap.xml",
-async (req, res) => {
+  "/sitemap.xml",
+  async (req, res) => {
+    try {
+      const data =
+        await firebaseGet(
+          "templates"
+        );
 
-try {  
+      const templates =
+        Object.values(
+          data || {}
+        ).filter(
+          (template) =>
+            template &&
+            template.published ===
+              true &&
+            template.id
+        );
 
-  const data =  
-    await firebaseGet(  
-      "templates"  
-    );  
+      const urls = [
+        {
+          loc:
+            `${SITE_URL}/`,
+          priority:
+            "1.0"
+        },
 
-  const templates =  
-    Object.values(  
-      data || {}  
-    )  
-    .filter(  
-      template =>  
-        template &&  
-        template.published === true &&  
-        template.id  
-    );  
+        {
+          loc:
+            `${SITE_URL}/template`,
+          priority:
+            "0.8"
+        },
 
-  const urls = [  
+        {
+          loc:
+            `${SITE_URL}/category.html`,
+          priority:
+            "0.6"
+        }
+      ];
 
-    {  
-      loc:  
-        `${SITE_URL}/`,  
-      priority:  
-        "1.0"  
-    },  
+      templates.forEach(
+        (template) => {
+          urls.push({
+            loc:
+              getTemplateSEOUrl(
+                template
+              ),
 
-    {  
-      loc:  
-        `${SITE_URL}/template`,  
-      priority:  
-        "0.8"  
-    }  
+            priority:
+              "0.7"
+          });
+        }
+      );
 
-  ];  
+      const uniqueUrls =
+        Array.from(
+          new Map(
+            urls.map(
+              (item) => [
+                item.loc,
+                item
+              ]
+            )
+          ).values()
+        );
 
-  templates.forEach(  
-    template => {  
+      const xmlUrls =
+        uniqueUrls
+          .map(
+            (item) => `
+  <url>
+    <loc>${escapeHTML(
+      item.loc
+    )}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>${item.priority}</priority>
+  </url>
+`
+          )
+          .join("");
 
-      urls.push({  
-
-        loc:  
-          getTemplateSEOUrl(  
-            template  
-          ),  
-
-        priority:  
-          "0.7"  
-
-      });  
-
-    }  
-  );  
-
-  const uniqueUrls =  
-    Array.from(  
-      new Map(  
-        urls.map(  
-          item =>  
-            [  
-              item.loc,  
-              item  
-            ]  
-        )  
-      ).values()  
-    );  
-
-  const xmlUrls =  
-    uniqueUrls  
-      .map(  
-        item => `
-
-  <url>  <loc>${escapeHTML(  
-  item.loc  
-)}</loc>  
-
-<changefreq>weekly</changefreq>  
-
-<priority>${item.priority}</priority>
-
-  </url>  `
-)
-.join("");
-
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
-
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
-xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-
-> 
-
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
 ${xmlUrls}
-
 </urlset>`;
 
-res  
-    .status(200)  
-    .type("application/xml")  
-    .send(xml);  
+      res
+        .status(200)
+        .type("application/xml")
+        .send(xml);
+    } catch (error) {
+      console.error(
+        "Sitemap error:",
+        error.message
+      );
 
-} catch (error) {  
-
-  console.error(  
-    "Sitemap error:",  
-    error.message  
-  );  
-
-  res.status(500).type(  
-    "application/xml"  
-  ).send(  
-    `<?xml version="1.0" encoding="UTF-8"?>
-
+      res
+        .status(500)
+        .type("application/xml")
+        .send(
+          `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
-xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-
-> 
-
-</urlset>`
-);
-
-}
-
-}
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+></urlset>`
+        );
+    }
+  }
 );
 
 /* =====================================================
@@ -3255,196 +2491,151 @@ LIKE / DISLIKE
 ===================================================== */
 
 app.post(
-"/api/templates/:id/reaction",
-async (req, res) => {
+  "/api/templates/:id/reaction",
+  async (req, res) => {
+    try {
+      const id =
+        String(
+          req.params.id || ""
+        ).trim();
 
-try {  
+      const reaction =
+        String(
+          req.body.reaction || ""
+        ).trim();
 
-  const id =  
-    String(  
-      req.params.id || ""  
-    ).trim();  
+      const previous =
+        String(
+          req.body.previous || ""
+        ).trim();
 
-  const reaction =  
-    String(  
-      req.body.reaction || ""  
-    ).trim();  
+      if (
+        !id ||
+        ![
+          "like",
+          "dislike",
+          ""
+        ].includes(reaction) ||
+        ![
+          "like",
+          "dislike",
+          ""
+        ].includes(previous)
+      ) {
+        return res.status(400).json({
+          error:
+            "Invalid reaction."
+        });
+      }
 
-  const previous =  
-    String(  
-      req.body.previous || ""  
-    ).trim();  
+      const database =
+        initFirebase();
 
-  if (  
-    !id ||  
-    ![  
-      "like",  
-      "dislike",  
-      ""  
-    ].includes(  
-      reaction  
-    ) ||  
-    ![  
-      "like",  
-      "dislike",  
-      ""  
-    ].includes(  
-      previous  
-    )  
-  ) {  
+      if (!database) {
+        throw new Error(
+          "Firebase is not configured."
+        );
+      }
 
-    return res.status(400).json({  
+      const template =
+        await firebaseGet(
+          `templates/${id}`
+        );
 
-      error:  
-        "Invalid reaction."  
+      if (
+        !template ||
+        template.published !==
+          true
+      ) {
+        return res.status(404).json({
+          error:
+            "Template not found."
+        });
+      }
 
-    });  
+      let likes =
+        Number(
+          template.likes || 0
+        );
 
-  }  
+      let dislikes =
+        Number(
+          template.dislikes || 0
+        );
 
-  const database =  
-    initFirebase();  
+      if (
+        reaction === previous
+      ) {
+        return res.json({
+          ok: true,
+          likes,
+          dislikes,
+          reaction
+        });
+      }
 
-  if (!database) {  
+      if (
+        previous === "like"
+      ) {
+        likes =
+          Math.max(
+            0,
+            likes - 1
+          );
+      }
 
-    throw new Error(  
-      "Firebase is not configured."  
-    );  
+      if (
+        previous === "dislike"
+      ) {
+        dislikes =
+          Math.max(
+            0,
+            dislikes - 1
+          );
+      }
 
-  }  
+      if (
+        reaction === "like"
+      ) {
+        likes++;
+      }
 
-  const template =  
-    await firebaseGet(  
-      `templates/${id}`  
-    );  
+      if (
+        reaction === "dislike"
+      ) {
+        dislikes++;
+      }
 
-  if (  
-    !template ||  
-    template.published !== true  
-  ) {  
+      await database
+        .ref(
+          `templates/${id}/likes`
+        )
+        .set(likes);
 
-    return res.status(404).json({  
+      await database
+        .ref(
+          `templates/${id}/dislikes`
+        )
+        .set(dislikes);
 
-      error:  
-        "Template not found."  
+      res.json({
+        ok: true,
+        likes,
+        dislikes,
+        reaction
+      });
+    } catch (error) {
+      console.error(
+        "Reaction error:",
+        error.message
+      );
 
-    });  
-
-  }  
-
-  let likes =  
-    Number(  
-      template.likes || 0  
-    );  
-
-  let dislikes =  
-    Number(  
-      template.dislikes || 0  
-    );  
-
-  if (  
-    reaction === previous  
-  ) {  
-
-    return res.json({  
-
-      ok: true,  
-
-      likes,  
-
-      dislikes,  
-
-      reaction  
-
-    });  
-
-  }  
-
-  if (  
-    previous === "like"  
-  ) {  
-
-    likes =  
-      Math.max(  
-        0,  
-        likes - 1  
-      );  
-
-  }  
-
-  if (  
-    previous === "dislike"  
-  ) {  
-
-    dislikes =  
-      Math.max(  
-        0,  
-        dislikes - 1  
-      );  
-
-  }  
-
-  if (  
-    reaction === "like"  
-  ) {  
-
-    likes++;  
-
-  }  
-
-  if (  
-    reaction === "dislike"  
-  ) {  
-
-    dislikes++;  
-
-  }  
-
-  await database  
-    .ref(  
-      `templates/${id}/likes`  
-    )  
-    .set(  
-      likes  
-    );  
-
-  await database  
-    .ref(  
-      `templates/${id}/dislikes`  
-    )  
-    .set(  
-      dislikes  
-    );  
-
-  res.json({  
-
-    ok: true,  
-
-    likes,  
-
-    dislikes,  
-
-    reaction  
-
-  });  
-
-} catch (error) {  
-
-  console.error(  
-    "Reaction error:",  
-    error.message  
-  );  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -3452,309 +2643,250 @@ ADMIN TEMPLATES
 ===================================================== */
 
 app.get(
-"/api/admin/templates",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const data =
+        await firebaseGet(
+          "templates"
+        );
 
-try {  
-
-  const data =  
-    await firebaseGet(  
-      "templates"  
-    );  
-
-  res.json(  
-    Object.values(  
-      data || {}  
-    )  
-  );  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json(
+        Object.values(
+          data || {}
+        )
+      );
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 app.post(
-"/api/admin/templates",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id =
+        crypto.randomUUID();
 
-try {  
+      const title =
+        String(
+          req.body.title || ""
+        ).trim();
 
-  const id =  
-    crypto.randomUUID();  
+      const category =
+        String(
+          req.body.category ||
+            "Other"
+        ).trim();
 
-  const title =  
-    String(  
-      req.body.title || ""  
-    ).trim();  
+      const html =
+        String(
+          req.body.html || ""
+        );
 
-  const category =  
-    String(  
-      req.body.category ||  
-      "Other"  
-    ).trim();  
+      const thumbnail =
+        String(
+          req.body.thumbnail ||
+            ""
+        );
 
-  const html =  
-    String(  
-      req.body.html || ""  
-    );  
+      const nameRequired =
+        Boolean(
+          req.body.nameRequired
+        );
 
-  const thumbnail =  
-    String(  
-      req.body.thumbnail || ""  
-    );  
+      const published =
+        Boolean(
+          req.body.published
+        );
 
-  const nameRequired =  
-    Boolean(  
-      req.body.nameRequired  
-    );  
+      const description =
+        String(
+          req.body.description ||
+            ""
+        ).trim();
 
-  const published =  
-    Boolean(  
-      req.body.published  
-    );  
+      if (!title || !html) {
+        return res.status(400).json({
+          error:
+            "Title and HTML are required."
+        });
+      }
 
-  const description =  
-    String(  
-      req.body.description ||  
-      ""  
-    ).trim();  
+      const template = {
+        id,
 
-  if (  
-    !title ||  
-    !html  
-  ) {  
+        title,
 
-    return res.status(400).json({  
+        category,
 
-      error:  
-        "Title and HTML are required."  
+        html,
 
-    });  
+        thumbnail,
 
-  }  
+        description,
 
-  const template = {  
+        nameRequired,
 
-    id,  
+        published,
 
-    title,  
+        views: 0,
 
-    category,  
+        likes: 0,
 
-    html,  
+        dislikes: 0,
 
-    thumbnail,  
+        createdAt:
+          Date.now(),
 
-    description,  
+        updatedAt:
+          Date.now()
+      };
 
-    nameRequired,  
+      await firebaseSet(
+        `templates/${id}`,
+        template
+      );
 
-    published,  
-
-    views: 0,  
-
-    likes: 0,  
-
-    dislikes: 0,  
-
-    createdAt:  
-      Date.now(),  
-
-    updatedAt:  
-      Date.now()  
-
-  };  
-
-  await firebaseSet(  
-    `templates/${id}`,  
-    template  
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    template  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true,
+        template
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 app.put(
-"/api/admin/templates/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates/:id",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id =
+        req.params.id;
 
-try {  
+      const old =
+        await firebaseGet(
+          `templates/${id}`
+        );
 
-  const id =  
-    req.params.id;  
+      if (!old) {
+        return res.status(404).json({
+          error:
+            "Template not found."
+        });
+      }
 
-  const old =  
-    await firebaseGet(  
-      `templates/${id}`  
-    );  
+      const updated = {
+        ...old,
 
-  if (!old) {  
+        title:
+          String(
+            req.body.title ??
+              old.title ??
+              ""
+          ).trim(),
 
-    return res.status(404).json({  
+        category:
+          String(
+            req.body.category ??
+              old.category ??
+              "Other"
+          ).trim(),
 
-      error:  
-        "Template not found."  
+        html:
+          String(
+            req.body.html ??
+              old.html ??
+              ""
+          ),
 
-    });  
+        thumbnail:
+          String(
+            req.body.thumbnail ??
+              old.thumbnail ??
+              ""
+          ),
 
-  }  
+        description:
+          String(
+            req.body.description ??
+              old.description ??
+              ""
+          ).trim(),
 
-  const updated = {  
+        nameRequired:
+          req.body.nameRequired ===
+          undefined
+            ? Boolean(
+                old.nameRequired
+              )
+            : Boolean(
+                req.body.nameRequired
+              ),
 
-    ...old,  
+        published:
+          req.body.published ===
+          undefined
+            ? Boolean(
+                old.published
+              )
+            : Boolean(
+                req.body.published
+              ),
 
-    title:  
-      String(  
-        req.body.title ??  
-        old.title ??  
-        ""  
-      ).trim(),  
+        updatedAt:
+          Date.now()
+      };
 
-    category:  
-      String(  
-        req.body.category ??  
-        old.category ??  
-        "Other"  
-      ).trim(),  
+      await firebaseSet(
+        `templates/${id}`,
+        updated
+      );
 
-    html:  
-      String(  
-        req.body.html ??  
-        old.html ??  
-        ""  
-      ),  
-
-    thumbnail:  
-      String(  
-        req.body.thumbnail ??  
-        old.thumbnail ??  
-        ""  
-      ),  
-
-    description:  
-      String(  
-        req.body.description ??  
-        old.description ??  
-        ""  
-      ).trim(),  
-
-    nameRequired:  
-      req.body.nameRequired ===  
-      undefined  
-
-        ? Boolean(  
-            old.nameRequired  
-          )  
-
-        : Boolean(  
-            req.body.nameRequired  
-          ),  
-
-    published:  
-      req.body.published ===  
-      undefined  
-
-        ? Boolean(  
-            old.published  
-          )  
-
-        : Boolean(  
-            req.body.published  
-          ),  
-
-    updatedAt:  
-      Date.now()  
-
-  };  
-
-  await firebaseSet(  
-    `templates/${id}`,  
-    updated  
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    template:  
-      updated  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true,
+        template: updated
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 app.delete(
-"/api/admin/templates/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/templates/:id",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await firebaseSet(
+        `templates/${req.params.id}`,
+        null
+      );
 
-try {  
-
-  await firebaseSet(  
-    `templates/${req.params.id}`,  
-    null  
-  );  
-
-  res.json({  
-
-    ok: true  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -3762,75 +2894,55 @@ ADS
 ===================================================== */
 
 app.get(
-"/api/ads",
-async (req, res) => {
+  "/api/ads",
+  async (req, res) => {
+    try {
+      const data =
+        await firebaseGet(
+          "ads"
+        );
 
-try {  
+      const ads =
+        Object.values(
+          data || {}
+        ).filter(
+          (ad) =>
+            ad &&
+            ad.enabled === true
+        );
 
-  const data =  
-    await firebaseGet(  
-      "ads"  
-    );  
-
-  const ads =  
-    Object.values(  
-      data || {}  
-    )  
-
-    .filter(  
-      ad =>  
-        ad &&  
-        ad.enabled === true  
-    );  
-
-  res.json(  
-    ads  
-  );  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json(ads);
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 app.get(
-"/api/admin/ads",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const data =
+        await firebaseGet(
+          "ads"
+        );
 
-try {  
-
-  const data =  
-    await firebaseGet(  
-      "ads"  
-    );  
-
-  res.json(  
-    Object.values(  
-      data || {}  
-    )  
-  );  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json(
+        Object.values(
+          data || {}
+        )
+      );
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -3838,90 +2950,70 @@ CREATE AD
 ===================================================== */
 
 app.post(
-"/api/admin/ads",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id =
+        crypto.randomUUID();
 
-try {  
+      const validPositions = [
+        "top",
+        "middle",
+        "social"
+      ];
 
-  const id =  
-    crypto.randomUUID();  
+      const position =
+        validPositions.includes(
+          req.body.position
+        )
+          ? req.body.position
+          : "middle";
 
-  const validPositions = [  
+      const ad = {
+        id,
 
-    "top",  
+        title:
+          String(
+            req.body.title ||
+              "Advertisement"
+          ),
 
-    "middle",  
+        position,
 
-    "social"  
+        code:
+          String(
+            req.body.code || ""
+          ),
 
-  ];  
+        enabled:
+          Boolean(
+            req.body.enabled
+          ),
 
-  const position =  
-    validPositions.includes(  
-      req.body.position  
-    )  
+        createdAt:
+          Date.now(),
 
-      ? req.body.position  
+        updatedAt:
+          Date.now()
+      };
 
-      : "middle";  
+      await firebaseSet(
+        `ads/${id}`,
+        ad
+      );
 
-  const ad = {  
-
-    id,  
-
-    title:  
-      String(  
-        req.body.title ||  
-        "Advertisement"  
-      ),  
-
-    position,  
-
-    code:  
-      String(  
-        req.body.code ||  
-        ""  
-      ),  
-
-    enabled:  
-      Boolean(  
-        req.body.enabled  
-      ),  
-
-    createdAt:  
-      Date.now(),  
-
-    updatedAt:  
-      Date.now()  
-
-  };  
-
-  await firebaseSet(  
-    `ads/${id}`,  
-    ad  
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    ad  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true,
+        ad
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -3929,113 +3021,87 @@ UPDATE AD
 ===================================================== */
 
 app.put(
-"/api/admin/ads/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads/:id",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id =
+        req.params.id;
 
-try {  
+      const old =
+        await firebaseGet(
+          `ads/${id}`
+        );
 
-  const id =  
-    req.params.id;  
+      if (!old) {
+        return res.status(404).json({
+          error:
+            "Advertisement not found."
+        });
+      }
 
-  const old =  
-    await firebaseGet(  
-      `ads/${id}`  
-    );  
+      const validPositions = [
+        "top",
+        "middle",
+        "social"
+      ];
 
-  if (!old) {  
+      const position =
+        validPositions.includes(
+          req.body.position
+        )
+          ? req.body.position
+          : old.position;
 
-    return res.status(404).json({  
+      const updated = {
+        ...old,
 
-      error:  
-        "Advertisement not found."  
+        title:
+          String(
+            req.body.title ??
+              old.title ??
+              "Advertisement"
+          ),
 
-    });  
+        position,
 
-  }  
+        code:
+          String(
+            req.body.code ??
+              old.code ??
+              ""
+          ),
 
-  const validPositions = [  
+        enabled:
+          req.body.enabled ===
+          undefined
+            ? Boolean(
+                old.enabled
+              )
+            : Boolean(
+                req.body.enabled
+              ),
 
-    "top",  
+        updatedAt:
+          Date.now()
+      };
 
-    "middle",  
+      await firebaseSet(
+        `ads/${id}`,
+        updated
+      );
 
-    "social"  
-
-  ];  
-
-  const position =  
-    validPositions.includes(  
-      req.body.position  
-    )  
-
-      ? req.body.position  
-
-      : old.position;  
-
-  const updated = {  
-
-    ...old,  
-
-    title:  
-      String(  
-        req.body.title ??  
-        old.title ??  
-        "Advertisement"  
-      ),  
-
-    position,  
-
-    code:  
-      String(  
-        req.body.code ??  
-        old.code ??  
-        ""  
-      ),  
-
-    enabled:  
-      req.body.enabled ===  
-      undefined  
-
-        ? Boolean(  
-            old.enabled  
-          )  
-
-        : Boolean(  
-            req.body.enabled  
-          ),  
-
-    updatedAt:  
-      Date.now()  
-
-  };  
-
-  await firebaseSet(  
-    `ads/${id}`,  
-    updated  
-  );  
-
-  res.json({  
-
-    ok: true,  
-
-    ad:  
-      updated  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true,
+        ad: updated
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -4043,35 +3109,25 @@ DELETE AD
 ===================================================== */
 
 app.delete(
-"/api/admin/ads/:id",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/ads/:id",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await firebaseSet(
+        `ads/${req.params.id}`,
+        null
+      );
 
-try {  
-
-  await firebaseSet(  
-    `ads/${req.params.id}`,  
-    null  
-  );  
-
-  res.json({  
-
-    ok: true  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -4079,43 +3135,31 @@ ANALYTICS
 ===================================================== */
 
 app.post(
-"/api/analytics/view",
-async (req, res) => {
+  "/api/analytics/view",
+  async (req, res) => {
+    try {
+      await increment(
+        "stats/totalViews"
+      );
 
-try {  
+      if (
+        req.body.templateId
+      ) {
+        await increment(
+          `templates/${req.body.templateId}/views`
+        );
+      }
 
-  await increment(  
-    "stats/totalViews"  
-  );  
-
-  if (  
-    req.body.templateId  
-  ) {  
-
-    await increment(  
-      `templates/${req.body.templateId}/views`  
-    );  
-
-  }  
-
-  res.json({  
-
-    ok: true  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -4123,63 +3167,45 @@ ONLINE USERS
 ===================================================== */
 
 app.post(
-"/api/online/heartbeat",
-async (req, res) => {
+  "/api/online/heartbeat",
+  async (req, res) => {
+    try {
+      const clientId =
+        String(
+          req.body.clientId ||
+            ""
+        )
+          .replace(
+            /[^a-zA-Z0-9_-]/g,
+            ""
+          )
+          .slice(0, 80);
 
-try {  
+      if (!clientId) {
+        return res.status(400).json({
+          error:
+            "Client ID is required."
+        });
+      }
 
-  const clientId =  
-    String(  
-      req.body.clientId || ""  
-    )  
-    .replace(  
-      /[^a-zA-Z0-9_-]/g,  
-      ""  
-    )  
-    .slice(  
-      0,  
-      80  
-    );  
+      await firebaseSet(
+        `onlineUsers/${clientId}`,
+        {
+          lastSeen:
+            Date.now()
+        }
+      );
 
-  if (!clientId) {  
-
-    return res.status(400).json({  
-
-      error:  
-        "Client ID is required."  
-
-    });  
-
-  }  
-
-  await firebaseSet(  
-    `onlineUsers/${clientId}`,  
-    {  
-
-      lastSeen:  
-        Date.now()  
-
-    }  
-  );  
-
-  res.json({  
-
-    ok: true  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+      res.json({
+        ok: true
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
 );
 
 /* =====================================================
@@ -4187,138 +3213,121 @@ ADMIN STATISTICS
 ===================================================== */
 
 app.get(
-"/api/admin/stats",
-requireAdmin,
-async (req, res) => {
+  "/api/admin/stats",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const stats =
+        await firebaseGet(
+          "stats"
+        );
 
-try {  
+      const templates =
+        await firebaseGet(
+          "templates"
+        );
 
-  const stats =  
-    await firebaseGet(  
-      "stats"  
-    );  
+      const onlineUsers =
+        await firebaseGet(
+          "onlineUsers"
+        );
 
-  const templates =  
-    await firebaseGet(  
-      "templates"  
-    );  
+      const now =
+        Date.now();
 
-  const onlineUsers =  
-    await firebaseGet(  
-      "onlineUsers"  
-    );  
+      const onlineLimit =
+        now - 90 * 1000;
 
-  const now =  
-    Date.now();  
+      const onlineCount =
+        Object.values(
+          onlineUsers || {}
+        )
+          .filter(
+            (user) =>
+              user &&
+              Number(
+                user.lastSeen
+              ) >=
+                onlineLimit
+          )
+          .length;
 
-  const onlineLimit =  
-    now -  
-    90 *  
-    1000;  
+      const templateList =
+        Object.values(
+          templates || {}
+        ).filter(Boolean);
 
-  const onlineCount =  
-    Object.values(  
-      onlineUsers || {}  
-    )  
+      const trending =
+        [...templateList]
+          .sort((a, b) => {
+            return (
+              Number(
+                b.views || 0
+              ) -
+              Number(
+                a.views || 0
+              )
+            );
+          })
+          .slice(0, 10)
+          .map(
+            (template) => ({
+              id:
+                template.id,
 
-    .filter(  
-      user => {  
+              title:
+                template.title,
 
-        return (  
+              views:
+                Number(
+                  template.views || 0
+                )
+            })
+          );
 
-          user &&  
+      res.json({
+        totalViews:
+          Number(
+            stats?.totalViews || 0
+          ),
 
-          Number(  
-            user.lastSeen  
-          ) >=  
-          onlineLimit  
+        onlineUsers:
+          onlineCount,
 
-        );  
+        templatesCount:
+          templateList.length,
 
-      }  
-    )  
+        trending
+      });
+    } catch (error) {
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
+);
 
-    .length;  
+/* =====================================================
+STATIC FILES
+===================================================== */
 
-  const templateList =  
-    Object.values(  
-      templates || {}  
-    )  
+/*
+IMPORTANT:
+This comes AFTER /sitemap.xml.
 
-    .filter(Boolean);  
+That prevents a physical
+public/sitemap.xml file from
+overriding the dynamic Firebase sitemap.
+*/
 
-  const trending =  
-    [...templateList]  
-
-      .sort(  
-        (a, b) => {  
-
-          return (  
-
-            Number(  
-              b.views || 0  
-            ) -  
-
-            Number(  
-              a.views || 0  
-            )  
-
-          );  
-
-        }  
-      )  
-
-      .slice(  
-        0,  
-        10  
-      )  
-
-      .map(  
-        template => ({  
-
-          id:  
-            template.id,  
-
-          title:  
-            template.title,  
-
-          views:  
-            Number(  
-              template.views || 0  
-            )  
-
-        })  
-      );  
-
-  res.json({  
-
-    totalViews:  
-      Number(  
-        stats?.totalViews || 0  
-      ),  
-
-    onlineUsers:  
-      onlineCount,  
-
-    templatesCount:  
-      templateList.length,  
-
-    trending  
-
-  });  
-
-} catch (error) {  
-
-  res.status(500).json({  
-
-    error:  
-      error.message  
-
-  });  
-
-}
-
-}
+app.use(
+  express.static(
+    path.join(
+      __dirname,
+      "public"
+    )
+  )
 );
 
 /* =====================================================
@@ -4326,48 +3335,42 @@ PAGES
 ===================================================== */
 
 app.get(
-"/",
-(req, res) => {
-
-res.sendFile(  
-  path.join(  
-    __dirname,  
-    "public",  
-    "index.html"  
-  )  
-);
-
-}
-);
-
-app.get(
-"/template",
-(req, res) => {
-
-res.sendFile(  
-  path.join(  
-    __dirname,  
-    "public",  
-    "template.html"  
-  )  
-);
-
-}
+  "/",
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "index.html"
+      )
+    );
+  }
 );
 
 app.get(
-"/admin",
-(req, res) => {
-
-res.sendFile(  
-  path.join(  
-    __dirname,  
-    "public",  
-    "admin.html"  
-  )  
+  "/template",
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "template.html"
+      )
+    );
+  }
 );
 
-}
+app.get(
+  "/admin",
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "public",
+        "admin.html"
+      )
+    );
+  }
 );
 
 /* =====================================================
@@ -4375,16 +3378,14 @@ SERVER
 ===================================================== */
 
 app.listen(
-PORT,
-() => {
+  PORT,
+  () => {
+    console.log(
+      `MAKYAMA Message Server running on port ${PORT}`
+    );
 
-console.log(  
-  `MAKYAMA Message Server running on port ${PORT}`  
-);  
-
-console.log(  
-  `SITE_URL: ${SITE_URL}`  
-);
-
-}
+    console.log(
+      `SITE_URL: ${SITE_URL}`
+    );
+  }
 );
