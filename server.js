@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const path = require("path");
+const fs = require("fs");
 
 const admin = require("firebase-admin");
 
@@ -9,6 +10,14 @@ const app = express();
 
 const PORT =
   process.env.PORT || 3000;
+
+const SITE_URL =
+  String(
+    process.env.SITE_URL ||
+    "https://makyama.pntr.dev"
+  )
+    .trim()
+    .replace(/\/+$/, "");
 
 /* =====================================================
 MIDDLEWARE
@@ -26,14 +35,6 @@ app.use(cookieParser());
 TEMPLATE HTML REDIRECT
 ===================================================== */
 
-/*
-  /template is the official public URL.
-
-  /template.html is the old/static URL.
-  Redirect it to /template so Google and users
-  have one canonical URL.
-*/
-
 app.get(
   "/template.html",
   (req, res) => {
@@ -46,6 +47,10 @@ app.get(
   }
 );
 
+/*
+  Static files are served after the
+  special routes below are declared.
+*/
 app.use(
   express.static(
     path.join(
@@ -186,6 +191,630 @@ async function increment(
 
       }
     );
+
+}
+
+/* =====================================================
+SEO HELPERS
+===================================================== */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    char => ({
+
+      "&":
+        "&amp;",
+
+      "<":
+        "&lt;",
+
+      ">":
+        "&gt;",
+
+      '"':
+        "&quot;",
+
+      "'":
+        "&#039;"
+
+    }[char])
+  );
+
+}
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHTML(
+    value
+  );
+
+}
+
+function cleanSEOText(
+  value,
+  fallback
+) {
+
+  const text =
+    String(
+      value ||
+      ""
+    )
+      .replace(
+        /<[^>]*>/g,
+        " "
+      )
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim();
+
+  return (
+    text ||
+    fallback
+  );
+
+}
+
+function makeTemplateSlug(
+  title
+) {
+
+  let slug =
+    String(
+      title ||
+      "message"
+    )
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(
+        /[\u0300-\u036f]/g,
+        ""
+      )
+      .replace(
+        /[^a-z0-9]+/g,
+        "-"
+      )
+      .replace(
+        /^-+|-+$/g,
+        ""
+      );
+
+  if (!slug) {
+    slug = "message";
+  }
+
+  return slug;
+
+}
+
+function getTemplateSEOUrl(
+  template
+) {
+
+  const slug =
+    makeTemplateSlug(
+      template?.title
+    );
+
+  const id =
+    encodeURIComponent(
+      String(
+        template?.id ||
+        ""
+      )
+    );
+
+  return (
+    `${SITE_URL}/message/${slug}-${id}`
+  );
+
+}
+
+/*
+  Extract a short text preview from
+  template HTML.
+
+  This is only used for server-side
+  SEO fallback content.
+*/
+function extractTemplateText(
+  html
+) {
+
+  return String(
+    html || ""
+  )
+    .replace(
+      /<script[\s\S]*?<\/script>/gi,
+      " "
+    )
+    .replace(
+      /<style[\s\S]*?<\/style>/gi,
+      " "
+    )
+    .replace(
+      /<[^>]+>/g,
+      " "
+    )
+    .replace(
+      /\{name\}/gi,
+      ""
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+
+}
+
+function createTemplateDescription(
+  template
+) {
+
+  const title =
+    cleanSEOText(
+      template?.title,
+      "Animated Message"
+    );
+
+  const supplied =
+    cleanSEOText(
+      template?.description,
+      ""
+    );
+
+  if (supplied) {
+
+    return supplied
+      .slice(0, 300);
+
+  }
+
+  const text =
+    extractTemplateText(
+      template?.html
+    );
+
+  if (text) {
+
+    return (
+      `Create and share this ${title} animated message with MAKYAMA MESSAGES. ${text}`
+    )
+      .slice(0, 300);
+
+  }
+
+  return (
+    `Create and share this beautiful ${title} animated message with MAKYAMA MESSAGES.`
+  )
+    .slice(0, 300);
+
+}
+
+/*
+  Reads public/template.html and injects
+  server-side SEO metadata.
+
+  The normal frontend JavaScript still
+  loads the template through the API,
+  so existing functionality remains.
+*/
+function buildTemplateSEOPage(
+  template
+) {
+
+  const templatePath =
+    path.join(
+      __dirname,
+      "public",
+      "template.html"
+    );
+
+  let html =
+    fs.readFileSync(
+      templatePath,
+      "utf8"
+    );
+
+  const title =
+    cleanSEOText(
+      template?.title,
+      "Animated Message"
+    );
+
+  const description =
+    createTemplateDescription(
+      template
+    );
+
+  const canonical =
+    getTemplateSEOUrl(
+      template
+    );
+
+  const safeTitle =
+    escapeAttribute(
+      `${title} | MAKYAMA MESSAGES`
+    );
+
+  const safeDescription =
+    escapeAttribute(
+      description
+    );
+
+  const safeCanonical =
+    escapeAttribute(
+      canonical
+    );
+
+  /*
+    Replace existing title.
+  */
+
+  html =
+    html.replace(
+      /<title[\s\S]*?<\/title>/i,
+      `<title>${safeTitle}</title>`
+    );
+
+  /*
+    Replace or insert canonical.
+  */
+
+  const canonicalTag =
+    `<link rel="canonical" href="${safeCanonical}" id="canonicalUrl">`;
+
+  if (
+    /<link[^>]+rel=["']canonical["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<link[^>]+rel=["']canonical["'][^>]*>/i,
+        canonicalTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${canonicalTag}\n</head>`
+      );
+
+  }
+
+  /*
+    Meta description.
+  */
+
+  const descriptionTag =
+    `<meta name="description" content="${safeDescription}" id="metaDescription">`;
+
+  if (
+    /<meta[^>]+name=["']description["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+name=["']description["'][^>]*>/i,
+        descriptionTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${descriptionTag}\n</head>`
+      );
+
+  }
+
+  /*
+    OG title.
+  */
+
+  const ogTitleTag =
+    `<meta property="og:title" content="${safeTitle}" id="ogTitle">`;
+
+  if (
+    /<meta[^>]+property=["']og:title["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+property=["']og:title["'][^>]*>/i,
+        ogTitleTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${ogTitleTag}\n</head>`
+      );
+
+  }
+
+  /*
+    OG description.
+  */
+
+  const ogDescriptionTag =
+    `<meta property="og:description" content="${safeDescription}" id="ogDescription">`;
+
+  if (
+    /<meta[^>]+property=["']og:description["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+property=["']og:description["'][^>]*>/i,
+        ogDescriptionTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${ogDescriptionTag}\n</head>`
+      );
+
+  }
+
+  /*
+    OG URL.
+  */
+
+  const ogUrlTag =
+    `<meta property="og:url" content="${safeCanonical}" id="ogUrl">`;
+
+  if (
+    /<meta[^>]+property=["']og:url["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+property=["']og:url["'][^>]*>/i,
+        ogUrlTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${ogUrlTag}\n</head>`
+      );
+
+  }
+
+  /*
+    Twitter title.
+  */
+
+  const twitterTitleTag =
+    `<meta name="twitter:title" content="${safeTitle}" id="twitterTitle">`;
+
+  if (
+    /<meta[^>]+name=["']twitter:title["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+name=["']twitter:title["'][^>]*>/i,
+        twitterTitleTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${twitterTitleTag}\n</head>`
+      );
+
+  }
+
+  /*
+    Twitter description.
+  */
+
+  const twitterDescriptionTag =
+    `<meta name="twitter:description" content="${safeDescription}" id="twitterDescription">`;
+
+  if (
+    /<meta[^>]+name=["']twitter:description["'][^>]*>/i
+      .test(html)
+  ) {
+
+    html =
+      html.replace(
+        /<meta[^>]+name=["']twitter:description["'][^>]*>/i,
+        twitterDescriptionTag
+      );
+
+  } else {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${twitterDescriptionTag}\n</head>`
+      );
+
+  }
+
+  /*
+    Server-side SEO text.
+
+    It is placed inside a noscript block
+    so normal JavaScript behaviour is not
+    affected.
+
+    Search engines can still understand
+    the page topic/title even before the
+    frontend API request runs.
+  */
+
+  const seoText =
+    escapeHTML(
+      extractTemplateText(
+        template?.html
+      )
+    );
+
+  const seoBlock = `
+
+<noscript id="seoTemplateContent">
+
+  <article>
+
+    <h1>${escapeHTML(title)}</h1>
+
+    <p>${safeDescription}</p>
+
+    ${
+      seoText
+        ? `<p>${seoText.slice(0, 2000)}</p>`
+        : ""
+    }
+
+  </article>
+
+</noscript>
+
+`;
+
+  if (
+    !html.includes(
+      'id="seoTemplateContent"'
+    )
+  ) {
+
+    html =
+      html.replace(
+        /<body[^>]*>/i,
+        match =>
+          `${match}\n${seoBlock}`
+      );
+
+  }
+
+  /*
+    Add structured data for this
+    individual message.
+  */
+
+  const structuredData = {
+
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "WebPage",
+
+    name:
+      title,
+
+    description:
+      description,
+
+    url:
+      canonical,
+
+    isPartOf: {
+
+      "@type":
+        "WebSite",
+
+      name:
+        "MAKYAMA MESSAGES",
+
+      url:
+        SITE_URL
+
+    }
+
+  };
+
+  const structuredScript = `
+
+<script type="application/ld+json">
+
+${JSON.stringify(
+  structuredData
+)}
+
+</script>
+
+`;
+
+  if (
+    !html.includes(
+      `"@type":"WebPage"`
+    )
+  ) {
+
+    html =
+      html.replace(
+        /<\/head>/i,
+        `${structuredScript}\n</head>`
+      );
+
+  }
+
+  /*
+    Tell frontend JS which URL is
+    canonical so it doesn't overwrite
+    the server-generated canonical.
+  */
+
+  const seoRouteScript = `
+
+<script>
+
+window.__MAKYAMA_SEO_URL__ =
+${JSON.stringify(canonical)};
+
+window.__MAKYAMA_TEMPLATE_ID__ =
+${JSON.stringify(
+  String(
+    template?.id || ""
+  )
+)};
+
+</script>
+
+`;
+
+  html =
+    html.replace(
+      /<body[^>]*>/i,
+      match =>
+        `${match}\n${seoRouteScript}`
+    );
+
+  return html;
 
 }
 
@@ -2047,6 +2676,9 @@ app.get(
       defaultLanguage:
         DEFAULT_LANGUAGE,
 
+      siteUrl:
+        SITE_URL,
+
       time:
         new Date().toISOString()
 
@@ -2295,7 +2927,7 @@ app.get(
 );
 
 /* =====================================================
-SINGLE TEMPLATE
+SINGLE TEMPLATE API
 ===================================================== */
 
 app.get(
@@ -2358,6 +2990,324 @@ app.get(
           error.message
 
       });
+
+    }
+
+  }
+);
+
+/* =====================================================
+SEO MESSAGE PAGE
+===================================================== */
+
+/*
+  Example:
+
+  /message/birthday-message-abc123
+
+  The final part contains the Firebase
+  template ID.
+
+  We do NOT trust the slug for lookup.
+  We extract the ID after the final "-".
+*/
+
+app.get(
+  "/message/:slugAndId",
+  async (req, res) => {
+
+    try {
+
+      const slugAndId =
+        String(
+          req.params.slugAndId ||
+          ""
+        ).trim();
+
+      if (!slugAndId) {
+
+        return res.status(404).send(
+          "Message not found."
+        );
+
+      }
+
+      /*
+        IDs generated by crypto.randomUUID()
+        contain hyphens, so we cannot simply
+        split on the final hyphen.
+
+        Instead, find the Firebase template
+        whose ID appears at the end of the URL.
+      */
+
+      const data =
+        await firebaseGet(
+          "templates"
+        );
+
+      const templates =
+        Object.values(
+          data || {}
+        )
+        .filter(
+          template =>
+            template &&
+            template.published === true
+        );
+
+      let template =
+        null;
+
+      for (
+        const item of templates
+      ) {
+
+        const id =
+          String(
+            item.id ||
+            ""
+          );
+
+        if (!id) {
+          continue;
+        }
+
+        const expectedSlug =
+          `${makeTemplateSlug(
+            item.title
+          )}-${id}`;
+
+        if (
+          slugAndId ===
+          expectedSlug
+        ) {
+
+          template =
+            item;
+
+          break;
+
+        }
+
+      }
+
+      /*
+        Also support direct ID if an
+        old/shared link happens to use it.
+      */
+
+      if (!template) {
+
+        template =
+          templates.find(
+            item =>
+              String(
+                item.id ||
+                ""
+              ) ===
+              slugAndId
+          ) || null;
+
+      }
+
+      if (!template) {
+
+        return res.status(404).send(
+          `
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="robots"
+  content="noindex,follow"
+>
+
+<title>
+Message Not Found | MAKYAMA MESSAGES
+</title>
+
+</head>
+
+<body>
+
+<h1>
+Message Not Found
+</h1>
+
+<p>
+This MAKYAMA message does not exist or is no longer published.
+</p>
+
+</body>
+
+</html>
+
+`
+        );
+
+      }
+
+      const html =
+        buildTemplateSEOPage(
+          template
+        );
+
+      res
+        .status(200)
+        .type("html")
+        .send(html);
+
+    } catch (error) {
+
+      console.error(
+        "SEO message page error:",
+        error.message
+      );
+
+      res.status(500).send(
+        "Unable to load message."
+      );
+
+    }
+
+  }
+);
+
+/* =====================================================
+SITEMAP
+===================================================== */
+
+app.get(
+  "/sitemap.xml",
+  async (req, res) => {
+
+    try {
+
+      const data =
+        await firebaseGet(
+          "templates"
+        );
+
+      const templates =
+        Object.values(
+          data || {}
+        )
+        .filter(
+          template =>
+            template &&
+            template.published === true &&
+            template.id
+        );
+
+      const urls = [
+
+        {
+          loc:
+            `${SITE_URL}/`,
+          priority:
+            "1.0"
+        },
+
+        {
+          loc:
+            `${SITE_URL}/template`,
+          priority:
+            "0.8"
+        }
+
+      ];
+
+      templates.forEach(
+        template => {
+
+          urls.push({
+
+            loc:
+              getTemplateSEOUrl(
+                template
+              ),
+
+            priority:
+              "0.7"
+
+          });
+
+        }
+      );
+
+      const uniqueUrls =
+        Array.from(
+          new Map(
+            urls.map(
+              item =>
+                [
+                  item.loc,
+                  item
+                ]
+            )
+          ).values()
+        );
+
+      const xmlUrls =
+        uniqueUrls
+          .map(
+            item => `
+
+  <url>
+
+    <loc>${escapeHTML(
+      item.loc
+    )}</loc>
+
+    <changefreq>weekly</changefreq>
+
+    <priority>${item.priority}</priority>
+
+  </url>
+
+`
+          )
+          .join("");
+
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+
+${xmlUrls}
+
+</urlset>`;
+
+      res
+        .status(200)
+        .type("application/xml")
+        .send(xml);
+
+    } catch (error) {
+
+      console.error(
+        "Sitemap error:",
+        error.message
+      );
+
+      res.status(500).type(
+        "application/xml"
+      ).send(
+        `<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+</urlset>`
+      );
 
     }
 
@@ -2638,6 +3588,12 @@ app.post(
           req.body.published
         );
 
+      const description =
+        String(
+          req.body.description ||
+          ""
+        ).trim();
+
       if (
         !title ||
         !html
@@ -2663,6 +3619,8 @@ app.post(
         html,
 
         thumbnail,
+
+        description,
 
         nameRequired,
 
@@ -2766,6 +3724,13 @@ app.put(
             old.thumbnail ??
             ""
           ),
+
+        description:
+          String(
+            req.body.description ??
+            old.description ??
+            ""
+          ).trim(),
 
         nameRequired:
           req.body.nameRequired ===
@@ -3449,7 +4414,6 @@ app.get(
         "public",
         "template.html"
       )
-
     );
 
   }
@@ -3465,7 +4429,6 @@ app.get(
         "public",
         "admin.html"
       )
-
     );
 
   }
@@ -3481,6 +4444,10 @@ app.listen(
 
     console.log(
       `MAKYAMA Message Server running on port ${PORT}`
+    );
+
+    console.log(
+      `SITE_URL: ${SITE_URL}`
     );
 
   }
