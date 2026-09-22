@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <meta charset="UTF-8">
@@ -9,28 +10,42 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <meta
-    name="robots"
-    content="index, follow, max-image-preview:large"
-  >
+  <title>MAKYAMA Message</title>
 
   <meta
     name="description"
-    id="metaDescription"
     content="Create and share beautiful animated messages with MAKYAMA MESSAGES."
+  >
+
+  <meta
+    name="robots"
+    content="index,follow"
   >
 
   <link
     rel="canonical"
-    id="canonicalUrl"
     href="https://makyama.pntr.dev/template"
+    id="canonicalUrl"
   >
 
-  <title id="pageTitle">
-    MAKYAMA MESSAGES
-  </title>
+  <meta
+    property="og:title"
+    content="MAKYAMA Message"
+    id="ogTitle"
+  >
 
-  <!-- Open Graph -->
+  <meta
+    property="og:description"
+    content="Create and share beautiful animated messages with MAKYAMA MESSAGES."
+    id="ogDescription"
+  >
+
+  <meta
+    property="og:url"
+    content="https://makyama.pntr.dev/template"
+    id="ogUrl"
+  >
+
   <meta
     property="og:type"
     content="website"
@@ -42,29 +57,10 @@
   >
 
   <meta
-    property="og:title"
-    id="ogTitle"
-    content="MAKYAMA MESSAGES"
-  >
-
-  <meta
-    property="og:description"
-    id="ogDescription"
-    content="Create and share beautiful animated messages with MAKYAMA MESSAGES."
-  >
-
-  <meta
-    property="og:url"
-    id="ogUrl"
-    content="https://makyama.pntr.dev/template"
-  >
-
-  <meta
     property="og:image"
     content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
   >
 
-  <!-- Twitter -->
   <meta
     name="twitter:card"
     content="summary_large_image"
@@ -72,14 +68,14 @@
 
   <meta
     name="twitter:title"
+    content="MAKYAMA Message"
     id="twitterTitle"
-    content="MAKYAMA MESSAGES"
   >
 
   <meta
     name="twitter:description"
-    id="twitterDescription"
     content="Create and share beautiful animated messages with MAKYAMA MESSAGES."
+    id="twitterDescription"
   >
 
   <meta
@@ -87,348 +83,498 @@
     content="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
   >
 
-  <link
-    rel="icon"
-    href="https://i.postimg.cc/ZR41FZCc/file-0000000013948211a54a796ed50a7511.png"
-  >
-
   <style>
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
+    * {
+      box-sizing: border-box;
     }
 
-    html,
-    body{
-      min-height:100%;
+    html {
+      scroll-behavior: smooth;
     }
 
-    body{
+    body {
+      margin: 0;
+      min-height: 100vh;
       background:
         radial-gradient(
           circle at top,
-          #18212b 0%,
-          #090d12 45%,
-          #05070a 100%
+          #172642 0%,
+          #0b1424 38%,
+          #060b14 100%
         );
-      color:#fff;
+      color: #ffffff;
       font-family:
-        Arial,
-        Helvetica,
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         sans-serif;
-      overflow-x:hidden;
     }
 
     button,
-    input{
-      font:inherit;
+    input {
+      font: inherit;
     }
 
-    button{
-      cursor:pointer;
-    }
-
-    .page{
-      width:100%;
-      min-height:100vh;
+    .page {
+      width: min(
+        100%,
+        900px
+      );
+      margin: 0 auto;
       padding:
         18px
         14px
-        50px;
+        60px;
     }
 
-    .topbar{
-      width:100%;
-      max-width:900px;
-      margin:0 auto 22px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
-    .back{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      color:#dce6ef;
-      text-decoration:none;
-      font-size:14px;
-      padding:9px 13px;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      transition:.2s ease;
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #cbd7ea;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: 0.2s ease;
     }
 
-    .back:hover{
-      background:rgba(255,255,255,.1);
-      transform:translateY(-1px);
+    .back:hover {
+      color: #ffffff;
+      transform: translateX(-2px);
     }
 
-    .brand{
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:2px;
-      color:#aab7c4;
-      text-align:right;
+    .brand {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      opacity: 0.9;
     }
 
-    .container{
-      width:100%;
-      max-width:900px;
-      margin:0 auto;
+    .hero {
+      text-align: center;
+      margin:
+        15px
+        auto
+        25px;
     }
 
-    .heading{
-      text-align:center;
-      margin-bottom:20px;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding:
+        7px
+        12px;
+      border-radius: 999px;
+      background: rgba(
+        255,
+        255,
+        255,
+        0.07
+      );
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.08
+      );
+      color: #b9c8dd;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 13px;
     }
 
-    .eyebrow{
-      display:inline-block;
-      color:#8fd3ff;
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:1.6px;
-      text-transform:uppercase;
-      margin-bottom:9px;
-    }
-
-    .title{
+    .title {
+      margin: 0;
       font-size:
         clamp(
           28px,
           7vw,
-          52px
+          48px
         );
-      line-height:1.08;
-      font-weight:900;
-      word-break:break-word;
+      line-height: 1.05;
+      font-weight: 950;
+      letter-spacing: -1.2px;
+      word-break: break-word;
     }
 
-    .nameBox{
-      width:100%;
-      max-width:520px;
-      margin:0 auto 18px;
-      display:none;
+    .subtitle {
+      margin:
+        12px
+        auto
+        0;
+      max-width: 650px;
+      color: #91a2ba;
+      line-height: 1.6;
+      font-size: 14px;
     }
 
-    .nameBox label{
-      display:block;
-      margin-bottom:8px;
-      color:#aeb9c4;
-      font-size:13px;
-      font-weight:600;
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(
+            255,
+            255,
+            255,
+            0.075
+          ),
+          rgba(
+            255,
+            255,
+            255,
+            0.025
+          )
+        );
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.09
+      );
+      box-shadow:
+        0 30px 90px rgba(
+          0,
+          0,
+          0,
+          0.38
+        );
     }
 
-    .nameBox input{
-      width:100%;
-      border:none;
-      outline:none;
-      padding:14px 16px;
-      border-radius:14px;
-      background:#111820;
-      border:1px solid rgba(255,255,255,.1);
-      color:#fff;
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      top: -120px;
+      right: -100px;
+      border-radius: 50%;
+      background: rgba(
+        111,
+        168,
+        255,
+        0.12
+      );
+      filter: blur(10px);
+      pointer-events: none;
     }
 
-    .nameBox input:focus{
-      border-color:#66c7ff;
+    .message-header {
+      padding:
+        20px
+        20px
+        0;
+    }
+
+    .name-box {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .name-box.visible {
+      display: block;
+    }
+
+    .name-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #aebdd1;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .name-input {
+      width: 100%;
+      padding:
+        14px
+        15px;
+      border-radius: 14px;
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.1
+      );
+      outline: none;
+      background: rgba(
+        0,
+        0,
+        0,
+        0.18
+      );
+      color: #ffffff;
+    }
+
+    .name-input::placeholder {
+      color: #66758d;
+    }
+
+    .name-input:focus {
+      border-color: rgba(
+        255,
+        255,
+        255,
+        0.3
+      );
       box-shadow:
         0 0 0 3px
-        rgba(102,199,255,.12);
-    }
-
-    .messageCard{
-      position:relative;
-      width:100%;
-      min-height:320px;
-      padding:20px;
-      border-radius:26px;
-      overflow:hidden;
-      background:
-        rgba(10,14,19,.72);
-      border:
-        1px solid
-        rgba(255,255,255,.1);
-      box-shadow:
-        0 20px 70px
-        rgba(0,0,0,.35);
-    }
-
-    .messageCard::before{
-      content:"";
-      position:absolute;
-      inset:-100px;
-      background:
-        radial-gradient(
-          circle,
-          rgba(90,190,255,.12),
-          transparent 60%
+        rgba(
+          255,
+          255,
+          255,
+          0.05
         );
-      pointer-events:none;
     }
 
-    #messageBox{
-      position:relative;
-      z-index:2;
-      width:100%;
+    .message-box {
+      position: relative;
+      min-height: 260px;
+      padding: 20px;
+      overflow: hidden;
     }
 
-    .empty{
-      min-height:280px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:#8e9aa7;
-      font-size:14px;
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      color: #91a2ba;
+      font-size: 14px;
     }
 
-    .controls{
-      width:100%;
-      max-width:700px;
-      margin:18px auto 0;
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:10px;
+    .spinner {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border:
+        3px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.12
+        );
+      border-top-color: #ffffff;
+      animation:
+        spin 0.8s linear infinite;
+      margin-bottom: 12px;
     }
 
-    .controls button{
-      border:none;
-      color:#fff;
-      padding:12px 18px;
-      border-radius:999px;
-      font-weight:800;
-      font-size:14px;
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error {
+      padding: 35px 20px;
+      text-align: center;
+      color: #ffb4b4;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding:
+        0
+        20px
+        20px;
+    }
+
+    .control-button {
+      flex: 1 1 150px;
+      min-height: 48px;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      color: #ffffff;
+      font-weight: 850;
       transition:
-        transform .2s ease,
-        opacity .2s ease,
-        background .2s ease;
+        transform 0.18s ease,
+        opacity 0.18s ease,
+        background 0.18s ease;
     }
 
-    .controls button:hover{
-      transform:translateY(-2px);
+    .control-button:hover {
+      transform: translateY(-2px);
     }
 
-    #playBtn{
+    .control-button:active {
+      transform: translateY(0);
+    }
+
+    .play-button {
       background:
         linear-gradient(
           135deg,
-          #1687ff,
-          #6b4dff
+          #496fae,
+          #314f82
         );
     }
 
-    #shareBtn{
+    .share-button {
       background:
-        rgba(255,255,255,.08);
-      border:
-        1px solid
-        rgba(255,255,255,.12);
+        rgba(
+          255,
+          255,
+          255,
+          0.08
+        );
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.1
+      );
     }
 
-    .info{
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:8px;
-      margin:16px auto;
+    .info-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding:
+        0
+        20px
+        20px;
     }
 
-    .pill{
-      color:#aeb9c4;
-      background:rgba(255,255,255,.045);
-      border:
-        1px solid
-        rgba(255,255,255,.08);
-      border-radius:999px;
-      padding:7px 11px;
-      font-size:11px;
+    .pill {
+      padding:
+        7px
+        10px;
+      border-radius: 999px;
+      background: rgba(
+        255,
+        255,
+        255,
+        0.055
+      );
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.06
+      );
+      color: #9eacc0;
+      font-size: 11px;
+      font-weight: 750;
     }
 
-    .ad{
-      width:100%;
-      min-height:70px;
-      margin:20px auto 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:#6f7a84;
-      font-size:11px;
-      overflow:hidden;
+    .ad {
+      min-height: 50px;
+      margin:
+        4px
+        20px
+        20px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
-    .status{
-      text-align:center;
-      color:#8e9aa7;
-      font-size:12px;
-      min-height:18px;
-      margin-top:12px;
+    .seo-fallback {
+      max-width: 700px;
+      margin:
+        20px
+        auto
+        0;
+      padding:
+        14px
+        16px;
+      border-radius: 14px;
+      background: rgba(
+        255,
+        255,
+        255,
+        0.035
+      );
+      border: 1px solid rgba(
+        255,
+        255,
+        255,
+        0.06
+      );
+      color: #91a2ba;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:25px;
-      transform:
-        translateX(-50%)
-        translateY(20px);
-      z-index:99999;
-      opacity:0;
-      pointer-events:none;
-      background:#151c24;
-      color:#fff;
-      border:
-        1px solid
-        rgba(255,255,255,.12);
-      border-radius:999px;
-      padding:11px 16px;
-      font-size:13px;
-      box-shadow:
-        0 10px 35px
-        rgba(0,0,0,.35);
-      transition:.25s ease;
+    .footer {
+      margin-top: 35px;
+      text-align: center;
+      color: #627189;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    .toast.show{
-      opacity:1;
-      transform:
-        translateX(-50%)
-        translateY(0);
+    .footer strong {
+      color: #a8b5c8;
     }
 
-    @media(max-width:600px){
+    @media (
+      max-width: 600px
+    ) {
 
-      .page{
+      .page {
         padding:
           14px
           10px
-          40px;
+          45px;
       }
 
-      .topbar{
-        margin-bottom:18px;
+      .topbar {
+        margin-bottom: 18px;
       }
 
-      .brand{
-        font-size:10px;
-        letter-spacing:1.3px;
+      .brand {
+        font-size: 11px;
       }
 
-      .messageCard{
-        padding:12px;
-        border-radius:20px;
+      .card {
+        border-radius: 20px;
       }
 
-      .controls button{
-        flex:1;
-        min-width:135px;
+      .message-box {
+        padding: 14px;
+      }
+
+      .controls {
+        padding:
+          0
+          14px
+          14px;
+      }
+
+      .info-pills {
+        padding:
+          0
+          14px
+          14px;
+      }
+
+      .ad {
+        margin:
+          4px
+          14px
+          14px;
       }
 
     }
@@ -456,58 +602,79 @@
 
     </div>
 
-    <div class="container">
+    <section class="hero">
 
-      <section class="heading">
+      <div class="eyebrow">
+        ✨ Animated Message
+      </div>
 
-        <div class="eyebrow">
-          Animated Message
+      <h1
+        id="title"
+        class="title"
+      >
+        Loading...
+      </h1>
+
+      <p
+        id="subtitle"
+        class="subtitle"
+      >
+        Create and share a beautiful interactive message.
+      </p>
+
+    </section>
+
+    <section class="card">
+
+      <div class="message-header">
+
+        <div
+          id="nameBox"
+          class="name-box"
+        >
+
+          <label
+            class="name-label"
+            for="nameInput"
+          >
+            Enter a name
+          </label>
+
+          <input
+            id="nameInput"
+            class="name-input"
+            type="text"
+            maxlength="80"
+            autocomplete="off"
+            placeholder="Type a name..."
+          >
+
         </div>
 
-        <h1
-          id="title"
-          class="title"
-        >
-          Loading...
-        </h1>
+      </div>
 
-      </section>
-
-      <section
-        id="nameBox"
-        class="nameBox"
+      <div
+        id="messageBox"
+        class="message-box"
       >
 
-        <label for="nameInput">
-          Enter name
-        </label>
+        <div class="loading">
 
-        <input
-          id="nameInput"
-          type="text"
-          maxlength="80"
-          autocomplete="name"
-          placeholder="Type a name..."
-        >
+          <div>
+            <div class="spinner"></div>
 
-      </section>
-
-      <section class="messageCard">
-
-        <div id="messageBox">
-
-          <div class="empty">
             Loading message...
           </div>
 
         </div>
 
-      </section>
+      </div>
 
       <div class="controls">
 
         <button
           id="playBtn"
+          class="control-button play-button"
           type="button"
         >
           ▶ Play Animation
@@ -515,6 +682,7 @@
 
         <button
           id="shareBtn"
+          class="control-button share-button"
           type="button"
         >
           ↗ Share
@@ -522,7 +690,7 @@
 
       </div>
 
-      <div class="info">
+      <div class="info-pills">
 
         <span class="pill">
           ✨ Animated
@@ -537,1072 +705,1634 @@
         </span>
 
         <span class="pill">
-          ✨ MAKYAMA
+          🌍 Global
         </span>
 
       </div>
 
       <div
-        id="adContainer"
+        id="middleAd"
         class="ad"
       >
         Advertisement
       </div>
 
-      <div
-        id="status"
-        class="status"
-      ></div>
+    </section>
 
+    <div
+      id="seoContent"
+      class="seo-fallback"
+    >
+      Create and share beautiful animated messages with MAKYAMA MESSAGES.
     </div>
+
+    <footer class="footer">
+
+      <strong>
+        MAKYAMA MESSAGES
+      </strong>
+
+      <br>
+
+      Create something meaningful.
+      Share it with someone special.
+
+    </footer>
 
   </main>
 
-  <div
-    id="toast"
-    class="toast"
-  ></div>
+  <script>
 
-<script>
+    /* =====================================================
+       GLOBAL STATE
+    ===================================================== */
 
-"use strict";
+    let template = null;
 
-/* =========================================================
-   MAKYAMA MESSAGES
-   TEMPLATE PAGE
-   ========================================================= */
+    let templateId = null;
 
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
+    let currentName = "";
 
-const templateId =
-  params.get("id");
+    let animationScripts = [];
 
-let templateData = null;
+    let animationNodes = [];
 
-let originalHTML = "";
+    let animationRunning = false;
 
-let animationScripts = [];
+    /* =====================================================
+       GET TEMPLATE ID
+    ===================================================== */
 
-let currentName = "";
+    function getTemplateId() {
 
-const $ = id =>
-  document.getElementById(id);
+      /*
+        1. Server-generated SEO variable.
+      */
 
+      if (
+        window.__MAKYAMA_TEMPLATE_ID__
+      ) {
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+        return String(
+          window.__MAKYAMA_TEMPLATE_ID__
+        ).trim();
 
-function escapeHTML(value){
+      }
 
-  return String(
-    value ?? ""
-  ).replace(
-    /[&<>"']/g,
-    char => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[char])
-  );
+      /*
+        2. Clean URL fallback.
 
-}
+        Example:
 
+        /message/birthday-message-UUID
+      */
 
-function showToast(message){
+      const pathname =
+        window.location.pathname;
 
-  const toast =
-    $("toast");
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-  clearTimeout(
-    window.__toastTimer
-  );
-
-  window.__toastTimer =
-    setTimeout(
-      () => {
-        toast.classList.remove(
-          "show"
+      const match =
+        pathname.match(
+          /^\/message\/(.+)$/i
         );
-      },
-      2600
-    );
 
-}
+      if (
+        match &&
+        match[1]
+      ) {
 
+        const slugAndId =
+          decodeURIComponent(
+            match[1]
+          );
 
-function setStatus(message){
+        /*
+          Current server identifies the
+          template by matching the complete
+          slug + ID.
 
-  $("status").textContent =
-    message || "";
+          The API still needs the real UUID.
 
-}
+          We therefore first use the page
+          endpoint's server variable above.
+        */
 
+      }
 
-function setMeta(
-  selector,
-  content
-){
+      /*
+        3. Legacy URL:
 
-  const element =
-    document.querySelector(
-      selector
-    );
+        /template?id=xxxxx
+      */
 
-  if(
-    element &&
-    content
-  ){
-    element.setAttribute(
-      "content",
-      content
-    );
-  }
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
 
-}
+      const queryId =
+        params.get("id");
 
+      if (queryId) {
 
-/* =========================================================
-   SEO
-   ========================================================= */
+        return queryId.trim();
 
-function updateSEO(){
+      }
 
-  if(!templateData){
-    return;
-  }
+      return "";
 
-  const title =
-    String(
-      templateData.title ||
-      "Animated Message"
-    ).trim();
+    }
 
-  const description =
-    String(
-      templateData.description ||
-      (
-        "Create and share this beautiful " +
-        title +
-        " animated message with MAKYAMA MESSAGES."
-      )
-    ).trim();
+    /* =====================================================
+       HTML ESCAPE
+    ===================================================== */
 
-  /*
-    The current public page still uses /template?id=...
-    until the backend's /message/:id route is added.
-  */
+    function escapeHTML(
+      value
+    ) {
 
-  const canonical =
-    window.location.origin +
-    "/template?id=" +
-    encodeURIComponent(
-      templateData.id ||
-      templateId ||
-      ""
-    );
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+        char => ({
 
-  document.title =
-    title +
-    " | MAKYAMA MESSAGES";
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
 
-  setMeta(
-    "#metaDescription",
-    description
-  );
+        }[char])
+      );
 
-  setMeta(
-    "#ogTitle",
-    title +
-    " | MAKYAMA MESSAGES"
-  );
+    }
 
-  setMeta(
-    "#ogDescription",
-    description
-  );
+    /* =====================================================
+       META
+    ===================================================== */
 
-  setMeta(
-    "#twitterTitle",
-    title +
-    " | MAKYAMA MESSAGES"
-  );
+    function setMeta(
+      selector,
+      attribute,
+      value
+    ) {
 
-  setMeta(
-    "#twitterDescription",
-    description
-  );
+      const element =
+        document.querySelector(
+          selector
+        );
 
-  const canonical =
-    document.querySelector(
-      "#canonicalUrl"
-    );
+      if (
+        element
+      ) {
 
-  if(canonical){
+        element.setAttribute(
+          attribute,
+          value
+        );
 
-    canonical.href =
-      canonical;
+      }
 
-  }
+    }
 
-  const ogUrl =
-    document.querySelector(
-      "#ogUrl"
-    );
+    function updateSEO(
+      data
+    ) {
 
-  if(ogUrl){
+      const title =
+        String(
+          data?.title ||
+          "Animated Message"
+        ).trim();
 
-    ogUrl.setAttribute(
-      "content",
-      canonical
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   NAME
-   ========================================================= */
-
-function applyName(html){
-
-  return String(
-    html || ""
-  ).replace(
-    /\{name\}/gi,
-    escapeHTML(
-      currentName
-    )
-  );
-
-}
-
-
-/* =========================================================
-   RENDER TEMPLATE
-   ========================================================= */
-
-function renderTemplate(){
-
-  if(!originalHTML){
-    return;
-  }
-
-  const box =
-    $("messageBox");
-
-  /*
-    Remove old template
-    content.
-  */
-
-  box.innerHTML =
-    applyName(
-      originalHTML
-    );
-
-  /*
-    Re-run scripts after
-    rendering the HTML.
-  */
-
-  executeTemplateScripts();
-
-  /*
-    Generic data-animation
-    support.
-  */
-
-  runAnimations();
-
-  /*
-    Allow template-specific
-    interactive controls.
-  */
-
-  setupInteractions();
-
-}
-
-
-/* =========================================================
-   TEMPLATE SCRIPTS
-   ========================================================= */
-
-function executeTemplateScripts(){
-
-  const scripts =
-    Array.from(
-      $("messageBox")
-        .querySelectorAll(
-          "script"
+      const description =
+        String(
+          data?.description ||
+          `Create and share this ${title} animated message with MAKYAMA MESSAGES.`
         )
-    );
-
-  animationScripts = [];
-
-  scripts.forEach(
-    oldScript => {
-
-      const newScript =
-        document.createElement(
-          "script"
+        .replace(
+          /\s+/g,
+          " "
+        )
+        .trim()
+        .slice(
+          0,
+          300
         );
 
-      Array.from(
-        oldScript.attributes
-      ).forEach(
-        attribute => {
+      document.title =
+        `${title} | MAKYAMA MESSAGES`;
 
-          newScript.setAttribute(
-            attribute.name,
-            attribute.value
+      setMeta(
+        'meta[name="description"]',
+        "content",
+        description
+      );
+
+      setMeta(
+        'meta[property="og:title"]',
+        "content",
+        `${title} | MAKYAMA MESSAGES`
+      );
+
+      setMeta(
+        'meta[property="og:description"]',
+        "content",
+        description
+      );
+
+      setMeta(
+        'meta[name="twitter:title"]',
+        "content",
+        `${title} | MAKYAMA MESSAGES`
+      );
+
+      setMeta(
+        'meta[name="twitter:description"]',
+        "content",
+        description
+      );
+
+      /*
+        Do not overwrite the server-side
+        canonical on clean SEO pages.
+      */
+
+      if (
+        window.__MAKYAMA_SEO_URL__
+      ) {
+
+        setMeta(
+          "#canonicalUrl",
+          "href",
+          window.__MAKYAMA_SEO_URL__
+        );
+
+        setMeta(
+          "#ogUrl",
+          "content",
+          window.__MAKYAMA_SEO_URL__
+        );
+
+      }
+
+    }
+
+    /* =====================================================
+       REPLACE NAME
+    ===================================================== */
+
+    function replaceName(
+      html
+    ) {
+
+      return String(
+        html || ""
+      ).replace(
+        /\{name\}/gi,
+        escapeHTML(
+          currentName ||
+          "..."
+        )
+      );
+
+    }
+
+    /* =====================================================
+       EXTRACT SCRIPTS
+    ===================================================== */
+
+    function extractScripts(
+      container
+    ) {
+
+      animationScripts = [];
+
+      const scripts =
+        Array.from(
+          container.querySelectorAll(
+            "script"
+          )
+        );
+
+      scripts.forEach(
+        script => {
+
+          animationScripts.push(
+            script.textContent ||
+            ""
+          );
+
+          script.remove();
+
+        }
+      );
+
+    }
+
+    /* =====================================================
+       RUN TEMPLATE SCRIPTS
+    ===================================================== */
+
+    function runTemplateScripts() {
+
+      animationScripts.forEach(
+        code => {
+
+          if (
+            !String(
+              code
+            ).trim()
+          ) {
+
+            return;
+
+          }
+
+          try {
+
+            const fn =
+              new Function(
+                code
+              );
+
+            fn();
+
+          } catch (error) {
+
+            console.error(
+              "Template animation error:",
+              error
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+    /* =====================================================
+       GENERIC DATA ANIMATION
+    ===================================================== */
+
+    function collectAnimationNodes() {
+
+      animationNodes =
+        Array.from(
+          document.querySelectorAll(
+            "#messageBox [data-animation]"
+          )
+        );
+
+    }
+
+    function runDataAnimations() {
+
+      collectAnimationNodes();
+
+      animationNodes.forEach(
+        node => {
+
+          const animation =
+            node.getAttribute(
+              "data-animation"
+            );
+
+          const duration =
+            Number(
+              node.getAttribute(
+                "data-duration"
+              ) ||
+              700
+            );
+
+          node.style.animation =
+            "none";
+
+          /*
+            Force browser reflow.
+          */
+
+          void node.offsetWidth;
+
+          if (
+            animation ===
+            "fade"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0
+                },
+
+                {
+                  opacity: 1
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "ease-out",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+          else if (
+            animation ===
+            "up"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0,
+                  transform:
+                    "translateY(35px)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "translateY(0)"
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "cubic-bezier(.2,.8,.2,1)",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+          else if (
+            animation ===
+            "zoom"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0,
+                  transform:
+                    "scale(.7)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "scale(1)"
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "cubic-bezier(.2,.8,.2,1)",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+          else if (
+            animation ===
+            "pop"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0,
+                  transform:
+                    "scale(.3)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "scale(1.08)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "scale(1)"
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "ease-out",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+          else if (
+            animation ===
+            "left"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0,
+                  transform:
+                    "translateX(-45px)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "translateX(0)"
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "ease-out",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+          else if (
+            animation ===
+            "right"
+          ) {
+
+            node.animate(
+              [
+                {
+                  opacity: 0,
+                  transform:
+                    "translateX(45px)"
+                },
+
+                {
+                  opacity: 1,
+                  transform:
+                    "translateX(0)"
+                }
+              ],
+              {
+                duration,
+                easing:
+                  "ease-out",
+                fill:
+                  "both"
+              }
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+    /* =====================================================
+       CUSTOM TEMPLATE CLICK ACTIONS
+    ===================================================== */
+
+    function setupTemplateActions() {
+
+      const elements =
+        document.querySelectorAll(
+          "#messageBox [data-mk-action]"
+        );
+
+      elements.forEach(
+        element => {
+
+          /*
+            Prevent duplicate listeners.
+          */
+
+          if (
+            element.dataset.mkBound ===
+            "true"
+          ) {
+
+            return;
+
+          }
+
+          element.dataset.mkBound =
+            "true";
+
+          element.addEventListener(
+            "click",
+            event => {
+
+              const action =
+                element.getAttribute(
+                  "data-mk-action"
+                );
+
+              if (
+                !action
+              ) {
+
+                return;
+
+              }
+
+              /*
+                Supported native actions.
+              */
+
+              if (
+                action ===
+                "show"
+              ) {
+
+                const target =
+                  element.getAttribute(
+                    "data-target"
+                  );
+
+                if (
+                  target
+                ) {
+
+                  const targetElement =
+                    document.querySelector(
+                      target
+                    );
+
+                  if (
+                    targetElement
+                  ) {
+
+                    targetElement.style.display =
+                      "";
+
+                    targetElement.removeAttribute(
+                      "hidden"
+                    );
+
+                  }
+
+                }
+
+              }
+
+              else if (
+                action ===
+                "hide"
+              ) {
+
+                const target =
+                  element.getAttribute(
+                    "data-target"
+                  );
+
+                if (
+                  target
+                ) {
+
+                  const targetElement =
+                    document.querySelector(
+                      target
+                    );
+
+                  if (
+                    targetElement
+                  ) {
+
+                    targetElement.style.display =
+                      "none";
+
+                  }
+
+                }
+
+              }
+
+              else if (
+                action ===
+                "toggle"
+              ) {
+
+                const target =
+                  element.getAttribute(
+                    "data-target"
+                  );
+
+                if (
+                  target
+                ) {
+
+                  const targetElement =
+                    document.querySelector(
+                      target
+                    );
+
+                  if (
+                    targetElement
+                  ) {
+
+                    const hidden =
+                      targetElement.style.display ===
+                      "none";
+
+                    targetElement.style.display =
+                      hidden
+                        ? ""
+                        : "none";
+
+                  }
+
+                }
+
+              }
+
+              else if (
+                action ===
+                "text"
+              ) {
+
+                const target =
+                  element.getAttribute(
+                    "data-target"
+                  );
+
+                const value =
+                  element.getAttribute(
+                    "data-text"
+                  );
+
+                if (
+                  target
+                ) {
+
+                  const targetElement =
+                    document.querySelector(
+                      target
+                    );
+
+                  if (
+                    targetElement
+                  ) {
+
+                    targetElement.textContent =
+                      String(
+                        value ||
+                        ""
+                      ).replace(
+                        /\{name\}/gi,
+                        currentName
+                      );
+
+                  }
+
+                }
+
+              }
+
+              else if (
+                action ===
+                "class"
+              ) {
+
+                const target =
+                  element.getAttribute(
+                    "data-target"
+                  );
+
+                const className =
+                  element.getAttribute(
+                    "data-class"
+                  );
+
+                if (
+                  target &&
+                  className
+                ) {
+
+                  const targetElement =
+                    document.querySelector(
+                      target
+                    );
+
+                  if (
+                    targetElement
+                  ) {
+
+                    targetElement.classList.toggle(
+                      className
+                    );
+
+                  }
+
+                }
+
+              }
+
+              else if (
+                action ===
+                "replay"
+              ) {
+
+                playAnimation();
+
+              }
+
+            }
           );
 
         }
       );
 
-      newScript.textContent =
-        oldScript.textContent;
-
-      animationScripts.push(
-        newScript
-      );
-
-      oldScript.replaceWith(
-        newScript
-      );
-
     }
-  );
 
-}
+    /* =====================================================
+       RENDER TEMPLATE
+    ===================================================== */
 
+    function renderTemplate() {
 
-/* =========================================================
-   ANIMATION SUPPORT
-   ========================================================= */
+      if (
+        !template
+      ) {
 
-function runAnimations(){
-
-  const elements =
-    document.querySelectorAll(
-      "[data-animation]"
-    );
-
-  elements.forEach(
-    element => {
-
-      const animation =
-        element.getAttribute(
-          "data-animation"
-        );
-
-      if(!animation){
         return;
+
       }
 
+      const messageBox =
+        document.getElementById(
+          "messageBox"
+        );
+
+      if (
+        !messageBox
+      ) {
+
+        return;
+
+      }
+
+      messageBox.innerHTML =
+        replaceName(
+          template.html ||
+          ""
+        );
+
+      extractScripts(
+        messageBox
+      );
+
+      setupTemplateActions();
+
+      runTemplateScripts();
+
+      runDataAnimations();
+
+      collectAnimationNodes();
+
+      animationRunning =
+        true;
+
       /*
-        Restart CSS animation.
+        Hide generic SEO fallback after
+        the actual template has loaded.
       */
 
-      element.style.animation =
-        "none";
+      const seoContent =
+        document.getElementById(
+          "seoContent"
+        );
 
-      void element.offsetWidth;
+      if (
+        seoContent
+      ) {
 
-      element.style.animation =
-        animation;
+        seoContent.style.display =
+          "none";
+
+      }
 
     }
-  );
 
-}
+    /* =====================================================
+       PLAY / REPLAY
+    ===================================================== */
 
+    function playAnimation() {
 
-/* =========================================================
-   GENERIC INTERACTIONS
-   ========================================================= */
+      if (
+        !template
+      ) {
 
-function setupInteractions(){
+        return;
 
-  /*
-    Templates can use:
+      }
 
-    data-mk-action="..."
+      renderTemplate();
 
-    This keeps interactive
-    templates flexible.
-  */
+    }
 
-  document
-    .querySelectorAll(
-      "[data-mk-action]"
-    )
-    .forEach(
-      element => {
+    /* =====================================================
+       NAME INPUT
+    ===================================================== */
 
-        if(
-          element.dataset
-            .mkBound === "1"
-        ){
+    const nameInput =
+      document.getElementById(
+        "nameInput"
+      );
+
+    if (
+      nameInput
+    ) {
+
+      nameInput.addEventListener(
+        "input",
+        () => {
+
+          currentName =
+            nameInput.value.trim();
+
+          /*
+            Re-render only if template
+            requires a name.
+
+            This keeps dynamic templates
+            synchronized with the name.
+          */
+
+          if (
+            template &&
+            template.nameRequired
+          ) {
+
+            renderTemplate();
+
+          }
+
+        }
+      );
+
+    }
+
+    /* =====================================================
+       SHARE
+    ===================================================== */
+
+    async function shareMessage() {
+
+      const url =
+        window.location.href;
+
+      const title =
+        template?.title ||
+        "MAKYAMA Message";
+
+      const text =
+        `Check out this ${title} message on MAKYAMA MESSAGES.`;
+
+      try {
+
+        if (
+          navigator.share
+        ) {
+
+          await navigator.share({
+
+            title,
+
+            text,
+
+            url
+
+          });
+
           return;
+
         }
 
-        element.dataset.mkBound =
-          "1";
+        await navigator.clipboard.writeText(
+          url
+        );
 
-        element.addEventListener(
-          "click",
-          event => {
+        alert(
+          "Message link copied!"
+        );
 
-            const action =
-              element.getAttribute(
-                "data-mk-action"
+      } catch (
+        error
+      ) {
+
+        /*
+          User cancelling native share
+          should not show an error.
+        */
+
+        if (
+          error?.name ===
+          "AbortError"
+        ) {
+
+          return;
+
+        }
+
+        try {
+
+          await navigator.clipboard.writeText(
+            url
+          );
+
+          alert(
+            "Message link copied!"
+          );
+
+        } catch (
+          copyError
+        ) {
+
+          alert(
+            url
+          );
+
+        }
+
+      }
+
+    }
+
+    const shareButton =
+      document.getElementById(
+        "shareBtn"
+      );
+
+    if (
+      shareButton
+    ) {
+
+      shareButton.addEventListener(
+        "click",
+        shareMessage
+      );
+
+    }
+
+    /* =====================================================
+       PLAY BUTTON
+    ===================================================== */
+
+    const playButton =
+      document.getElementById(
+        "playBtn"
+      );
+
+    if (
+      playButton
+    ) {
+
+      playButton.addEventListener(
+        "click",
+        playAnimation
+      );
+
+    }
+
+    /* =====================================================
+       LOAD ADS
+    ===================================================== */
+
+    async function loadAds() {
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/ads",
+            {
+              cache:
+                "no-store"
+            }
+          );
+
+        if (
+          !response.ok
+        ) {
+
+          return;
+
+        }
+
+        const ads =
+          await response.json();
+
+        if (
+          !Array.isArray(
+            ads
+          )
+        ) {
+
+          return;
+
+        }
+
+        const middleAds =
+          ads.filter(
+            ad =>
+              ad &&
+              ad.enabled === true &&
+              ad.position ===
+                "middle"
+          );
+
+        const middleAd =
+          middleAds[0];
+
+        const container =
+          document.getElementById(
+            "middleAd"
+          );
+
+        if (
+          !container
+        ) {
+
+          return;
+
+        }
+
+        if (
+          !middleAd
+        ) {
+
+          container.style.display =
+            "none";
+
+          return;
+
+        }
+
+        container.innerHTML =
+          middleAd.code ||
+          "";
+
+        /*
+          Execute scripts inserted by
+          advertisement code.
+
+          This is necessary for ad providers
+          that return script tags.
+        */
+
+        const scripts =
+          Array.from(
+            container.querySelectorAll(
+              "script"
+            )
+          );
+
+        scripts.forEach(
+          oldScript => {
+
+            const newScript =
+              document.createElement(
+                "script"
               );
 
-            handleAction(
-              action,
-              element,
-              event
+            Array.from(
+              oldScript.attributes
+            ).forEach(
+              attribute => {
+
+                newScript.setAttribute(
+                  attribute.name,
+                  attribute.value
+                );
+
+              }
+            );
+
+            newScript.textContent =
+              oldScript.textContent;
+
+            oldScript.replaceWith(
+              newScript
             );
 
           }
         );
 
-      }
-    );
+      } catch (
+        error
+      ) {
 
-}
-
-
-/* =========================================================
-   ACTION HANDLER
-   ========================================================= */
-
-function handleAction(
-  action,
-  element,
-  event
-){
-
-  if(!action){
-    return;
-  }
-
-  /*
-    Built-in simple actions.
-  */
-
-  if(action === "hide"){
-
-    element.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  if(action === "show"){
-
-    const target =
-      element.getAttribute(
-        "data-target"
-      );
-
-    if(target){
-
-      const targetElement =
-        document.querySelector(
-          target
+        console.warn(
+          "Ad loading failed:",
+          error.message
         );
 
-      if(targetElement){
-
-        targetElement.style.display =
-          "";
-
       }
 
     }
 
-    return;
+    /* =====================================================
+       ANALYTICS
+    ===================================================== */
 
-  }
+    async function recordView() {
 
+      if (
+        !templateId
+      ) {
 
-  if(action === "toggle"){
+        return;
 
-    const target =
-      element.getAttribute(
-        "data-target"
-      );
+      }
 
-    if(target){
+      try {
 
-      const targetElement =
-        document.querySelector(
-          target
+        await fetch(
+          "/api/analytics/view",
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                templateId
+
+              })
+
+          }
         );
 
-      if(targetElement){
+      } catch (
+        error
+      ) {
 
-        const hidden =
-          getComputedStyle(
-            targetElement
-          ).display === "none";
-
-        targetElement.style.display =
-          hidden
-            ? ""
-            : "none";
+        console.warn(
+          "Analytics error:",
+          error.message
+        );
 
       }
 
     }
 
-    return;
+    /* =====================================================
+       ONLINE HEARTBEAT
+    ===================================================== */
 
-  }
+    function getClientId() {
 
+      const key =
+        "makyama_client_id";
 
-  /*
-    Template-specific actions
-    can be handled inside the
-    template's own script.
-  */
+      let clientId =
+        localStorage.getItem(
+          key
+        );
 
-}
+      if (
+        !clientId
+      ) {
 
+        if (
+          crypto?.randomUUID
+        ) {
 
-/* =========================================================
-   PLAY / REPLAY
-   ========================================================= */
+          clientId =
+            crypto.randomUUID();
 
-function playAnimation(){
+        } else {
 
-  renderTemplate();
+          clientId =
+            `${Date.now()}-${Math.random()
+              .toString(36)
+              .slice(2)}`;
 
-  setStatus(
-    "Animation replayed."
-  );
-
-  setTimeout(
-    () => setStatus(""),
-    1800
-  );
-
-}
-
-
-$("playBtn")
-  .addEventListener(
-    "click",
-    playAnimation
-  );
-
-
-/* =========================================================
-   SHARE
-   ========================================================= */
-
-async function sharePage(){
-
-  const title =
-    templateData?.title ||
-    "MAKYAMA MESSAGES";
-
-  const shareURL =
-    window.location.href;
-
-  const shareData = {
-
-    title:
-      title +
-      " | MAKYAMA MESSAGES",
-
-    text:
-      "Check out this animated message from MAKYAMA MESSAGES.",
-
-    url:
-      shareURL
-
-  };
-
-  try{
-
-    if(
-      navigator.share
-    ){
-
-      await navigator.share(
-        shareData
-      );
-
-      return;
-
-    }
-
-    if(
-      navigator.clipboard
-    ){
-
-      await navigator.clipboard.writeText(
-        shareURL
-      );
-
-      showToast(
-        "Link copied!"
-      );
-
-      return;
-
-    }
-
-    showToast(
-      "Copy this page link to share."
-    );
-
-  }catch(error){
-
-    if(
-      error &&
-      error.name ===
-      "AbortError"
-    ){
-      return;
-    }
-
-    showToast(
-      "Unable to share right now."
-    );
-
-  }
-
-}
-
-
-$("shareBtn")
-  .addEventListener(
-    "click",
-    sharePage
-  );
-
-
-/* =========================================================
-   NAME INPUT
-   ========================================================= */
-
-$("nameInput")
-  .addEventListener(
-    "input",
-    event => {
-
-      currentName =
-        event.target.value
-          .trim();
-
-      renderTemplate();
-
-    }
-  );
-
-
-/* =========================================================
-   LOAD ADS
-   ========================================================= */
-
-async function loadAds(){
-
-  const container =
-    $("adContainer");
-
-  if(!container){
-    return;
-  }
-
-  try{
-
-    const response =
-      await fetch(
-        "/api/ads",
-        {
-          cache:"no-store"
         }
-      );
 
-    if(
-      !response.ok
-    ){
-      return;
+        localStorage.setItem(
+          key,
+          clientId
+        );
+
+      }
+
+      return clientId;
+
     }
 
-    const data =
-      await response.json();
+    async function heartbeat() {
 
-    /*
-      Keep compatibility with
-      the existing ad API.
+      try {
 
-      Only top/middle are used
-      here. No "download"
-      position is introduced.
-    */
+        await fetch(
+          "/api/online/heartbeat",
+          {
 
-    const ads =
-      Array.isArray(data)
-        ? data
-        : (
-            Array.isArray(
-              data.ads
-            )
-              ? data.ads
-              : []
+            method:
+              "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                clientId:
+                  getClientId()
+
+              })
+
+          }
+        );
+
+      } catch (
+        error
+      ) {
+
+        /*
+          Silent failure.
+        */
+
+      }
+
+    }
+
+    /* =====================================================
+       LOAD TEMPLATE
+    ===================================================== */
+
+    async function loadTemplate() {
+
+      templateId =
+        getTemplateId();
+
+      if (
+        !templateId
+      ) {
+
+        showError(
+          "Message ID is missing."
+        );
+
+        return;
+
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            `/api/templates/${encodeURIComponent(
+              templateId
+            )}`,
+            {
+              cache:
+                "no-store"
+            }
           );
 
-    const enabled =
-      ads.filter(
-        ad =>
-          ad &&
-          (
-            ad.enabled === true ||
-            ad.active === true ||
-            ad.status === "enabled"
-          )
-      );
+        if (
+          !response.ok
+        ) {
 
-    let ad =
-      enabled.find(
-        item =>
-          item.position ===
-          "middle"
-      );
-
-    if(!ad){
-
-      ad =
-        enabled.find(
-          item =>
-            item.position ===
-            "top"
-        );
-
-    }
-
-    if(!ad){
-      return;
-    }
-
-    renderAd(
-      ad,
-      container
-    );
-
-  }catch(error){
-
-    console.warn(
-      "Ad loading failed:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER AD
-   ========================================================= */
-
-function renderAd(
-  ad,
-  container
-){
-
-  container.innerHTML =
-    "";
-
-  /*
-    Different admin/ad
-    field names are supported.
-  */
-
-  const code =
-    ad.html ||
-    ad.code ||
-    ad.script ||
-    ad.content ||
-    "";
-
-  if(!code){
-    return;
-  }
-
-  /*
-    If the ad contains a
-    script, insert HTML first
-    then execute scripts.
-  */
-
-  const wrapper =
-    document.createElement(
-      "div"
-    );
-
-  wrapper.innerHTML =
-    code;
-
-  container.appendChild(
-    wrapper
-  );
-
-  const scripts =
-    Array.from(
-      wrapper.querySelectorAll(
-        "script"
-      )
-    );
-
-  scripts.forEach(
-    oldScript => {
-
-      const script =
-        document.createElement(
-          "script"
-        );
-
-      Array.from(
-        oldScript.attributes
-      ).forEach(
-        attribute => {
-
-          script.setAttribute(
-            attribute.name,
-            attribute.value
+          throw new Error(
+            "Message not found."
           );
 
         }
-      );
 
-      script.textContent =
-        oldScript.textContent;
+        template =
+          await response.json();
 
-      oldScript.replaceWith(
-        script
-      );
+        /*
+          Update page title and metadata.
+        */
 
-    }
-  );
+        updateSEO(
+          template
+        );
 
-}
+        /*
+          Visible heading.
+        */
 
+        const title =
+          document.getElementById(
+            "title"
+          );
 
-/* =========================================================
-   LOAD TEMPLATE
-   ========================================================= */
+        if (
+          title
+        ) {
 
-async function loadTemplate(){
+          title.textContent =
+            template.title ||
+            "MAKYAMA Message";
 
-  if(!templateId){
-
-    $("title").textContent =
-      "Message Not Found";
-
-    $("messageBox").innerHTML =
-      `
-        <div class="empty">
-          No message was selected.
-        </div>
-      `;
-
-    setStatus(
-      "Missing template ID."
-    );
-
-    return;
-
-  }
-
-  try{
-
-    setStatus(
-      "Loading..."
-    );
-
-    const response =
-      await fetch(
-        "/api/templates/" +
-        encodeURIComponent(
-          templateId
-        ),
-        {
-          cache:"no-store"
         }
-      );
 
-    if(
-      !response.ok
-    ){
+        /*
+          Subtitle.
+        */
 
-      throw new Error(
-        "Template not found."
-      );
+        const subtitle =
+          document.getElementById(
+            "subtitle"
+          );
+
+        if (
+          subtitle
+        ) {
+
+          subtitle.textContent =
+            template.description ||
+            `Create and share this ${
+              template.title ||
+              "beautiful"
+            } animated message.`;
+
+        }
+
+        /*
+          Name field.
+        */
+
+        const nameBox =
+          document.getElementById(
+            "nameBox"
+          );
+
+        if (
+          template.nameRequired
+        ) {
+
+          nameBox?.classList.add(
+            "visible"
+          );
+
+          nameInput?.focus();
+
+        } else {
+
+          nameBox?.classList.remove(
+            "visible"
+          );
+
+        }
+
+        /*
+          SEO text fallback.
+        */
+
+        const seoContent =
+          document.getElementById(
+            "seoContent"
+          );
+
+        if (
+          seoContent
+        ) {
+
+          const description =
+            template.description ||
+            `Create and share this ${
+              template.title ||
+              "animated"
+            } message with MAKYAMA MESSAGES.`;
+
+          seoContent.textContent =
+            description;
+
+        }
+
+        renderTemplate();
+
+        recordView();
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          "Template loading error:",
+          error
+        );
+
+        showError(
+          error.message ||
+          "Unable to load this message."
+        );
+
+      }
 
     }
 
-    const result =
-      await response.json();
+    /* =====================================================
+       ERROR
+    ===================================================== */
 
-    /*
-      Support either:
+    function showError(
+      message
+    ) {
 
-      { ...template }
+      const messageBox =
+        document.getElementById(
+          "messageBox"
+        );
 
-      or
+      if (
+        messageBox
+      ) {
 
-      { template: {...} }
-    */
+        messageBox.innerHTML = `
 
-    templateData =
-      result.template ||
-      result.data ||
-      result;
+          <div class="error">
 
-    if(
-      !templateData ||
-      typeof templateData !==
-      "object"
-    ){
+            <div
+              style="
+                font-size:42px;
+                margin-bottom:12px;
+              "
+            >
+              😕
+            </div>
 
-      throw new Error(
-        "Invalid template data."
-      );
+            <strong>
+              Message unavailable
+            </strong>
 
-    }
+            <br><br>
 
-    /*
-      Title
-    */
+            ${escapeHTML(
+              message
+            )}
 
-    const title =
-      String(
-        templateData.title ||
-        "Animated Message"
-      );
+            <br><br>
 
-    $("title").textContent =
-      title;
+            <a
+              href="/"
+              style="
+                color:#ffffff;
+                font-weight:800;
+              "
+            >
+              ← Back to Messages
+            </a>
 
-    /*
-      Description for SEO
-    */
-
-    updateSEO();
-
-    /*
-      Name field
-    */
-
-    if(
-      templateData.nameRequired ===
-      true
-    ){
-
-      $("nameBox").style.display =
-        "block";
-
-    }else{
-
-      $("nameBox").style.display =
-        "none";
-
-    }
-
-    /*
-      Template HTML
-    */
-
-    originalHTML =
-      String(
-        templateData.html ||
-        ""
-      );
-
-    if(!originalHTML){
-
-      $("messageBox").innerHTML =
-        `
-          <div class="empty">
-            This message has no content yet.
           </div>
+
         `;
 
-    }else{
-
-      renderTemplate();
+      }
 
     }
 
-    setStatus("");
+    /* =====================================================
+       START
+    ===================================================== */
 
-    /*
-      Ads load separately so
-      a blocked ad never prevents
-      the message itself from
-      loading.
-    */
+    loadTemplate();
 
     loadAds();
 
-  }catch(error){
+    heartbeat();
 
-    console.error(
-      "Template loading error:",
-      error
+    setInterval(
+      heartbeat,
+      30000
     );
 
-    $("title").textContent =
-      "Message Not Found";
-
-    $("messageBox").innerHTML =
-      `
-        <div class="empty">
-          This message could not be loaded.
-        </div>
-      `;
-
-    setStatus(
-      error.message ||
-      "Unable to load message."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-loadTemplate();
-
-</script>
+  </script>
 
 </body>
-</html>
+
+  </html>
