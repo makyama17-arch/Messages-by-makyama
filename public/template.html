@@ -2,1034 +2,819 @@
 <html lang="en">
 
 <head>
-  <link rel="canonical" href="https://makyama.pntr.dev/template">
 
-<meta charset="UTF-8">
+  <link
+    rel="canonical"
+    href="https://makyama.pntr.dev/template"
+  >
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+  <meta charset="UTF-8">
 
-<title>MAKYAMA Message</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<style>
+  <title>MAKYAMA Message</title>
 
-/* =====================================================
-   RESET
-===================================================== */
+  <style>
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+    /* =====================================================
+       RESET
+    ===================================================== */
 
-:root{
-  --bg:#050816;
-  --panel:rgba(15,23,47,.78);
-  --line:rgba(255,255,255,.10);
-  --text:#ffffff;
-  --muted:#8d9bb9;
-  --blue:#5b8cff;
-  --purple:#8b5cff;
-  --cyan:#39d9ff;
-  --green:#25d366;
-}
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
 
-html{
-  scroll-behavior:smooth;
-}
+    :root{
+      --bg:#050816;
+      --panel:rgba(15,23,47,.78);
+      --line:rgba(255,255,255,.10);
+      --text:#ffffff;
+      --muted:#8d9bb9;
+      --blue:#5b8cff;
+      --purple:#8b5cff;
+      --cyan:#39d9ff;
+      --green:#25d366;
+    }
 
-body{
+    html{
+      scroll-behavior:smooth;
+    }
 
-  min-height:100vh;
+    body{
 
-  background:
-    radial-gradient(
-      circle at 15% 10%,
-      rgba(91,140,255,.15),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 85% 20%,
-      rgba(139,92,255,.13),
-      transparent 30%
-    ),
-    var(--bg);
+      min-height:100vh;
 
-  color:var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(91,140,255,.15),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(139,92,255,.13),
+          transparent 30%
+        ),
+        var(--bg);
 
-  font-family:
-    Inter,
-    Arial,
-    Helvetica,
-    sans-serif;
+      color:var(--text);
 
-  overflow-x:hidden;
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 
-}
+      overflow-x:hidden;
 
+    }
 
-/* =====================================================
-   HEADER
-===================================================== */
 
-header{
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-  position:sticky;
+    header{
 
-  top:0;
+      position:sticky;
 
-  z-index:1000;
+      top:0;
 
-  padding:14px 18px;
+      z-index:1000;
 
-  background:
-    rgba(5,8,22,.78);
+      padding:14px 18px;
 
-  backdrop-filter:
-    blur(18px);
+      background:
+        rgba(5,8,22,.78);
 
-  border-bottom:
-    1px solid var(--line);
+      backdrop-filter:
+        blur(18px);
 
-}
+      border-bottom:
+        1px solid var(--line);
 
-.header-inner{
+    }
 
-  max-width:1000px;
+    .header-inner{
 
-  margin:auto;
+      max-width:1000px;
 
-  display:flex;
+      margin:auto;
 
-  align-items:center;
+      display:flex;
 
-  justify-content:space-between;
+      align-items:center;
 
-  gap:15px;
+      justify-content:space-between;
 
-}
+      gap:15px;
 
-.back{
+    }
 
-  display:inline-flex;
+    .back{
 
-  align-items:center;
+      display:inline-flex;
 
-  gap:8px;
+      align-items:center;
 
-  color:#d8e2f7;
+      gap:8px;
 
-  text-decoration:none;
+      color:#d8e2f7;
 
-  font-size:13px;
+      text-decoration:none;
 
-  padding:9px 12px;
+      font-size:13px;
 
-  border-radius:10px;
+      padding:9px 12px;
 
-  transition:.25s;
+      border-radius:10px;
 
-}
+      transition:.25s;
 
-.back:hover{
+    }
 
-  background:
-    rgba(255,255,255,.07);
+    .back:hover{
 
-  color:white;
+      background:
+        rgba(255,255,255,.07);
 
-  transform:
-    translateX(-3px);
+      color:white;
 
-}
+      transform:
+        translateX(-3px);
 
-.brand{
+    }
 
-  font-size:13px;
+    .brand{
 
-  font-weight:900;
+      font-size:13px;
 
-  letter-spacing:.7px;
+      font-weight:900;
 
-  color:#9eb5e8;
+      letter-spacing:.7px;
 
-}
+      color:#9eb5e8;
 
+    }
 
-/* =====================================================
-   PAGE
-===================================================== */
 
-.page{
+    /* =====================================================
+       PAGE
+    ===================================================== */
 
-  max-width:1000px;
+    .page{
 
-  margin:auto;
+      max-width:1000px;
 
-  padding:
-    25px 18px 60px;
+      margin:auto;
 
-}
+      padding:
+        25px 18px 60px;
 
-.title-area{
+    }
 
-  text-align:center;
+    .title-area{
 
-  padding:
-    15px 0 25px;
+      text-align:center;
 
-}
+      padding:
+        15px 0 25px;
 
-.eyebrow{
+    }
 
-  display:inline-flex;
+    .eyebrow{
 
-  align-items:center;
+      display:inline-flex;
 
-  gap:7px;
+      align-items:center;
 
-  color:#9bb5ed;
+      gap:7px;
 
-  font-size:10px;
+      color:#9bb5ed;
 
-  letter-spacing:1.5px;
+      font-size:10px;
 
-  text-transform:uppercase;
+      letter-spacing:1.5px;
 
-  margin-bottom:11px;
+      text-transform:uppercase;
 
-}
+      margin-bottom:11px;
 
-.eyebrow-dot{
+    }
 
-  width:6px;
+    .eyebrow-dot{
 
-  height:6px;
+      width:6px;
 
-  border-radius:50%;
+      height:6px;
 
-  background:#55e9a3;
+      border-radius:50%;
 
-  box-shadow:
-    0 0 12px #55e9a3;
+      background:#55e9a3;
 
-  animation:
-    pulse 1.5s infinite;
+      box-shadow:
+        0 0 12px #55e9a3;
 
-}
+      animation:
+        pulse 1.5s infinite;
 
-@keyframes pulse{
+    }
 
-  0%,100%{
-    transform:scale(1);
-    opacity:1;
-  }
+    @keyframes pulse{
 
-  50%{
-    transform:scale(.65);
-    opacity:.5;
-  }
+      0%,100%{
+        transform:scale(1);
+        opacity:1;
+      }
 
-}
+      50%{
+        transform:scale(.65);
+        opacity:.5;
+      }
 
-.title{
+    }
 
-  font-size:
-    clamp(28px,6vw,48px);
+    .title{
 
-  line-height:1.1;
+      font-size:
+        clamp(28px,6vw,48px);
 
-  font-weight:900;
+      line-height:1.1;
 
-  letter-spacing:-1.5px;
+      font-weight:900;
 
-  background:
-    linear-gradient(
-      90deg,
-      #fff,
-      #74dcff,
-      #9e80ff,
-      #fff
-    );
+      letter-spacing:-1.5px;
 
-  background-size:
-    250% auto;
+      background:
+        linear-gradient(
+          90deg,
+          #fff,
+          #74dcff,
+          #9e80ff,
+          #fff
+        );
 
-  -webkit-background-clip:
-    text;
+      background-size:
+        250% auto;
 
-  background-clip:
-    text;
+      -webkit-background-clip:
+        text;
 
-  color:transparent;
+      background-clip:
+        text;
 
-  animation:
-    titleGradient 5s linear infinite;
+      color:transparent;
 
-}
+      animation:
+        titleGradient 5s linear infinite;
 
-@keyframes titleGradient{
+    }
 
-  to{
+    @keyframes titleGradient{
 
-    background-position:
-      250% center;
+      to{
 
-  }
+        background-position:
+          250% center;
 
-}
+      }
 
+    }
 
-/* =====================================================
-   NAME
-===================================================== */
 
-.name-box{
+    /* =====================================================
+       NAME
+    ===================================================== */
 
-  display:none;
+    .name-box{
 
-  margin:
-    0 auto 17px;
+      display:none;
 
-  max-width:620px;
+      margin:
+        0 auto 17px;
 
-}
+      max-width:620px;
 
-.name-label{
+    }
 
-  display:block;
+    .name-label{
 
-  color:#91a0bd;
+      display:block;
 
-  font-size:11px;
+      color:#91a0bd;
 
-  margin:
-    0 0 7px 4px;
+      font-size:11px;
 
-}
+      margin:
+        0 0 7px 4px;
 
-.name-input-wrap{
+    }
 
-  position:relative;
+    .name-input-wrap{
 
-}
+      position:relative;
 
-.name-input-icon{
+    }
 
-  position:absolute;
+    .name-input-icon{
 
-  left:15px;
+      position:absolute;
 
-  top:50%;
+      left:15px;
 
-  transform:
-    translateY(-50%);
+      top:50%;
 
-  font-size:17px;
+      transform:
+        translateY(-50%);
 
-  opacity:.7;
+      font-size:17px;
 
-}
+      opacity:.7;
 
-.name-box input{
+    }
 
-  width:100%;
+    .name-box input{
 
-  height:52px;
+      width:100%;
 
-  padding:
-    0 15px 0 45px;
+      height:52px;
 
-  border-radius:13px;
+      padding:
+        0 15px 0 45px;
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+      border-radius:13px;
 
-  outline:none;
+      border:
+        1px solid
+        rgba(255,255,255,.10);
 
-  background:
-    rgba(13,20,42,.85);
+      outline:none;
 
-  color:white;
+      background:
+        rgba(13,20,42,.85);
 
-  font-size:15px;
+      color:white;
 
-  transition:.25s;
+      font-size:15px;
 
-}
+      transition:.25s;
 
-.name-box input::placeholder{
+    }
 
-  color:#586682;
+    .name-box input::placeholder{
 
-}
+      color:#586682;
 
-.name-box input:focus{
+    }
 
-  border-color:
-    rgba(91,140,255,.6);
+    .name-box input:focus{
 
-  box-shadow:
-    0 0 0 4px
-    rgba(91,140,255,.08);
+      border-color:
+        rgba(91,140,255,.6);
 
-}
+      box-shadow:
+        0 0 0 4px
+        rgba(91,140,255,.08);
 
+    }
 
-/* =====================================================
-   MESSAGE
-===================================================== */
 
-.message-shell{
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
 
-  position:relative;
+    .message-shell{
 
-  max-width:900px;
+      position:relative;
 
-  margin:auto;
+      max-width:900px;
 
-  padding:1px;
+      margin:auto;
 
-  border-radius:25px;
+      padding:1px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(91,140,255,.35),
-      rgba(139,92,255,.22),
-      rgba(57,217,255,.15)
-    );
+      border-radius:25px;
 
-  box-shadow:
-    0 30px 90px
-    rgba(0,0,0,.32);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(91,140,255,.35),
+          rgba(139,92,255,.22),
+          rgba(57,217,255,.15)
+        );
 
-}
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.32);
 
-.message-box{
+    }
 
-  min-height:520px;
+    .message-box{
 
-  position:relative;
+      min-height:520px;
 
-  overflow:hidden;
+      position:relative;
 
-  border-radius:24px;
+      overflow:hidden;
 
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(91,140,255,.09),
-      transparent 35%
-    ),
-    #07101f;
+      border-radius:24px;
 
-}
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(91,140,255,.09),
+          transparent 35%
+        ),
+        #07101f;
 
-.message-box::before{
+    }
 
-  content:"";
+    .message-box::before{
 
-  position:absolute;
+      content:"";
 
-  width:250px;
+      position:absolute;
 
-  height:250px;
+      width:250px;
 
-  border-radius:50%;
+      height:250px;
 
-  left:-130px;
+      border-radius:50%;
 
-  top:-120px;
+      left:-130px;
 
-  background:
-    rgba(91,140,255,.08);
+      top:-120px;
 
-  filter:
-    blur(30px);
+      background:
+        rgba(91,140,255,.08);
 
-  pointer-events:none;
+      filter:
+        blur(30px);
 
-}
+      pointer-events:none;
 
-.message-box::after{
+    }
 
-  content:"";
+    .message-box::after{
 
-  position:absolute;
+      content:"";
 
-  width:250px;
+      position:absolute;
 
-  height:250px;
+      width:250px;
 
-  border-radius:50%;
+      height:250px;
 
-  right:-130px;
+      border-radius:50%;
 
-  bottom:-120px;
+      right:-130px;
 
-  background:
-    rgba(139,92,255,.08);
+      bottom:-120px;
 
-  filter:
-    blur(30px);
+      background:
+        rgba(139,92,255,.08);
 
-  pointer-events:none;
+      filter:
+        blur(30px);
 
-}
+      pointer-events:none;
 
-.loading{
+    }
 
-  min-height:520px;
+    .loading{
 
-  display:flex;
+      min-height:520px;
 
-  flex-direction:column;
+      display:flex;
 
-  align-items:center;
+      flex-direction:column;
 
-  justify-content:center;
+      align-items:center;
 
-  gap:13px;
+      justify-content:center;
 
-  color:#8190ad;
+      gap:13px;
 
-  font-size:12px;
+      color:#8190ad;
 
-}
+      font-size:12px;
 
-.loader{
+    }
 
-  width:42px;
+    .loader{
 
-  height:42px;
+      width:42px;
 
-  border-radius:50%;
+      height:42px;
 
-  border:
-    3px solid
-    rgba(255,255,255,.08);
+      border-radius:50%;
 
-  border-top-color:
-    var(--blue);
+      border:
+        3px solid
+        rgba(255,255,255,.08);
 
-  border-right-color:
-    var(--purple);
+      border-top-color:
+        var(--blue);
 
-  animation:
-    spin .8s linear infinite;
+      border-right-color:
+        var(--purple);
 
-}
+      animation:
+        spin .8s linear infinite;
 
-@keyframes spin{
+    }
 
-  to{
-    transform:rotate(360deg);
-  }
+    @keyframes spin{
 
-}
+      to{
+        transform:rotate(360deg);
+      }
 
+    }
 
-/* =====================================================
-   CONTROLS
-===================================================== */
 
-.controls{
+    /* =====================================================
+       CONTROLS
+    ===================================================== */
 
-  max-width:900px;
+    .controls{
 
-  margin:
-    17px auto 0;
+      max-width:900px;
 
-  display:grid;
+      margin:
+        17px auto 0;
 
-  grid-template-columns:
-    repeat(3,1fr);
+      display:grid;
 
-  gap:10px;
+      grid-template-columns:
+        repeat(2,1fr);
 
-}
+      gap:10px;
 
-button{
+    }
 
-  min-height:50px;
+    button{
 
-  border:
-    1px solid
-    rgba(255,255,255,.08);
+      min-height:50px;
 
-  border-radius:13px;
+      border:
+        1px solid
+        rgba(255,255,255,.08);
 
-  cursor:pointer;
+      border-radius:13px;
 
-  color:white;
+      cursor:pointer;
 
-  font-size:13px;
+      color:white;
 
-  font-weight:800;
+      font-size:13px;
 
-  background:
-    rgba(19,29,57,.9);
+      font-weight:800;
 
-  transition:
-    transform .25s,
-    box-shadow .25s,
-    border-color .25s;
+      background:
+        rgba(19,29,57,.9);
 
-}
+      transition:
+        transform .25s,
+        box-shadow .25s,
+        border-color .25s;
 
-button:hover{
+    }
 
-  transform:
-    translateY(-3px);
+    button:hover{
 
-  border-color:
-    rgba(255,255,255,.18);
+      transform:
+        translateY(-3px);
 
-  box-shadow:
-    0 12px 30px
-    rgba(0,0,0,.22);
+      border-color:
+        rgba(255,255,255,.18);
 
-}
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.22);
 
-button:disabled{
+    }
 
-  opacity:.55;
+    button:disabled{
 
-  cursor:not-allowed;
+      opacity:.55;
 
-  transform:none;
+      cursor:not-allowed;
 
-}
+      transform:none;
 
-#playBtn{
+    }
 
-  background:
-    linear-gradient(
-      135deg,
-      #4f82ff,
-      #795cff
-    );
+    #playBtn{
 
-  border-color:
-    transparent;
+      background:
+        linear-gradient(
+          135deg,
+          #4f82ff,
+          #795cff
+        );
 
-  box-shadow:
-    0 8px 25px
-    rgba(79,130,255,.18);
+      border-color:
+        transparent;
 
-}
+      box-shadow:
+        0 8px 25px
+        rgba(79,130,255,.18);
 
-#shareBtn{
+    }
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(32,50,86,.95),
-      rgba(25,36,66,.95)
-    );
+    #shareBtn{
 
-}
+      background:
+        linear-gradient(
+          135deg,
+          rgba(32,50,86,.95),
+          rgba(25,36,66,.95)
+        );
 
-#downloadBtn{
+    }
 
-  background:
-    linear-gradient(
-      135deg,
-      #087fca,
-      #0b9fd8
-    );
 
-  border-color:
-    transparent;
+    /* =====================================================
+       AD
+    ===================================================== */
 
-  box-shadow:
-    0 8px 25px
-    rgba(11,159,216,.14);
+    .ad{
 
-}
+      max-width:900px;
 
+      min-height:70px;
 
-/* =====================================================
-   AD
-===================================================== */
+      margin:
+        20px auto 0;
 
-.ad{
+      border:
+        1px dashed
+        rgba(126,154,255,.15);
 
-  max-width:900px;
+      border-radius:14px;
 
-  min-height:70px;
+      display:flex;
 
-  margin:
-    20px auto 0;
+      align-items:center;
 
-  border:
-    1px dashed
-    rgba(126,154,255,.15);
+      justify-content:center;
 
-  border-radius:14px;
+      color:#52617c;
 
-  display:flex;
+      background:
+        rgba(255,255,255,.012);
 
-  align-items:center;
+      font-size:10px;
 
-  justify-content:center;
+      letter-spacing:1px;
 
-  color:#52617c;
+      text-transform:uppercase;
 
-  background:
-    rgba(255,255,255,.012);
+    }
 
-  font-size:10px;
+    .ad.has-ad{
 
-  letter-spacing:1px;
+      border:
+        1px solid
+        rgba(126,154,255,.12);
 
-  text-transform:uppercase;
+      text-transform:none;
 
-}
+      letter-spacing:normal;
 
-.ad.has-ad{
+    }
 
-  border:
-    1px solid
-    rgba(126,154,255,.12);
 
-  text-transform:none;
+    /* =====================================================
+       INFO
+    ===================================================== */
 
-  letter-spacing:normal;
+    .info{
 
-}
+      max-width:900px;
 
+      margin:
+        18px auto 0;
 
-/* =====================================================
-   DOWNLOAD AD
-===================================================== */
+      display:flex;
 
-.download-ad-overlay{
+      justify-content:center;
 
-  position:fixed;
+      gap:8px;
 
-  inset:0;
+      flex-wrap:wrap;
 
-  z-index:99999;
+    }
 
-  display:none;
+    .info-pill{
 
-  align-items:center;
+      padding:
+        7px 10px;
 
-  justify-content:center;
+      border-radius:999px;
 
-  padding:20px;
+      background:
+        rgba(255,255,255,.035);
 
-  background:
-    rgba(0,0,0,.72);
+      border:
+        1px solid
+        rgba(255,255,255,.06);
 
-  backdrop-filter:
-    blur(8px);
+      color:#667594;
 
-}
+      font-size:9px;
 
-.download-ad-overlay.show{
+    }
 
-  display:flex;
 
-}
+    /* =====================================================
+       MOBILE
+    ===================================================== */
 
-.download-ad-box{
+    @media(max-width:600px){
 
-  width:100%;
+      header{
 
-  max-width:520px;
+        padding:
+          11px 12px;
 
-  min-height:180px;
+      }
 
-  padding:20px;
+      .page{
 
-  border-radius:20px;
+        padding:
+          20px 12px 45px;
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+      }
 
-  background:
-    rgba(11,18,38,.96);
+      .brand{
 
-  box-shadow:
-    0 30px 100px
-    rgba(0,0,0,.55);
+        font-size:10px;
 
-  text-align:center;
+      }
 
-}
+      .back{
 
-.download-ad-title{
+        font-size:11px;
 
-  color:#8fa4cc;
+        padding:
+          7px 8px;
 
-  font-size:11px;
+      }
 
-  text-transform:uppercase;
+      .title-area{
 
-  letter-spacing:1.3px;
+        padding-top:8px;
 
-  margin-bottom:12px;
+      }
 
-}
+      .title{
 
-#downloadAdContent{
+        font-size:31px;
 
-  width:100%;
+      }
 
-  min-height:100px;
+      .message-shell{
 
-  display:flex;
+        border-radius:19px;
 
-  align-items:center;
+      }
 
-  justify-content:center;
+      .message-box{
 
-  overflow:hidden;
+        min-height:460px;
 
-}
+        border-radius:18px;
 
-.ad-loading{
+      }
 
-  color:#7e8da9;
+      .loading{
 
-  font-size:12px;
+        min-height:460px;
 
-}
+      }
 
+      .controls{
 
-/* =====================================================
-   DOWNLOAD FALLBACK
-===================================================== */
+        grid-template-columns:1fr;
 
-.download-fallback{
+      }
 
-  display:none;
+      button{
 
-  max-width:900px;
+        min-height:48px;
 
-  margin:
-    12px auto 0;
+      }
 
-  padding:14px;
+    }
 
-  border-radius:15px;
-
-  background:
-    rgba(91,140,255,.08);
-
-  border:
-    1px solid
-    rgba(91,140,255,.20);
-
-  text-align:center;
-
-}
-
-.download-fallback.show{
-
-  display:block;
-
-}
-
-.download-fallback-text{
-
-  color:#9eabc4;
-
-  font-size:11px;
-
-  line-height:1.5;
-
-  margin-bottom:10px;
-
-}
-
-.manual-download{
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  min-height:44px;
-
-  padding:
-    0 18px;
-
-  border-radius:12px;
-
-  color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #087fca,
-      #0b9fd8
-    );
-
-  text-decoration:none;
-
-  font-size:12px;
-
-  font-weight:900;
-
-}
-
-
-/* =====================================================
-   INFO
-===================================================== */
-
-.info{
-
-  max-width:900px;
-
-  margin:
-    18px auto 0;
-
-  display:flex;
-
-  justify-content:center;
-
-  gap:8px;
-
-  flex-wrap:wrap;
-
-}
-
-.info-pill{
-
-  padding:
-    7px 10px;
-
-  border-radius:999px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid
-    rgba(255,255,255,.06);
-
-  color:#667594;
-
-  font-size:9px;
-
-}
-
-
-/* =====================================================
-   DOWNLOAD STATUS
-===================================================== */
-
-.download-status{
-
-  max-width:900px;
-
-  margin:
-    10px auto 0;
-
-  text-align:center;
-
-  min-height:18px;
-
-  color:#71809e;
-
-  font-size:10px;
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-  header{
-
-    padding:
-      11px 12px;
-
-  }
-
-  .page{
-
-    padding:
-      20px 12px 45px;
-
-  }
-
-  .brand{
-
-    font-size:10px;
-
-  }
-
-  .back{
-
-    font-size:11px;
-
-    padding:
-      7px 8px;
-
-  }
-
-  .title-area{
-
-    padding-top:8px;
-
-  }
-
-  .title{
-
-    font-size:31px;
-
-  }
-
-  .message-shell{
-
-    border-radius:19px;
-
-  }
-
-  .message-box{
-
-    min-height:460px;
-
-    border-radius:18px;
-
-  }
-
-  .loading{
-
-    min-height:460px;
-
-  }
-
-  .controls{
-
-    grid-template-columns:1fr;
-
-  }
-
-  button{
-
-    min-height:48px;
-
-  }
-
-}
-
-</style>
+  </style>
 
 </head>
 
@@ -1147,41 +932,6 @@ button:disabled{
     ↗ Share
   </button>
 
-
-  <button id="downloadBtn">
-    🎥 Download MP4
-  </button>
-
-</div>
-
-
-<div
-  id="downloadStatus"
-  class="download-status"
-></div>
-
-
-<div
-  id="downloadFallback"
-  class="download-fallback"
->
-
-  <div
-    class="download-fallback-text"
-  >
-    MP4 iko tayari. Kama download haikuanza,
-    bonyeza button hapa chini.
-  </div>
-
-
-  <a
-    id="manualDownloadLink"
-    class="manual-download"
-    href="#"
-  >
-    🎥 Download MP4
-  </a>
-
 </div>
 
 
@@ -1200,11 +950,7 @@ button:disabled{
   </span>
 
   <span class="info-pill">
-    🎥 MP4 Video
-  </span>
-
-  <span class="info-pill">
-    ✨ MAKYAMA Branded
+    ✨ MAKYAMA
   </span>
 
 </div>
@@ -1219,31 +965,6 @@ button:disabled{
 
 
 </main>
-
-
-<div
-  id="downloadAdOverlay"
-  class="download-ad-overlay"
->
-
-  <div class="download-ad-box">
-
-    <div class="download-ad-title">
-      Advertisement
-    </div>
-
-
-    <div id="downloadAdContent">
-
-      <div class="ad-loading">
-        Preparing advertisement...
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
 
 
 <script>
@@ -1295,39 +1016,9 @@ const shareBtn =
     "shareBtn"
   );
 
-const downloadBtn =
-  document.getElementById(
-    "downloadBtn"
-  );
-
 const downloadAd =
   document.getElementById(
     "downloadAd"
-  );
-
-const downloadAdOverlay =
-  document.getElementById(
-    "downloadAdOverlay"
-  );
-
-const downloadAdContent =
-  document.getElementById(
-    "downloadAdContent"
-  );
-
-const downloadStatus =
-  document.getElementById(
-    "downloadStatus"
-  );
-
-const downloadFallback =
-  document.getElementById(
-    "downloadFallback"
-  );
-
-const manualDownloadLink =
-  document.getElementById(
-    "manualDownloadLink"
   );
 
 
@@ -1338,10 +1029,6 @@ const manualDownloadLink =
 let template = null;
 
 let ads = [];
-
-let downloadAdData = null;
-
-let currentVideoUrl = null;
 
 
 /* =====================================================
@@ -1975,59 +1662,6 @@ function showTemporaryMessage(
 
 
 /* =====================================================
-   DOWNLOAD STATUS
-===================================================== */
-
-function setDownloadStatus(
-  message
-){
-
-  if(!downloadStatus){
-    return;
-  }
-
-
-  downloadStatus.textContent =
-    message || "";
-
-}
-
-
-/* =====================================================
-   RELEASE OLD VIDEO URL
-===================================================== */
-
-function releaseVideoUrl(){
-
-  if(
-    currentVideoUrl
-  ){
-
-    try{
-
-      URL.revokeObjectURL(
-        currentVideoUrl
-      );
-
-    }
-    catch(error){
-
-      console.log(
-        error
-      );
-
-    }
-
-
-    currentVideoUrl =
-      null;
-
-  }
-
-}
-
-
-/* =====================================================
    LOAD ADS
 ===================================================== */
 
@@ -2055,26 +1689,34 @@ async function loadAds(){
       await response.json();
 
 
-    const downloadAds =
+    /*
+      Keep the existing advertisement
+      system.
+
+      The old download-specific ad
+      position is no longer used.
+    */
+
+    const normalAds =
       ads.filter(
         ad =>
           ad &&
           ad.enabled === true &&
-          ad.position ===
-            "download"
+          (
+            ad.position === "middle" ||
+            ad.position === "top"
+          )
       );
 
 
-    if(
-      downloadAds.length > 0
-    ){
+    const selectedAd =
+      normalAds[0];
 
-      downloadAdData =
-        downloadAds[0];
 
+    if(selectedAd){
 
       renderNormalAd(
-        downloadAdData,
+        selectedAd,
         downloadAd
       );
 
@@ -2219,667 +1861,6 @@ function executeAdCode(
       }
 
     }
-  );
-
-}
-
-
-/* =====================================================
-   DOWNLOAD AD
-===================================================== */
-
-async function triggerDownloadAd(){
-
-  if(
-    !downloadAdData ||
-    !downloadAdData.code
-  ){
-
-    return;
-
-  }
-
-
-  downloadAdOverlay.classList.add(
-    "show"
-  );
-
-
-  downloadAdContent.innerHTML =
-    "";
-
-
-  executeAdCode(
-    downloadAdData.code,
-    downloadAdContent
-  );
-
-
-  await wait(1800);
-
-
-  downloadAdOverlay.classList.remove(
-    "show"
-  );
-
-
-  downloadAdContent.innerHTML =
-    "";
-
-}
-
-
-/* =====================================================
-   WAIT
-===================================================== */
-
-function wait(ms){
-
-  return new Promise(
-    resolve =>
-      setTimeout(
-        resolve,
-        ms
-      )
-  );
-
-}
-
-
-/* =====================================================
-   DOWNLOAD BLOB
-===================================================== */
-
-function downloadBlob(
-  blob,
-  filename
-){
-
-  if(
-    !blob ||
-    blob.size <= 0
-  ){
-
-    throw new Error(
-      "Video file is empty."
-    );
-
-  }
-
-
-  /*
-    Remove previous object URL.
-  */
-
-  releaseVideoUrl();
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  currentVideoUrl =
-    url;
-
-
-  /*
-    Prepare visible manual
-    fallback first.
-  */
-
-  manualDownloadLink.href =
-    url;
-
-  manualDownloadLink.download =
-    filename;
-
-
-  downloadFallback.classList.add(
-    "show"
-  );
-
-
-  /*
-    Try automatic download.
-  */
-
-  const link =
-    document.createElement(
-      "a"
-    );
-
-
-  link.href =
-    url;
-
-
-  link.download =
-    filename;
-
-
-  link.setAttribute(
-    "download",
-    filename
-  );
-
-
-  link.rel =
-    "noopener";
-
-
-  link.style.position =
-    "fixed";
-
-
-  link.style.left =
-    "-9999px";
-
-
-  link.style.top =
-    "-9999px";
-
-
-  document.body.appendChild(
-    link
-  );
-
-
-  try{
-
-    link.click();
-
-  }
-  catch(error){
-
-    console.error(
-      "Automatic download blocked:",
-      error
-    );
-
-  }
-
-
-  link.remove();
-
-
-  /*
-    Keep the object URL alive long
-    enough for the manual fallback.
-  */
-
-  setTimeout(
-    () => {
-
-      if(
-        currentVideoUrl ===
-        url
-      ){
-
-        releaseVideoUrl();
-
-      }
-
-    },
-    120000
-  );
-
-}
-
-
-/* =====================================================
-   MANUAL DOWNLOAD
-===================================================== */
-
-manualDownloadLink.addEventListener(
-  "click",
-  () => {
-
-    setDownloadStatus(
-      "✓ Downloading MP4..."
-    );
-
-  }
-);
-
-
-/* =====================================================
-   DOWNLOAD MP4
-===================================================== */
-
-downloadBtn.addEventListener(
-  "click",
-  async () => {
-
-    if(!template){
-
-      showTemporaryMessage(
-        "Template bado haijapakiwa."
-      );
-
-      return;
-
-    }
-
-
-    downloadBtn.disabled =
-      true;
-
-    playBtn.disabled =
-      true;
-
-    shareBtn.disabled =
-      true;
-
-
-    downloadFallback.classList.remove(
-      "show"
-    );
-
-
-    setDownloadStatus(
-      "Preparing your MAKYAMA video..."
-    );
-
-
-    const oldText =
-      downloadBtn.textContent;
-
-
-    try{
-
-      /*
-        IMPORTANT:
-
-        Hakuna /api/analytics/download
-        hapa.
-
-        Server ya /api/generate-video
-        tayari ina-count download
-        baada ya MP4 kutengenezwa.
-      */
-
-
-      renderMessage();
-
-
-      downloadBtn.textContent =
-        "⏳ Opening advertisement...";
-
-
-      setDownloadStatus(
-        "Preparing advertisement..."
-      );
-
-
-      await triggerDownloadAd();
-
-
-      downloadBtn.textContent =
-        "⏳ Creating MP4...";
-
-
-      setDownloadStatus(
-        "Creating MP4. Please wait..."
-      );
-
-
-      /*
-        Give the request enough time.
-
-        Render + Playwright + FFmpeg
-        inaweza kuchukua zaidi ya
-        dakika moja.
-      */
-
-      const controller =
-        new AbortController();
-
-
-      const timeoutId =
-        setTimeout(
-          () => {
-
-            controller.abort();
-
-          },
-          180000
-        );
-
-
-      let response;
-
-
-      try{
-
-        response =
-          await fetch(
-            "/api/generate-video",
-            {
-
-              method:
-                "POST",
-
-              headers:{
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-
-                  templateId:
-                    template.id,
-
-                  name:
-                    nameInput.value.trim() ||
-                    "Rafiki"
-
-                }),
-
-              signal:
-                controller.signal
-
-            }
-          );
-
-      }
-      finally{
-
-        clearTimeout(
-          timeoutId
-        );
-
-      }
-
-
-      /*
-        HTTP error.
-      */
-
-      if(!response.ok){
-
-        let errorMessage =
-          "Video generation failed.";
-
-
-        try{
-
-          const contentType =
-            response.headers.get(
-              "content-type"
-            ) || "";
-
-
-          if(
-            contentType.includes(
-              "application/json"
-            )
-          ){
-
-            const errorData =
-              await response.json();
-
-
-            if(
-              errorData &&
-              errorData.error
-            ){
-
-              errorMessage =
-                errorData.error;
-
-            }
-
-          }
-          else{
-
-            const text =
-              await response.text();
-
-
-            if(text){
-
-              errorMessage =
-                text.slice(
-                  0,
-                  300
-                );
-
-            }
-
-          }
-
-        }
-        catch(error){
-
-          console.log(
-            "Could not read server error:",
-            error
-          );
-
-        }
-
-
-        throw new Error(
-          errorMessage
-        );
-
-      }
-
-
-      /*
-        Check content type.
-
-        Server should return
-        video/mp4.
-      */
-
-      const contentType =
-        String(
-          response.headers.get(
-            "content-type"
-          ) || ""
-        ).toLowerCase();
-
-
-      if(
-        contentType.includes(
-          "application/json"
-        )
-      ){
-
-        let data = null;
-
-
-        try{
-
-          data =
-            await response.json();
-
-        }
-        catch(error){
-
-          console.log(
-            error
-          );
-
-        }
-
-
-        throw new Error(
-          data &&
-          data.error
-            ? data.error
-            : "Server returned an unexpected response."
-        );
-
-      }
-
-
-      downloadBtn.textContent =
-        "⏳ Receiving MP4...";
-
-
-      setDownloadStatus(
-        "MP4 created. Receiving video..."
-      );
-
-
-      const blob =
-        await response.blob();
-
-
-      /*
-        Validate actual file.
-      */
-
-      if(
-        !blob ||
-        blob.size <= 1000
-      ){
-
-        throw new Error(
-          "MP4 received but the file is empty."
-        );
-
-      }
-
-
-      const filename =
-        makeFileName() +
-        ".mp4";
-
-
-      downloadBtn.textContent =
-        "⏳ Starting download...";
-
-
-      setDownloadStatus(
-        "Video ready. Starting download..."
-      );
-
-
-      downloadBlob(
-        blob,
-        filename
-      );
-
-
-      /*
-        Do not immediately claim that
-        Android definitely saved it.
-
-        Tell user fallback is available.
-      */
-
-      setDownloadStatus(
-        "✓ MP4 iko tayari. Kama haijashuka, tumia button ya Download MP4 hapa chini."
-      );
-
-
-      showTemporaryMessage(
-        "✓ MP4 iko tayari"
-      );
-
-    }
-    catch(error){
-
-      console.error(
-        "Video download error:",
-        error
-      );
-
-
-      let errorMessage;
-
-
-      if(
-        error &&
-        error.name ===
-          "AbortError"
-      ){
-
-        errorMessage =
-          "Video generation took too long. Please try again.";
-
-      }
-      else{
-
-        errorMessage =
-          error &&
-          error.message
-            ? error.message
-            : "Video failed. Try again.";
-
-      }
-
-
-      setDownloadStatus(
-        "❌ " +
-        errorMessage
-      );
-
-
-      showTemporaryMessage(
-        "❌ " +
-        errorMessage
-      );
-
-    }
-    finally{
-
-      downloadBtn.disabled =
-        false;
-
-      playBtn.disabled =
-        false;
-
-      shareBtn.disabled =
-        false;
-
-      downloadBtn.textContent =
-        oldText;
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   FILE NAME
-===================================================== */
-
-function makeFileName(){
-
-  const base =
-    template &&
-    template.title
-      ? template.title
-      : "MAKYAMA_Message";
-
-
-  const clean =
-    base
-      .replace(
-        /[^a-z0-9_\- ]/gi,
-        ""
-      )
-      .trim()
-      .replace(
-        /\s+/g,
-        "_"
-      );
-
-
-  return (
-    "MAKYAMA_" +
-    (
-      clean ||
-      "Message"
-    )
   );
 
 }
