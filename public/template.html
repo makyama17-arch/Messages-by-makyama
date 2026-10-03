@@ -7,7 +7,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
   <title>MAKYAMA Message</title>
@@ -91,11 +91,16 @@
 
     html {
       scroll-behavior: smooth;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     body {
       margin: 0;
+      width: 100%;
       min-height: 100vh;
+      min-height: 100svh;
       background:
         radial-gradient(
           circle at top,
@@ -111,6 +116,7 @@
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+      overflow-x: hidden;
     }
 
     button,
@@ -160,6 +166,7 @@
       letter-spacing: 1.5px;
       color: #ffffff;
       opacity: 0.9;
+      white-space: nowrap;
     }
 
     .hero {
@@ -208,6 +215,7 @@
       font-weight: 950;
       letter-spacing: -1.2px;
       word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     .subtitle {
@@ -219,10 +227,13 @@
       color: #91a2ba;
       line-height: 1.6;
       font-size: 14px;
+      overflow-wrap: anywhere;
     }
 
     .card {
       position: relative;
+      width: 100%;
+      max-width: 100%;
       overflow: hidden;
       border-radius: 26px;
       background:
@@ -272,9 +283,12 @@
       );
       filter: blur(10px);
       pointer-events: none;
+      z-index: 0;
     }
 
     .message-header {
+      position: relative;
+      z-index: 2;
       padding:
         20px
         20px
@@ -341,19 +355,32 @@
         );
     }
 
+    /*
+      IMPORTANT:
+      The actual message now lives inside
+      an isolated iframe.
+
+      This prevents template JavaScript
+      from being destroyed by innerHTML.
+    */
+
     .message-box {
       position: relative;
-      min-height: 260px;
-      padding: 20px;
+      width: 100%;
+      max-width: 100%;
+      min-height: 320px;
+      padding: 0;
       overflow: hidden;
+      z-index: 1;
     }
 
     .loading {
       display: grid;
       place-items: center;
-      min-height: 220px;
+      min-height: 260px;
       color: #91a2ba;
       font-size: 14px;
+      text-align: center;
     }
 
     .spinner {
@@ -371,7 +398,10 @@
       border-top-color: #ffffff;
       animation:
         spin 0.8s linear infinite;
-      margin-bottom: 12px;
+      margin:
+        0
+        auto
+        12px;
     }
 
     @keyframes spin {
@@ -380,14 +410,38 @@
       }
     }
 
+    /*
+      TEMPLATE IFRAME
+    */
+
+    .makyama-template-frame {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      height: 600px;
+      min-height: 320px;
+      border: 0;
+      outline: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      color-scheme: normal;
+    }
+
     .error {
-      padding: 35px 20px;
+      padding:
+        35px
+        20px;
       text-align: center;
       color: #ffb4b4;
       line-height: 1.6;
     }
 
     .controls {
+      position: relative;
+      z-index: 3;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -398,7 +452,10 @@
     }
 
     .control-button {
-      flex: 1 1 150px;
+      flex:
+        1
+        1
+        150px;
       min-height: 48px;
       border: 0;
       border-radius: 14px;
@@ -409,6 +466,7 @@
         transform 0.18s ease,
         opacity 0.18s ease,
         background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .control-button:hover {
@@ -445,6 +503,8 @@
     }
 
     .info-pills {
+      position: relative;
+      z-index: 3;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -478,6 +538,8 @@
     }
 
     .ad {
+      position: relative;
+      z-index: 3;
       min-height: 50px;
       margin:
         4px
@@ -529,11 +591,10 @@
       color: #a8b5c8;
     }
 
-    @media (
-      max-width: 600px
-    ) {
+    @media (max-width: 600px) {
 
       .page {
+        width: 100%;
         padding:
           14px
           10px
@@ -544,16 +605,29 @@
         margin-bottom: 18px;
       }
 
+      .back {
+        font-size: 13px;
+      }
+
       .brand {
-        font-size: 11px;
+        font-size: 10px;
+        letter-spacing: 1px;
       }
 
       .card {
+        width: 100%;
         border-radius: 20px;
       }
 
       .message-box {
-        padding: 14px;
+        width: 100%;
+        padding: 0;
+      }
+
+      .makyama-template-frame {
+        width: 100%;
+        min-height: 420px;
+        height: 620px;
       }
 
       .controls {
@@ -575,6 +649,31 @@
           4px
           14px
           14px;
+      }
+
+    }
+
+    @media (max-width: 380px) {
+
+      .page {
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+
+      .topbar {
+        gap: 7px;
+      }
+
+      .back {
+        font-size: 12px;
+      }
+
+      .brand {
+        font-size: 9px;
+      }
+
+      .makyama-template-frame {
+        min-height: 400px;
       }
 
     }
@@ -661,9 +760,11 @@
         <div class="loading">
 
           <div>
+
             <div class="spinner"></div>
 
             Loading message...
+
           </div>
 
         </div>
@@ -741,6 +842,7 @@
 
   </main>
 
+
   <script>
 
     /* =====================================================
@@ -753,21 +855,16 @@
 
     let currentName = "";
 
-    let animationScripts = [];
-
-    let animationNodes = [];
-
     let animationRunning = false;
+
+    let templateFrame = null;
+
 
     /* =====================================================
        GET TEMPLATE ID
     ===================================================== */
 
     function getTemplateId() {
-
-      /*
-        1. Server-generated SEO variable.
-      */
 
       if (
         window.__MAKYAMA_TEMPLATE_ID__
@@ -778,14 +875,6 @@
         ).trim();
 
       }
-
-      /*
-        2. Clean URL fallback.
-
-        Example:
-
-        /message/birthday-message-UUID
-      */
 
       const pathname =
         window.location.pathname;
@@ -800,29 +889,17 @@
         match[1]
       ) {
 
-        const slugAndId =
-          decodeURIComponent(
-            match[1]
-          );
-
         /*
-          Current server identifies the
-          template by matching the complete
-          slug + ID.
+          On clean SEO pages the server
+          normally injects:
 
-          The API still needs the real UUID.
+          window.__MAKYAMA_TEMPLATE_ID__
 
-          We therefore first use the page
-          endpoint's server variable above.
+          So we do not attempt to guess
+          the UUID from the slug here.
         */
 
       }
-
-      /*
-        3. Legacy URL:
-
-        /template?id=xxxxx
-      */
 
       const params =
         new URLSearchParams(
@@ -841,6 +918,7 @@
       return "";
 
     }
+
 
     /* =====================================================
        HTML ESCAPE
@@ -866,6 +944,7 @@
       );
 
     }
+
 
     /* =====================================================
        META
@@ -894,6 +973,7 @@
       }
 
     }
+
 
     function updateSEO(
       data
@@ -954,8 +1034,7 @@
       );
 
       /*
-        Do not overwrite the server-side
-        canonical on clean SEO pages.
+        Preserve server-generated canonical.
       */
 
       if (
@@ -978,6 +1057,7 @@
 
     }
 
+
     /* =====================================================
        REPLACE NAME
     ===================================================== */
@@ -998,566 +1078,984 @@
 
     }
 
+
     /* =====================================================
-       EXTRACT SCRIPTS
+       TEMPLATE DOCUMENT PREPARATION
     ===================================================== */
 
-    function extractScripts(
-      container
+    function prepareTemplateHTML(
+      rawHTML
     ) {
 
-      animationScripts = [];
+      let html =
+        String(
+          rawHTML ||
+          ""
+        ).trim();
 
-      const scripts =
-        Array.from(
-          container.querySelectorAll(
-            "script"
+      if (
+        !html
+      ) {
+
+        return `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="UTF-8">
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+              >
+            </head>
+
+            <body>
+              <div
+                style="
+                  min-height:100vh;
+                  display:grid;
+                  place-items:center;
+                  font-family:system-ui,sans-serif;
+                  padding:30px;
+                  text-align:center;
+                "
+              >
+                Message is empty.
+              </div>
+            </body>
+          </html>
+        `;
+
+      }
+
+
+      /*
+        If the template already contains
+        a complete HTML document, keep it.
+      */
+
+      const isFullDocument =
+        /<!doctype\s+html/i.test(html) ||
+        /<html[\s>]/i.test(html) ||
+        /<head[\s>]/i.test(html) ||
+        /<body[\s>]/i.test(html);
+
+
+      /*
+        Template fragment:
+        automatically create a complete
+        responsive document around it.
+      */
+
+      if (
+        !isFullDocument
+      ) {
+
+        html = `
+          <!DOCTYPE html>
+
+          <html lang="en">
+
+          <head>
+
+            <meta charset="UTF-8">
+
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+            >
+
+            <style>
+
+              html,
+              body {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+                overflow-x: hidden;
+              }
+
+              body {
+                min-height: 100vh;
+                min-height: 100svh;
+              }
+
+              *,
+              *::before,
+              *::after {
+                box-sizing: border-box;
+              }
+
+              img,
+              video,
+              canvas,
+              svg {
+                max-width: 100%;
+              }
+
+            </style>
+
+          </head>
+
+          <body>
+
+            ${html}
+
+          </body>
+
+          </html>
+        `;
+
+      }
+
+
+      /*
+        Make sure viewport exists even when
+        admin stored a complete HTML document
+        without viewport.
+      */
+
+      if (
+        !/<meta[^>]+name=["']viewport["']/i.test(
+          html
+        )
+      ) {
+
+        if (
+          /<head[^>]*>/i.test(
+            html
           )
-        );
+        ) {
 
-      scripts.forEach(
-        script => {
+          html =
+            html.replace(
+              /<head[^>]*>/i,
+              match => `
+                ${match}
 
-          animationScripts.push(
-            script.textContent ||
-            ""
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+                >
+              `
+            );
+
+        }
+
+      }
+
+
+      /*
+        Responsive safety CSS.
+
+        We inject it into the template so
+        old templates also behave properly.
+      */
+
+      const responsiveCSS = `
+
+        <style id="__makyama_responsive">
+
+          html,
+          body {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0;
+            overflow-x: hidden !important;
+          }
+
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          img,
+          video,
+          canvas,
+          svg {
+            max-width: 100%;
+          }
+
+          input,
+          textarea,
+          select,
+          button {
+            max-width: 100%;
+          }
+
+          @media (max-width: 600px) {
+
+            body {
+              width: 100%;
+              min-width: 0 !important;
+            }
+
+          }
+
+        </style>
+
+      `;
+
+
+      /*
+        Inject responsive CSS.
+      */
+
+      if (
+        /<\/head>/i.test(
+          html
+        )
+      ) {
+
+        html =
+          html.replace(
+            /<\/head>/i,
+            `${responsiveCSS}</head>`
           );
 
-          script.remove();
+      } else {
 
-        }
-      );
+        html =
+          responsiveCSS +
+          html;
 
-    }
+      }
 
-    /* =====================================================
-       RUN TEMPLATE SCRIPTS
-    ===================================================== */
 
-    function runTemplateScripts() {
+      /*
+        This helper runs INSIDE the iframe.
 
-      animationScripts.forEach(
-        code => {
+        It provides:
 
-          if (
-            !String(
-              code
-            ).trim()
-          ) {
+        - automatic iframe height
+        - data-animation
+        - data-mk-action
+        - name variable
+        - resize observation
 
-            return;
+        It does NOT replace the template's
+        own JavaScript.
+      */
 
-          }
+      const helperScript = `
 
-          try {
+        <script>
 
-            const fn =
-              new Function(
-                code
-              );
+          (function () {
 
-            fn();
+            "use strict";
 
-          } catch (error) {
 
-            console.error(
-              "Template animation error:",
-              error
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-    /* =====================================================
-       GENERIC DATA ANIMATION
-    ===================================================== */
-
-    function collectAnimationNodes() {
-
-      animationNodes =
-        Array.from(
-          document.querySelectorAll(
-            "#messageBox [data-animation]"
-          )
-        );
-
-    }
-
-    function runDataAnimations() {
-
-      collectAnimationNodes();
-
-      animationNodes.forEach(
-        node => {
-
-          const animation =
-            node.getAttribute(
-              "data-animation"
-            );
-
-          const duration =
-            Number(
-              node.getAttribute(
-                "data-duration"
-              ) ||
-              700
-            );
-
-          node.style.animation =
-            "none";
-
-          /*
-            Force browser reflow.
-          */
-
-          void node.offsetWidth;
-
-          if (
-            animation ===
-            "fade"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0
-                },
-
-                {
-                  opacity: 1
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "ease-out",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-          else if (
-            animation ===
-            "up"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0,
-                  transform:
-                    "translateY(35px)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "translateY(0)"
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "cubic-bezier(.2,.8,.2,1)",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-          else if (
-            animation ===
-            "zoom"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0,
-                  transform:
-                    "scale(.7)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "scale(1)"
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "cubic-bezier(.2,.8,.2,1)",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-          else if (
-            animation ===
-            "pop"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0,
-                  transform:
-                    "scale(.3)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "scale(1.08)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "scale(1)"
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "ease-out",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-          else if (
-            animation ===
-            "left"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0,
-                  transform:
-                    "translateX(-45px)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "translateX(0)"
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "ease-out",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-          else if (
-            animation ===
-            "right"
-          ) {
-
-            node.animate(
-              [
-                {
-                  opacity: 0,
-                  transform:
-                    "translateX(45px)"
-                },
-
-                {
-                  opacity: 1,
-                  transform:
-                    "translateX(0)"
-                }
-              ],
-              {
-                duration,
-                easing:
-                  "ease-out",
-                fill:
-                  "both"
-              }
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-    /* =====================================================
-       CUSTOM TEMPLATE CLICK ACTIONS
-    ===================================================== */
-
-    function setupTemplateActions() {
-
-      const elements =
-        document.querySelectorAll(
-          "#messageBox [data-mk-action]"
-        );
-
-      elements.forEach(
-        element => {
-
-          /*
-            Prevent duplicate listeners.
-          */
-
-          if (
-            element.dataset.mkBound ===
-            "true"
-          ) {
-
-            return;
-
-          }
-
-          element.dataset.mkBound =
-            "true";
-
-          element.addEventListener(
-            "click",
-            event => {
-
-              const action =
-                element.getAttribute(
-                  "data-mk-action"
+            /* =========================================
+               MAKYAMA TEMPLATE GLOBAL
+            ========================================= */
+
+            window.MAKYAMA_NAME =
+              ${JSON.stringify(
+                currentName ||
+                ""
+              )};
+
+
+            /* =========================================
+               SAFE HEIGHT REPORT
+            ========================================= */
+
+            function reportHeight() {
+
+              try {
+
+                var body =
+                  document.body;
+
+                var documentElement =
+                  document.documentElement;
+
+                var height =
+                  Math.max(
+                    body
+                      ? body.scrollHeight
+                      : 0,
+
+                    body
+                      ? body.offsetHeight
+                      : 0,
+
+                    documentElement
+                      ? documentElement.scrollHeight
+                      : 0,
+
+                    documentElement
+                      ? documentElement.offsetHeight
+                      : 0,
+
+                    documentElement
+                      ? documentElement.clientHeight
+                      : 0
+                  );
+
+
+                /*
+                  Small minimum so tiny templates
+                  do not collapse.
+                */
+
+                height =
+                  Math.max(
+                    height,
+                    320
+                  );
+
+
+                window.parent.postMessage(
+                  {
+                    type:
+                      "MAKYAMA_TEMPLATE_HEIGHT",
+
+                    height:
+                      height
+                  },
+
+                  "*"
                 );
 
-              if (
-                !action
+              } catch (
+                error
               ) {
 
-                return;
-
-              }
-
-              /*
-                Supported native actions.
-              */
-
-              if (
-                action ===
-                "show"
-              ) {
-
-                const target =
-                  element.getAttribute(
-                    "data-target"
-                  );
-
-                if (
-                  target
-                ) {
-
-                  const targetElement =
-                    document.querySelector(
-                      target
-                    );
-
-                  if (
-                    targetElement
-                  ) {
-
-                    targetElement.style.display =
-                      "";
-
-                    targetElement.removeAttribute(
-                      "hidden"
-                    );
-
-                  }
-
-                }
-
-              }
-
-              else if (
-                action ===
-                "hide"
-              ) {
-
-                const target =
-                  element.getAttribute(
-                    "data-target"
-                  );
-
-                if (
-                  target
-                ) {
-
-                  const targetElement =
-                    document.querySelector(
-                      target
-                    );
-
-                  if (
-                    targetElement
-                  ) {
-
-                    targetElement.style.display =
-                      "none";
-
-                  }
-
-                }
-
-              }
-
-              else if (
-                action ===
-                "toggle"
-              ) {
-
-                const target =
-                  element.getAttribute(
-                    "data-target"
-                  );
-
-                if (
-                  target
-                ) {
-
-                  const targetElement =
-                    document.querySelector(
-                      target
-                    );
-
-                  if (
-                    targetElement
-                  ) {
-
-                    const hidden =
-                      targetElement.style.display ===
-                      "none";
-
-                    targetElement.style.display =
-                      hidden
-                        ? ""
-                        : "none";
-
-                  }
-
-                }
-
-              }
-
-              else if (
-                action ===
-                "text"
-              ) {
-
-                const target =
-                  element.getAttribute(
-                    "data-target"
-                  );
-
-                const value =
-                  element.getAttribute(
-                    "data-text"
-                  );
-
-                if (
-                  target
-                ) {
-
-                  const targetElement =
-                    document.querySelector(
-                      target
-                    );
-
-                  if (
-                    targetElement
-                  ) {
-
-                    targetElement.textContent =
-                      String(
-                        value ||
-                        ""
-                      ).replace(
-                        /\{name\}/gi,
-                        currentName
-                      );
-
-                  }
-
-                }
-
-              }
-
-              else if (
-                action ===
-                "class"
-              ) {
-
-                const target =
-                  element.getAttribute(
-                    "data-target"
-                  );
-
-                const className =
-                  element.getAttribute(
-                    "data-class"
-                  );
-
-                if (
-                  target &&
-                  className
-                ) {
-
-                  const targetElement =
-                    document.querySelector(
-                      target
-                    );
-
-                  if (
-                    targetElement
-                  ) {
-
-                    targetElement.classList.toggle(
-                      className
-                    );
-
-                  }
-
-                }
-
-              }
-
-              else if (
-                action ===
-                "replay"
-              ) {
-
-                playAnimation();
+                /*
+                  Silent failure.
+                */
 
               }
 
             }
+
+
+            /* =========================================
+               DATA ANIMATIONS
+            ========================================= */
+
+            function runDataAnimations() {
+
+              var elements =
+                document.querySelectorAll(
+                  "[data-animation]"
+                );
+
+
+              elements.forEach(
+                function (node) {
+
+                  var animation =
+                    node.getAttribute(
+                      "data-animation"
+                    );
+
+                  var duration =
+                    Number(
+                      node.getAttribute(
+                        "data-duration"
+                      ) ||
+                      700
+                    );
+
+
+                  if (
+                    animation ===
+                    "fade"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0
+                        },
+
+                        {
+                          opacity: 1
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "ease-out",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+
+                  else if (
+                    animation ===
+                    "up"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0,
+
+                          transform:
+                            "translateY(35px)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "translateY(0)"
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "cubic-bezier(.2,.8,.2,1)",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+
+                  else if (
+                    animation ===
+                    "zoom"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0,
+
+                          transform:
+                            "scale(.7)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "scale(1)"
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "cubic-bezier(.2,.8,.2,1)",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+
+                  else if (
+                    animation ===
+                    "pop"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0,
+
+                          transform:
+                            "scale(.3)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "scale(1.08)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "scale(1)"
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "ease-out",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+
+                  else if (
+                    animation ===
+                    "left"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0,
+
+                          transform:
+                            "translateX(-45px)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "translateX(0)"
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "ease-out",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+
+                  else if (
+                    animation ===
+                    "right"
+                  ) {
+
+                    node.animate(
+                      [
+                        {
+                          opacity: 0,
+
+                          transform:
+                            "translateX(45px)"
+                        },
+
+                        {
+                          opacity: 1,
+
+                          transform:
+                            "translateX(0)"
+                        }
+                      ],
+
+                      {
+                        duration:
+                          duration,
+
+                        easing:
+                          "ease-out",
+
+                        fill:
+                          "both"
+                      }
+                    );
+
+                  }
+
+                }
+              );
+
+            }
+
+
+            /* =========================================
+               DATA MK ACTIONS
+            ========================================= */
+
+            function setupMKActions() {
+
+              var elements =
+                document.querySelectorAll(
+                  "[data-mk-action]"
+                );
+
+
+              elements.forEach(
+                function (element) {
+
+                  if (
+                    element.dataset.makyamaBound ===
+                    "true"
+                  ) {
+
+                    return;
+
+                  }
+
+
+                  element.dataset.makyamaBound =
+                    "true";
+
+
+                  element.addEventListener(
+                    "click",
+
+                    function () {
+
+                      var action =
+                        element.getAttribute(
+                          "data-mk-action"
+                        );
+
+
+                      if (
+                        !action
+                      ) {
+
+                        return;
+
+                      }
+
+
+                      var target =
+                        element.getAttribute(
+                          "data-target"
+                        );
+
+
+                      var targetElement =
+                        target
+                          ? document.querySelector(
+                              target
+                            )
+                          : null;
+
+
+                      /* SHOW */
+
+                      if (
+                        action ===
+                        "show"
+                      ) {
+
+                        if (
+                          targetElement
+                        ) {
+
+                          targetElement.style.display =
+                            "";
+
+                          targetElement.removeAttribute(
+                            "hidden"
+                          );
+
+                        }
+
+                      }
+
+
+                      /* HIDE */
+
+                      else if (
+                        action ===
+                        "hide"
+                      ) {
+
+                        if (
+                          targetElement
+                        ) {
+
+                          targetElement.style.display =
+                            "none";
+
+                        }
+
+                      }
+
+
+                      /* TOGGLE */
+
+                      else if (
+                        action ===
+                        "toggle"
+                      ) {
+
+                        if (
+                          targetElement
+                        ) {
+
+                          var hidden =
+                            getComputedStyle(
+                              targetElement
+                            ).display ===
+                            "none";
+
+
+                          targetElement.style.display =
+                            hidden
+                              ? ""
+                              : "none";
+
+                        }
+
+                      }
+
+
+                      /* TEXT */
+
+                      else if (
+                        action ===
+                        "text"
+                      ) {
+
+                        var value =
+                          element.getAttribute(
+                            "data-text"
+                          ) ||
+                          "";
+
+
+                        if (
+                          targetElement
+                        ) {
+
+                          targetElement.textContent =
+                            value.replace(
+                              /\\\\{name\\\\}/gi,
+                              window.MAKYAMA_NAME ||
+                              ""
+                            );
+
+                        }
+
+                      }
+
+
+                      /* CLASS */
+
+                      else if (
+                        action ===
+                        "class"
+                      ) {
+
+                        var className =
+                          element.getAttribute(
+                            "data-class"
+                          );
+
+
+                        if (
+                          targetElement &&
+                          className
+                        ) {
+
+                          targetElement.classList.toggle(
+                            className
+                          );
+
+                        }
+
+                      }
+
+
+                      /*
+                        Always recalculate height
+                        after an action.
+                      */
+
+                      setTimeout(
+                        reportHeight,
+                        50
+                      );
+
+                    }
+                  );
+
+                }
+              );
+
+            }
+
+
+            /* =========================================
+               RESIZE OBSERVER
+            ========================================= */
+
+            function setupResizeObserver() {
+
+              try {
+
+                if (
+                  "ResizeObserver"
+                  in window
+                ) {
+
+                  var observer =
+                    new ResizeObserver(
+                      function () {
+
+                        reportHeight();
+
+                      }
+                    );
+
+
+                  if (
+                    document.documentElement
+                  ) {
+
+                    observer.observe(
+                      document.documentElement
+                    );
+
+                  }
+
+
+                  if (
+                    document.body
+                  ) {
+
+                    observer.observe(
+                      document.body
+                    );
+
+                  }
+
+                }
+
+              } catch (
+                error
+              ) {
+
+                /*
+                  Fallback below.
+                */
+
+              }
+
+            }
+
+
+            /* =========================================
+               START HELPERS
+            ========================================= */
+
+            function startHelpers() {
+
+              setupMKActions();
+
+              runDataAnimations();
+
+              setupResizeObserver();
+
+              reportHeight();
+
+              setTimeout(
+                reportHeight,
+                100
+              );
+
+              setTimeout(
+                reportHeight,
+                500
+              );
+
+              setTimeout(
+                reportHeight,
+                1200
+              );
+
+            }
+
+
+            if (
+              document.readyState ===
+              "loading"
+            ) {
+
+              document.addEventListener(
+                "DOMContentLoaded",
+                startHelpers,
+                {
+                  once:
+                    true
+                }
+              );
+
+            } else {
+
+              startHelpers();
+
+            }
+
+
+            window.addEventListener(
+              "load",
+              reportHeight
+            );
+
+
+          })();
+
+        </script>
+
+      `;
+
+
+      /*
+        Put helper after the template's own
+        scripts so the original template
+        remains untouched.
+      */
+
+      if (
+        /<\/body>/i.test(
+          html
+        )
+      ) {
+
+        html =
+          html.replace(
+            /<\/body>/i,
+            `${helperScript}</body>`
           );
 
-        }
-      );
+      } else {
+
+        html +=
+          helperScript;
+
+      }
+
+
+      return html;
 
     }
+
 
     /* =====================================================
        RENDER TEMPLATE
@@ -1573,10 +2071,12 @@
 
       }
 
+
       const messageBox =
         document.getElementById(
           "messageBox"
         );
+
 
       if (
         !messageBox
@@ -1586,36 +2086,123 @@
 
       }
 
+
+      /*
+        Remove old iframe.
+      */
+
       messageBox.innerHTML =
-        replaceName(
+        "";
+
+
+      /*
+        Prepare complete document.
+      */
+
+      const html =
+        prepareTemplateHTML(
           template.html ||
           ""
         );
 
-      extractScripts(
-        messageBox
+
+      /*
+        Create isolated frame.
+
+        allow-scripts:
+        template JavaScript works.
+
+        allow-forms:
+        template forms work.
+
+        allow-popups:
+        links/popups requested by the
+        template can work.
+
+        IMPORTANT:
+        We intentionally do NOT add
+        allow-same-origin here.
+      */
+
+      const iframe =
+        document.createElement(
+          "iframe"
+        );
+
+
+      iframe.className =
+        "makyama-template-frame";
+
+
+      iframe.title =
+        template.title ||
+        "MAKYAMA Message";
+
+
+      iframe.setAttribute(
+        "sandbox",
+        "allow-scripts allow-forms allow-popups"
       );
 
-      setupTemplateActions();
 
-      runTemplateScripts();
+      iframe.setAttribute(
+        "scrolling",
+        "no"
+      );
 
-      runDataAnimations();
 
-      collectAnimationNodes();
+      iframe.setAttribute(
+        "frameborder",
+        "0"
+      );
+
+
+      iframe.setAttribute(
+        "aria-label",
+        template.title ||
+        "Animated MAKYAMA message"
+      );
+
+
+      /*
+        Start with a safe height.
+      */
+
+      iframe.style.height =
+        "600px";
+
+
+      messageBox.appendChild(
+        iframe
+      );
+
+
+      templateFrame =
+        iframe;
+
+
+      /*
+        srcdoc executes the complete
+        template document inside the iframe.
+      */
+
+      iframe.srcdoc =
+        html;
+
 
       animationRunning =
         true;
 
+
       /*
-        Hide generic SEO fallback after
-        the actual template has loaded.
+        Hide generic SEO fallback.
       */
 
       const seoContent =
         document.getElementById(
           "seoContent"
         );
+
 
       if (
         seoContent
@@ -1627,6 +2214,93 @@
       }
 
     }
+
+
+    /* =====================================================
+       TEMPLATE HEIGHT MESSAGE
+    ===================================================== */
+
+    window.addEventListener(
+      "message",
+
+      function (event) {
+
+        if (
+          !templateFrame
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          Only accept messages coming
+          from our current template iframe.
+        */
+
+        if (
+          event.source !==
+          templateFrame.contentWindow
+        ) {
+
+          return;
+
+        }
+
+
+        const data =
+          event.data;
+
+
+        if (
+          !data ||
+          data.type !==
+          "MAKYAMA_TEMPLATE_HEIGHT"
+        ) {
+
+          return;
+
+        }
+
+
+        const height =
+          Number(
+            data.height
+          );
+
+
+        if (
+          !Number.isFinite(
+            height
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          Prevent absurd values.
+        */
+
+        const safeHeight =
+          Math.min(
+            Math.max(
+              height,
+              320
+            ),
+            20000
+          );
+
+
+        templateFrame.style.height =
+          `${safeHeight}px`;
+
+      }
+    );
+
 
     /* =====================================================
        PLAY / REPLAY
@@ -1642,9 +2316,11 @@
 
       }
 
+
       renderTemplate();
 
     }
+
 
     /* =====================================================
        NAME INPUT
@@ -1655,23 +2331,24 @@
         "nameInput"
       );
 
+
     if (
       nameInput
     ) {
 
       nameInput.addEventListener(
         "input",
-        () => {
+        function () {
 
           currentName =
             nameInput.value.trim();
 
-          /*
-            Re-render only if template
-            requires a name.
 
-            This keeps dynamic templates
-            synchronized with the name.
+          /*
+            Re-render only when required.
+
+            This makes {name} update in the
+            actual template iframe.
           */
 
           if (
@@ -1688,6 +2365,7 @@
 
     }
 
+
     /* =====================================================
        SHARE
     ===================================================== */
@@ -1697,12 +2375,15 @@
       const url =
         window.location.href;
 
+
       const title =
         template?.title ||
         "MAKYAMA Message";
 
+
       const text =
         `Check out this ${title} message on MAKYAMA MESSAGES.`;
+
 
       try {
 
@@ -1724,9 +2405,11 @@
 
         }
 
+
         await navigator.clipboard.writeText(
           url
         );
+
 
         alert(
           "Message link copied!"
@@ -1735,11 +2418,6 @@
       } catch (
         error
       ) {
-
-        /*
-          User cancelling native share
-          should not show an error.
-        */
 
         if (
           error?.name ===
@@ -1750,11 +2428,13 @@
 
         }
 
+
         try {
 
           await navigator.clipboard.writeText(
             url
           );
+
 
           alert(
             "Message link copied!"
@@ -1774,10 +2454,12 @@
 
     }
 
+
     const shareButton =
       document.getElementById(
         "shareBtn"
       );
+
 
     if (
       shareButton
@@ -1790,6 +2472,7 @@
 
     }
 
+
     /* =====================================================
        PLAY BUTTON
     ===================================================== */
@@ -1798,6 +2481,7 @@
       document.getElementById(
         "playBtn"
       );
+
 
     if (
       playButton
@@ -1809,6 +2493,7 @@
       );
 
     }
+
 
     /* =====================================================
        LOAD ADS
@@ -1827,6 +2512,7 @@
             }
           );
 
+
         if (
           !response.ok
         ) {
@@ -1835,8 +2521,10 @@
 
         }
 
+
         const ads =
           await response.json();
+
 
         if (
           !Array.isArray(
@@ -1848,6 +2536,7 @@
 
         }
 
+
         const middleAds =
           ads.filter(
             ad =>
@@ -1857,13 +2546,16 @@
                 "middle"
           );
 
+
         const middleAd =
           middleAds[0];
+
 
         const container =
           document.getElementById(
             "middleAd"
           );
+
 
         if (
           !container
@@ -1872,6 +2564,7 @@
           return;
 
         }
+
 
         if (
           !middleAd
@@ -1884,16 +2577,14 @@
 
         }
 
+
         container.innerHTML =
           middleAd.code ||
           "";
 
-        /*
-          Execute scripts inserted by
-          advertisement code.
 
-          This is necessary for ad providers
-          that return script tags.
+        /*
+          Execute advertisement scripts.
         */
 
         const scripts =
@@ -1903,6 +2594,7 @@
             )
           );
 
+
         scripts.forEach(
           oldScript => {
 
@@ -1910,6 +2602,7 @@
               document.createElement(
                 "script"
               );
+
 
             Array.from(
               oldScript.attributes
@@ -1924,8 +2617,10 @@
               }
             );
 
+
             newScript.textContent =
               oldScript.textContent;
+
 
             oldScript.replaceWith(
               newScript
@@ -1947,6 +2642,7 @@
 
     }
 
+
     /* =====================================================
        ANALYTICS
     ===================================================== */
@@ -1960,6 +2656,7 @@
         return;
 
       }
+
 
       try {
 
@@ -2000,6 +2697,7 @@
 
     }
 
+
     /* =====================================================
        ONLINE HEARTBEAT
     ===================================================== */
@@ -2009,10 +2707,12 @@
       const key =
         "makyama_client_id";
 
+
       let clientId =
         localStorage.getItem(
           key
         );
+
 
       if (
         !clientId
@@ -2034,6 +2734,7 @@
 
         }
 
+
         localStorage.setItem(
           key,
           clientId
@@ -2041,9 +2742,11 @@
 
       }
 
+
       return clientId;
 
     }
+
 
     async function heartbeat() {
 
@@ -2086,6 +2789,7 @@
 
     }
 
+
     /* =====================================================
        LOAD TEMPLATE
     ===================================================== */
@@ -2094,6 +2798,7 @@
 
       templateId =
         getTemplateId();
+
 
       if (
         !templateId
@@ -2106,6 +2811,7 @@
         return;
 
       }
+
 
       try {
 
@@ -2120,6 +2826,7 @@
             }
           );
 
+
         if (
           !response.ok
         ) {
@@ -2130,25 +2837,29 @@
 
         }
 
+
         template =
           await response.json();
 
+
         /*
-          Update page title and metadata.
+          SEO.
         */
 
         updateSEO(
           template
         );
 
+
         /*
-          Visible heading.
+          Visible title.
         */
 
         const title =
           document.getElementById(
             "title"
           );
+
 
         if (
           title
@@ -2160,6 +2871,7 @@
 
         }
 
+
         /*
           Subtitle.
         */
@@ -2168,6 +2880,7 @@
           document.getElementById(
             "subtitle"
           );
+
 
         if (
           subtitle
@@ -2182,6 +2895,7 @@
 
         }
 
+
         /*
           Name field.
         */
@@ -2191,6 +2905,7 @@
             "nameBox"
           );
 
+
         if (
           template.nameRequired
         ) {
@@ -2199,7 +2914,11 @@
             "visible"
           );
 
-          nameInput?.focus();
+
+          /*
+            Do not force keyboard focus
+            automatically on mobile.
+          */
 
         } else {
 
@@ -2209,14 +2928,16 @@
 
         }
 
+
         /*
-          SEO text fallback.
+          SEO fallback.
         */
 
         const seoContent =
           document.getElementById(
             "seoContent"
           );
+
 
         if (
           seoContent
@@ -2229,12 +2950,20 @@
               "animated"
             } message with MAKYAMA MESSAGES.`;
 
+
           seoContent.textContent =
             description;
 
         }
 
+
+        /*
+          Render the real interactive
+          template.
+        */
+
         renderTemplate();
+
 
         recordView();
 
@@ -2247,6 +2976,7 @@
           error
         );
 
+
         showError(
           error.message ||
           "Unable to load this message."
@@ -2255,6 +2985,7 @@
       }
 
     }
+
 
     /* =====================================================
        ERROR
@@ -2268,6 +2999,7 @@
         document.getElementById(
           "messageBox"
         );
+
 
       if (
         messageBox
@@ -2316,6 +3048,7 @@
 
     }
 
+
     /* =====================================================
        START
     ===================================================== */
@@ -2325,6 +3058,7 @@
     loadAds();
 
     heartbeat();
+
 
     setInterval(
       heartbeat,
