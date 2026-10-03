@@ -17,7 +17,10 @@
     content="Create and share beautiful interactive messages with MAKYAMA MESSAGES."
   >
 
-  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  >
 
   <link
     rel="icon"
@@ -382,14 +385,14 @@
     #templateFrame{
       display:block;
       width:100%;
-      height:500px;
+      height:560px;
       min-height:280px;
       border:0;
       margin:0;
       padding:0;
-      background:white;
+      background:#05070a;
       overflow:hidden;
-      transition:height .25s ease;
+      transition:height .2s ease;
     }
 
     .template-loading{
@@ -553,7 +556,7 @@
     }
 
     /* =========================
-       AD AREA
+       AD
     ========================= */
 
     .ad-slot{
@@ -703,7 +706,8 @@
       }
 
       #templateFrame{
-        min-height:300px;
+        min-height:320px;
+        height:560px;
       }
 
       .controls{
@@ -742,10 +746,6 @@
 
 <div class="page">
 
-  <!-- =========================
-       TOP BAR
-  ========================== -->
-
   <header class="topbar">
     <div class="topbar-inner">
 
@@ -759,7 +759,9 @@
 
         <div class="brand-text">
           <div class="brand-title">MAKYAMA MESSAGES</div>
-          <div class="brand-subtitle">Interactive messages made with code</div>
+          <div class="brand-subtitle">
+            Interactive messages made with code
+          </div>
         </div>
 
       </a>
@@ -792,10 +794,6 @@
   </header>
 
 
-  <!-- =========================
-       MAIN
-  ========================== -->
-
   <main class="main">
 
     <section class="hero">
@@ -814,10 +812,6 @@
 
     </section>
 
-
-    <!-- =========================
-         NAME INPUT
-    ========================== -->
 
     <section
       id="namePanel"
@@ -855,10 +849,6 @@
 
     </section>
 
-
-    <!-- =========================
-         MESSAGE CARD
-    ========================== -->
 
     <section class="message-card">
 
@@ -923,10 +913,6 @@
       </div>
 
 
-      <!-- =========================
-           CONTROLS
-      ========================== -->
-
       <div class="controls">
 
         <button
@@ -957,10 +943,6 @@
 
     </section>
 
-
-    <!-- =========================
-         REACTIONS
-    ========================== -->
 
     <section class="reaction-area">
 
@@ -993,22 +975,13 @@
     </section>
 
 
-    <!-- =========================
-         MIDDLE AD
-    ========================== -->
-
     <div
       id="middleAd"
       class="ad-slot"
     ></div>
 
-
   </main>
 
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
 
   <footer class="footer">
 
@@ -1038,7 +1011,6 @@
 let currentTemplate = null;
 let currentName = "";
 let currentTemplateId = null;
-
 let toastTimer = null;
 
 const frame = document.getElementById("templateFrame");
@@ -1059,21 +1031,18 @@ function $(id){
 
 
 function escapeHTML(value){
+
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-function escapeAttribute(value){
-  return escapeHTML(value);
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
 function showToast(message){
+
   const toast = $("toast");
 
   if(!toast){
@@ -1086,9 +1055,11 @@ function showToast(message){
 
   clearTimeout(toastTimer);
 
-  toastTimer = setTimeout(() => {
+  toastTimer = setTimeout(function(){
+
     toast.classList.remove("show");
-  }, 2400);
+
+  },2400);
 }
 
 
@@ -1098,29 +1069,29 @@ function showToast(message){
 
 function getTemplateId(){
 
-  /*
-   * SEO route injects this global:
-   *
-   * window.__MAKYAMA_TEMPLATE_ID__
-   *
-   * Legacy /template?id=... also remains supported.
-   */
-
   if(
     window.__MAKYAMA_TEMPLATE_ID__ &&
     String(window.__MAKYAMA_TEMPLATE_ID__).trim()
   ){
-    return String(window.__MAKYAMA_TEMPLATE_ID__).trim();
+
+    return String(
+      window.__MAKYAMA_TEMPLATE_ID__
+    ).trim();
   }
 
-  const params = new URLSearchParams(window.location.search);
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
   const id =
     params.get("id") ||
     params.get("template") ||
     params.get("templateId");
 
-  return id ? String(id).trim() : "";
+  return id
+    ? String(id).trim()
+    : "";
 }
 
 
@@ -1134,7 +1105,10 @@ function getCurrentSEOUrl(){
     window.__MAKYAMA_SEO_URL__ &&
     String(window.__MAKYAMA_SEO_URL__).trim()
   ){
-    return String(window.__MAKYAMA_SEO_URL__).trim();
+
+    return String(
+      window.__MAKYAMA_SEO_URL__
+    ).trim();
   }
 
   return window.location.href;
@@ -1142,7 +1116,7 @@ function getCurrentSEOUrl(){
 
 
 /* =========================================================
-   PAGE SEO
+   SEO
 ========================================================= */
 
 function updatePageSEO(template){
@@ -1152,7 +1126,10 @@ function updatePageSEO(template){
   }
 
   const title =
-    String(template.title || "MAKYAMA MESSAGE").trim();
+    String(
+      template.title ||
+      "MAKYAMA MESSAGE"
+    ).trim();
 
   const description =
     String(
@@ -1163,39 +1140,58 @@ function updatePageSEO(template){
   document.title =
     title + " | MAKYAMA MESSAGES";
 
-  $("pageTitle").textContent = title;
+  $("pageTitle").textContent =
+    title;
 
-  $("pageDescription").textContent = description;
+  $("pageDescription").textContent =
+    description;
+
 
   const canonical =
-    document.querySelector('link[rel="canonical"]');
+    document.querySelector(
+      'link[rel="canonical"]'
+    );
 
   if(canonical){
-    canonical.href = getCurrentSEOUrl();
+
+    canonical.href =
+      getCurrentSEOUrl();
+
   }else{
-    const link = document.createElement("link");
+
+    const link =
+      document.createElement("link");
+
     link.rel = "canonical";
-    link.href = getCurrentSEOUrl();
+
+    link.href =
+      getCurrentSEOUrl();
+
     document.head.appendChild(link);
   }
 
+
   let metaDescription =
-    document.querySelector('meta[name="description"]');
+    document.querySelector(
+      'meta[name="description"]'
+    );
 
   if(!metaDescription){
 
     metaDescription =
       document.createElement("meta");
 
-    metaDescription.name = "description";
+    metaDescription.name =
+      "description";
 
-    document.head.appendChild(metaDescription);
+    document.head.appendChild(
+      metaDescription
+    );
   }
 
-  metaDescription.content = description;
+  metaDescription.content =
+    description;
 
-
-  /* Open Graph */
 
   setMeta(
     "property",
@@ -1214,22 +1210,6 @@ function updatePageSEO(template){
     "og:url",
     getCurrentSEOUrl()
   );
-
-
-  if(template.thumbnail){
-
-    setMeta(
-      "property",
-      "og:image",
-      String(template.thumbnail)
-    );
-
-    setMeta(
-      "name",
-      "twitter:image",
-      String(template.thumbnail)
-    );
-  }
 
   setMeta(
     "property",
@@ -1254,26 +1234,57 @@ function updatePageSEO(template){
     "twitter:description",
     description
   );
+
+
+  if(template.thumbnail){
+
+    setMeta(
+      "property",
+      "og:image",
+      String(template.thumbnail)
+    );
+
+    setMeta(
+      "name",
+      "twitter:image",
+      String(template.thumbnail)
+    );
+  }
 }
 
 
-function setMeta(attribute, name, content){
+function setMeta(
+  attribute,
+  name,
+  content
+){
 
   let meta =
     document.querySelector(
-      'meta[' + attribute + '="' + name + '"]'
+      'meta[' +
+      attribute +
+      '="' +
+      name +
+      '"]'
     );
 
   if(!meta){
 
-    meta = document.createElement("meta");
+    meta =
+      document.createElement("meta");
 
-    meta.setAttribute(attribute, name);
+    meta.setAttribute(
+      attribute,
+      name
+    );
 
-    document.head.appendChild(meta);
+    document.head.appendChild(
+      meta
+    );
   }
 
-  meta.content = String(content || "");
+  meta.content =
+    String(content || "");
 }
 
 
@@ -1289,56 +1300,68 @@ function replaceName(html){
       "someone special"
     );
 
-  /*
-   * IMPORTANT:
-   *
-   * Only the {name} replacement is escaped.
-   * The actual HTML template is NOT escaped.
-   */
-
   return String(html || "")
-    .replace(/\{name\}/gi, replacement);
+    .replace(
+      /\{name\}/gi,
+      replacement
+    );
 }
 
 
 function applyName(){
 
   const value =
-    String(nameInput.value || "")
-      .trim()
-      .slice(0, 60);
+    String(
+      nameInput.value || ""
+    )
+    .trim()
+    .slice(0,60);
 
   if(!value){
 
-    showToast("Please enter a name.");
+    showToast(
+      "Please enter a name."
+    );
 
     nameInput.focus();
 
     return;
   }
 
-  currentName = value;
+  currentName =
+    value;
 
-  localStorageSafeSet(
-    "makyama_message_name",
-    currentName
-  );
+
+  try{
+
+    localStorage.setItem(
+      "makyama_message_name",
+      currentName
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Name storage unavailable.",
+      error
+    );
+  }
+
 
   if(currentTemplate){
 
-    renderTemplate(currentTemplate);
+    renderTemplate(
+      currentTemplate
+    );
 
-    showToast("Name updated.");
+    showToast(
+      "Name updated."
+    );
   }
 }
 
 
 function loadSavedName(){
-
-  /*
-   * Parent page storage is safe to use normally.
-   * The sandboxed template itself does not depend on storage.
-   */
 
   try{
 
@@ -1352,9 +1375,10 @@ function loadSavedName(){
       currentName =
         String(saved)
           .trim()
-          .slice(0, 60);
+          .slice(0,60);
 
-      nameInput.value = currentName;
+      nameInput.value =
+        currentName;
     }
 
   }catch(error){
@@ -1367,46 +1391,24 @@ function loadSavedName(){
 }
 
 
-function localStorageSafeSet(key, value){
-
-  try{
-
-    localStorage.setItem(
-      key,
-      String(value)
-    );
-
-  }catch(error){
-
-    console.warn(
-      "Could not save local data.",
-      error
-    );
-  }
-}
-
-
 /* =========================================================
-   PREPARE TEMPLATE HTML
+   PREPARE TEMPLATE
 ========================================================= */
 
 function prepareTemplateHTML(templateHTML){
 
   let html =
-    String(templateHTML || "").trim();
+    String(
+      templateHTML || ""
+    ).trim();
 
   if(!html){
-    throw new Error("Template HTML is empty.");
+
+    throw new Error(
+      "Template HTML is empty."
+    );
   }
 
-
-  /*
-   * Detect whether admin stored:
-   *
-   * 1. complete document
-   * OR
-   * 2. animation fragment
-   */
 
   const lower =
     html.toLowerCase();
@@ -1419,91 +1421,70 @@ function prepareTemplateHTML(templateHTML){
 
 
   /*
-   * If admin stored only a fragment,
-   * convert it into a complete document.
+   * Fragment template -> full document
    */
 
   if(!isFullDocument){
 
     html =
-`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<title>MAKYAMA MESSAGE</title>
-<style>
-html,
-body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  overflow-x:hidden;
-}
-*{
-  box-sizing:border-box;
-}
-img,
-video,
-canvas,
-svg{
-  max-width:100%;
-}
-button,
-input,
-textarea,
-select{
-  max-width:100%;
-}
-</style>
-</head>
-<body>
-${html}
-</body>
-</html>`;
+      "<!DOCTYPE html>" +
+      "<html lang=\"en\">" +
+      "<head>" +
+      "<meta charset=\"UTF-8\">" +
+      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover\">" +
+      "<title>MAKYAMA MESSAGE</title>" +
+      "<style>" +
+      "html,body{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden;}" +
+      "*,*:before,*:after{box-sizing:border-box;}" +
+      "img,video,canvas,svg{max-width:100%;}" +
+      "button,input,textarea,select{max-width:100%;}" +
+      "</style>" +
+      "</head>" +
+      "<body>" +
+      html +
+      "</body>" +
+      "</html>";
   }
 
 
   /*
-   * Make sure viewport exists.
+   * Add viewport when missing.
    */
 
-  if(!/<meta[^>]+name=["']viewport["']/i.test(html)){
+  if(
+    !/<meta[^>]+name=["']viewport["']/i.test(
+      html
+    )
+  ){
 
     html =
       html.replace(
         /<head([^>]*)>/i,
-        `<head$1>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">`
+        "<head$1>" +
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover\">"
       );
   }
 
 
   /*
-   * Responsive safety CSS.
-   *
-   * This does not replace the template's own CSS.
-   * It only protects the frame from accidental horizontal overflow.
+   * Responsive protection.
    */
 
-  const responsiveCSS = `
-<style id="makyama-responsive-helper">
-html{
-  width:100%;
-  max-width:100%;
+  const responsiveCSS =
+`<style id="makyama-responsive-helper">
+html,
+body{
+  width:100% !important;
+  max-width:100% !important;
   overflow-x:hidden !important;
 }
 
 body{
-  width:100%;
-  max-width:100%;
   min-height:100vh;
-  overflow-x:hidden !important;
 }
 
 *{
-  max-width:100%;
+  box-sizing:border-box;
 }
 
 img,
@@ -1525,6 +1506,7 @@ select{
   html,
   body{
     width:100% !important;
+    max-width:100% !important;
   }
 
   body{
@@ -1538,244 +1520,38 @@ select{
 </style>`;
 
 
-  if(!html.includes("id=\"makyama-responsive-helper\"")){
+  if(
+    !html.includes(
+      'id="makyama-responsive-helper"'
+    )
+  ){
 
-    if(/<\/head>/i.test(html)){
+    if(
+      /<\/head>/i.test(html)
+    ){
 
       html =
         html.replace(
           /<\/head>/i,
-          responsiveCSS + "\n</head>"
+          responsiveCSS +
+          "</head>"
         );
 
     }else{
 
       html =
-        responsiveCSS + "\n" + html;
+        responsiveCSS +
+        html;
     }
   }
 
 
   /*
-   * Insert the name.
+   * Replace {name}
    */
 
   html =
     replaceName(html);
-
-
-  /*
-   * IMPORTANT PARSER FIX
-   *
-   * We must NOT put a literal </script> inside the
-   * JavaScript source of this parent document.
-   *
-   * Therefore the closing tag is constructed separately.
-   */
-
-  const scriptEnd =
-    "<" + "/script>";
-
-
-  /*
-   * Helper executed INSIDE the iframe.
-   *
-   * It reports its actual height to the parent.
-   */
-
-  const helperScript = `
-<script>
-(function(){
-
-  "use strict";
-
-  function getHeight(){
-
-    var body =
-      document.body;
-
-    var doc =
-      document.documentElement;
-
-    if(!body || !doc){
-      return 320;
-    }
-
-    return Math.max(
-      body.scrollHeight || 0,
-      body.offsetHeight || 0,
-      doc.scrollHeight || 0,
-      doc.offsetHeight || 0,
-      280
-    );
-  }
-
-
-  function reportHeight(){
-
-    try{
-
-      window.parent.postMessage(
-        {
-          type:"MAKYAMA_TEMPLATE_HEIGHT",
-          height:getHeight()
-        },
-        "*"
-      );
-
-    }catch(error){
-
-      console.warn(
-        "MAKYAMA height report failed.",
-        error
-      );
-    }
-  }
-
-
-  function reportSoon(){
-
-    reportHeight();
-
-    setTimeout(reportHeight, 80);
-
-    setTimeout(reportHeight, 250);
-
-    setTimeout(reportHeight, 600);
-
-    setTimeout(reportHeight, 1200);
-  }
-
-
-  if(
-    document.readyState === "loading"
-  ){
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      reportSoon
-    );
-
-  }else{
-
-    reportSoon();
-  }
-
-
-  window.addEventListener(
-    "load",
-    reportSoon
-  );
-
-
-  if(
-    typeof ResizeObserver !== "undefined"
-  ){
-
-    try{
-
-      var target =
-        document.body ||
-        document.documentElement;
-
-      if(target){
-
-        var resizeObserver =
-          new ResizeObserver(function(){
-
-            reportHeight();
-
-          });
-
-        resizeObserver.observe(target);
-      }
-
-    }catch(error){
-
-      console.warn(
-        "ResizeObserver failed.",
-        error
-      );
-    }
-  }
-
-
-  if(
-    typeof MutationObserver !== "undefined"
-  ){
-
-    try{
-
-      var mutationTarget =
-        document.body ||
-        document.documentElement;
-
-      if(mutationTarget){
-
-        var mutationObserver =
-          new MutationObserver(function(){
-
-            reportHeight();
-
-          });
-
-        mutationObserver.observe(
-          mutationTarget,
-          {
-            subtree:true,
-            childList:true,
-            attributes:true,
-            characterData:true
-          }
-        );
-      }
-
-    }catch(error){
-
-      console.warn(
-        "MutationObserver failed.",
-        error
-      );
-    }
-  }
-
-
-  window.addEventListener(
-    "resize",
-    reportHeight
-  );
-
-
-  /*
-   * Some templates change height after a click.
-   * This catches delayed stage changes too.
-   */
-
-  setInterval(
-    reportHeight,
-    1500
-  );
-
-})();
-${scriptEnd}`;
-
-
-  /*
-   * Add helper before </body>.
-   */
-
-  if(/<\/body>/i.test(html)){
-
-    html =
-      html.replace(
-        /<\/body>/i,
-        helperScript + "\n</body>"
-      );
-
-  }else{
-
-    html += helperScript;
-  }
 
 
   return html;
@@ -1792,15 +1568,16 @@ function renderTemplate(template){
     return;
   }
 
-  currentTemplate = template;
+  currentTemplate =
+    template;
 
   currentTemplateId =
-    String(template.id || currentTemplateId || "");
+    String(
+      template.id ||
+      currentTemplateId ||
+      ""
+    );
 
-
-  /*
-   * Category
-   */
 
   $("templateCategory").textContent =
     String(
@@ -1815,10 +1592,6 @@ function renderTemplate(template){
       : "";
 
 
-  /*
-   * Name field
-   */
-
   const needsName =
     Boolean(
       template.nameRequired
@@ -1830,29 +1603,27 @@ function renderTemplate(template){
       : "none";
 
 
-  /*
-   * Update SEO/UI
-   */
-
-  updatePageSEO(template);
+  updatePageSEO(
+    template
+  );
 
 
-  /*
-   * Loading state
-   */
+  loading.classList.remove(
+    "hidden"
+  );
 
-  loading.classList.remove("hidden");
+  errorBox.classList.remove(
+    "show"
+  );
 
-  errorBox.classList.remove("show");
+  frame.style.display =
+    "block";
 
-  frame.style.display = "block";
+  frame.style.height =
+    window.innerWidth <= 600
+      ? "560px"
+      : "560px";
 
-  frame.style.height = "500px";
-
-
-  /*
-   * Prepare HTML.
-   */
 
   let html;
 
@@ -1871,94 +1642,109 @@ function renderTemplate(template){
     );
 
     showTemplateError(
-      "This template contains invalid or empty HTML."
+      "This template contains empty or invalid HTML."
     );
 
     return;
   }
 
 
-  /*
-   * srcdoc is intentionally used here.
-   *
-   * IMPORTANT:
-   * We do NOT use:
-   *
-   * messageBox.innerHTML = template.html
-   *
-   * because scripts inserted with innerHTML do not execute
-   * as normal document scripts.
-   */
-
   try{
 
-    frame.srcdoc = html;
+    /*
+     * srcdoc lets the browser parse the stored
+     * template as its own document.
+     *
+     * Scripts inside the template can therefore run.
+     */
+
+    frame.srcdoc =
+      html;
 
   }catch(error){
 
     console.error(
-      "srcdoc error:",
+      "Could not set iframe srcdoc:",
       error
     );
 
     showTemplateError(
-      "Your browser could not render this interactive message."
+      "The interactive message could not be rendered."
     );
   }
 }
 
 
 /* =========================================================
-   FRAME LOAD
+   IFRAME LOAD
 ========================================================= */
 
 frame.addEventListener(
   "load",
   function(){
 
-    loading.classList.add("hidden");
-
     /*
-     * Give the template a little time to calculate
-     * its first real height.
+     * Do not wait forever for a message from
+     * the iframe before hiding the loader.
      */
 
     setTimeout(
       function(){
-        requestTemplateHeight();
+
+        loading.classList.add(
+          "hidden"
+        );
+
       },
-      50
+      120
+    );
+
+
+    /*
+     * Ask templates that support postMessage
+     * to report their preferred height.
+     */
+
+    setTimeout(
+      requestTemplateHeight,
+      250
     );
 
     setTimeout(
-      function(){
-        requestTemplateHeight();
-      },
-      400
+      requestTemplateHeight,
+      700
     );
-
   }
 );
 
 
 /* =========================================================
-   FRAME MESSAGE / AUTO HEIGHT
+   IFRAME ERROR
+========================================================= */
+
+frame.addEventListener(
+  "error",
+  function(){
+
+    showTemplateError(
+      "The interactive message could not be displayed."
+    );
+  }
+);
+
+
+/* =========================================================
+   FRAME COMMUNICATION
 ========================================================= */
 
 window.addEventListener(
   "message",
   function(event){
 
-    /*
-     * The iframe is sandboxed without allow-same-origin.
-     * Therefore its origin can be "null".
-     *
-     * We verify the actual source window instead.
-     */
-
     if(
       !frame ||
-      event.source !== frame.contentWindow
+      event.source !==
+        frame.contentWindow
     ){
       return;
     }
@@ -1968,65 +1754,96 @@ window.addEventListener(
       event.data;
 
 
-    if(
-      !data ||
-      data.type !== "MAKYAMA_TEMPLATE_HEIGHT"
-    ){
-      return;
-    }
-
-
-    let height =
-      Number(data.height);
-
-
-    if(
-      !Number.isFinite(height)
-    ){
+    if(!data){
       return;
     }
 
 
     /*
-     * Keep the frame inside sensible bounds.
+     * Template may send:
+     *
+     * {
+     *   type:"MAKYAMA_TEMPLATE_HEIGHT",
+     *   height:1234
+     * }
      */
 
-    height =
-      Math.max(
-        280,
-        Math.min(
-          10000,
-          Math.ceil(height)
+    if(
+      data.type ===
+      "MAKYAMA_TEMPLATE_HEIGHT"
+    ){
+
+      const numberHeight =
+        Number(
+          data.height
+        );
+
+
+      if(
+        Number.isFinite(
+          numberHeight
         )
-      );
+      ){
+
+        const height =
+          Math.max(
+            280,
+            Math.min(
+              10000,
+              Math.ceil(
+                numberHeight
+              )
+            )
+          );
 
 
-    frame.style.height =
-      height + "px";
+        frame.style.height =
+          height + "px";
+      }
+    }
 
+
+    /*
+     * Template can also ask parent
+     * to recalculate height.
+     */
+
+    if(
+      data.type ===
+      "MAKYAMA_REQUEST_HEIGHT"
+    ){
+
+      requestTemplateHeight();
+    }
   }
 );
 
 
 /* =========================================================
-   REQUEST HEIGHT
+   REQUEST TEMPLATE HEIGHT
 ========================================================= */
 
 function requestTemplateHeight(){
 
   try{
 
-    frame.contentWindow.postMessage(
-      {
-        type:"MAKYAMA_REQUEST_HEIGHT"
-      },
-      "*"
-    );
+    if(
+      frame.contentWindow
+    ){
+
+      frame.contentWindow.postMessage(
+        {
+          type:
+            "MAKYAMA_REQUEST_HEIGHT"
+        },
+        "*"
+      );
+    }
 
   }catch(error){
 
     console.warn(
-      "Height request failed.",
+      "Template height request failed.",
       error
     );
   }
@@ -2037,11 +1854,16 @@ function requestTemplateHeight(){
    ERROR
 ========================================================= */
 
-function showTemplateError(message){
+function showTemplateError(
+  message
+){
 
-  loading.classList.add("hidden");
+  loading.classList.add(
+    "hidden"
+  );
 
-  frame.style.display = "none";
+  frame.style.display =
+    "none";
 
   errorText.textContent =
     String(
@@ -2049,12 +1871,14 @@ function showTemplateError(message){
       "Unable to load this message."
     );
 
-  errorBox.classList.add("show");
+  errorBox.classList.add(
+    "show"
+  );
 }
 
 
 /* =========================================================
-   LOAD TEMPLATE FROM API
+   LOAD TEMPLATE
 ========================================================= */
 
 async function loadTemplate(){
@@ -2077,9 +1901,16 @@ async function loadTemplate(){
     id;
 
 
-  loading.classList.remove("hidden");
+  loading.classList.remove(
+    "hidden"
+  );
 
-  errorBox.classList.remove("show");
+  errorBox.classList.remove(
+    "show"
+  );
+
+  frame.style.display =
+    "block";
 
 
   try{
@@ -2091,7 +1922,8 @@ async function loadTemplate(){
         {
           method:"GET",
           headers:{
-            "Accept":"application/json"
+            "Accept":
+              "application/json"
           },
           cache:"no-store"
         }
@@ -2101,7 +1933,8 @@ async function loadTemplate(){
     if(!response.ok){
 
       throw new Error(
-        "HTTP " + response.status
+        "HTTP " +
+        response.status
       );
     }
 
@@ -2109,11 +1942,6 @@ async function loadTemplate(){
     const data =
       await response.json();
 
-
-    /*
-     * Backend may return the template directly
-     * or inside a template property.
-     */
 
     const template =
       data &&
@@ -2133,9 +1961,14 @@ async function loadTemplate(){
     }
 
 
-    renderTemplate(template);
+    renderTemplate(
+      template
+    );
 
-    sendViewAnalytics(id);
+
+    sendViewAnalytics(
+      id
+    );
 
   }catch(error){
 
@@ -2148,9 +1981,6 @@ async function loadTemplate(){
       "This message could not be loaded. It may have been removed or is temporarily unavailable."
     );
 
-  }finally{
-
-    loading.classList.add("hidden");
   }
 }
 
@@ -2163,9 +1993,13 @@ function reloadTemplate(){
 
   if(currentTemplate){
 
-    renderTemplate(currentTemplate);
+    renderTemplate(
+      currentTemplate
+    );
 
-    showToast("Message reloaded.");
+    showToast(
+      "Message reloaded."
+    );
 
     return;
   }
@@ -2178,7 +2012,9 @@ function reloadTemplate(){
    ANALYTICS
 ========================================================= */
 
-async function sendViewAnalytics(id){
+async function sendViewAnalytics(
+  id
+){
 
   if(!id){
     return;
@@ -2191,10 +2027,12 @@ async function sendViewAnalytics(id){
       {
         method:"POST",
         headers:{
-          "Content-Type":"application/json"
+          "Content-Type":
+            "application/json"
         },
         body:JSON.stringify({
-          templateId:String(id)
+          templateId:
+            String(id)
         }),
         keepalive:true
       }
@@ -2211,7 +2049,7 @@ async function sendViewAnalytics(id){
 
 
 /* =========================================================
-   ONLINE HEARTBEAT
+   CLIENT ID
 ========================================================= */
 
 function getClientId(){
@@ -2219,10 +2057,13 @@ function getClientId(){
   const key =
     "makyama_client_id";
 
+
   try{
 
     let value =
-      localStorage.getItem(key);
+      localStorage.getItem(
+        key
+      );
 
 
     if(value){
@@ -2260,6 +2101,10 @@ function getClientId(){
 }
 
 
+/* =========================================================
+   HEARTBEAT
+========================================================= */
+
 async function sendHeartbeat(){
 
   try{
@@ -2269,10 +2114,12 @@ async function sendHeartbeat(){
       {
         method:"POST",
         headers:{
-          "Content-Type":"application/json"
+          "Content-Type":
+            "application/json"
         },
         body:JSON.stringify({
-          clientId:getClientId()
+          clientId:
+            getClientId()
         }),
         keepalive:true
       }
@@ -2280,16 +2127,22 @@ async function sendHeartbeat(){
 
   }catch(error){
 
-    /*
-     * Heartbeat failure should never
-     * break the message page.
-     */
-
     console.warn(
       "Heartbeat failed.",
       error
     );
   }
+}
+
+
+function startHeartbeat(){
+
+  sendHeartbeat();
+
+  setInterval(
+    sendHeartbeat,
+    30000
+  );
 }
 
 
@@ -2316,7 +2169,8 @@ async function loadAds(){
         {
           method:"GET",
           headers:{
-            "Accept":"application/json"
+            "Accept":
+              "application/json"
           },
           cache:"no-store"
         }
@@ -2336,7 +2190,9 @@ async function loadAds(){
       Array.isArray(data)
         ? data
         : (
-            Array.isArray(data.ads)
+            Array.isArray(
+              data.ads
+            )
               ? data.ads
               : []
           );
@@ -2344,10 +2200,16 @@ async function loadAds(){
 
     const middle =
       ads.find(
-        ad =>
-          String(ad.position || "")
-            .toLowerCase() ===
-          "middle"
+        function(ad){
+
+          return (
+            String(
+              ad.position || ""
+            ).toLowerCase() ===
+            "middle"
+          );
+
+        }
       );
 
 
@@ -2374,7 +2236,6 @@ async function loadAds(){
       '<div class="ad-inner">' +
       adHTML +
       "</div>";
-
 
   }catch(error){
 
@@ -2435,7 +2296,8 @@ async function react(type){
         {
           method:"POST",
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":
+              "application/json"
           },
           body:JSON.stringify({
             reaction:type
@@ -2445,6 +2307,7 @@ async function react(type){
 
 
     if(!response.ok){
+
       throw new Error(
         "Reaction failed"
       );
@@ -2456,7 +2319,6 @@ async function react(type){
         ? "Thanks for the ❤️"
         : "Thanks for your feedback."
     );
-
 
   }catch(error){
 
@@ -2492,13 +2354,16 @@ async function shareMessage(){
 
 
   const shareData = {
+
     title:
-      title + " | MAKYAMA MESSAGES",
+      title +
+      " | MAKYAMA MESSAGES",
 
     text:
       "Check out this interactive message on MAKYAMA MESSAGES.",
 
-    url:url
+    url:
+      url
   };
 
 
@@ -2516,7 +2381,9 @@ async function shareMessage(){
     }
 
 
-    await copyToClipboard(url);
+    await copyToClipboard(
+      url
+    );
 
     showToast(
       "Message link copied."
@@ -2524,22 +2391,21 @@ async function shareMessage(){
 
   }catch(error){
 
-    /*
-     * User cancelling native share
-     * is not an error we need to show.
-     */
-
     if(
       error &&
-      error.name === "AbortError"
+      error.name ===
+      "AbortError"
     ){
+
       return;
     }
 
 
     try{
 
-      await copyToClipboard(url);
+      await copyToClipboard(
+        url
+      );
 
       showToast(
         "Message link copied."
@@ -2580,10 +2446,14 @@ async function copyMessageLink(){
 }
 
 
-async function copyToClipboard(text){
+async function copyToClipboard(
+  text
+){
 
   const value =
-    String(text || "");
+    String(
+      text || ""
+    );
 
 
   if(
@@ -2599,10 +2469,6 @@ async function copyToClipboard(text){
     return;
   }
 
-
-  /*
-   * Fallback for older browsers.
-   */
 
   const textarea =
     document.createElement(
@@ -2651,22 +2517,8 @@ async function copyToClipboard(text){
 
 function goHome(){
 
-  window.location.href = "/";
-}
-
-
-/* =========================================================
-   HEARTBEAT START
-========================================================= */
-
-function startHeartbeat(){
-
-  sendHeartbeat();
-
-  setInterval(
-    sendHeartbeat,
-    30000
-  );
+  window.location.href =
+    "/";
 }
 
 
@@ -2691,4 +2543,4 @@ document.addEventListener(
 </script>
 
 </body>
-          </html>
+      </html>
